@@ -32,9 +32,9 @@ processes = []
 [[services]]
   http_checks = []
   internal_port = 8080
-  processes = ["app"]
   protocol = "tcp"
   script_checks = []
+
   [services.concurrency]
     hard_limit = 25
     soft_limit = 20
@@ -56,5 +56,5 @@ processes = []
     timeout = "2s"
 
 [[statics]]
-  guest_path = "/app/public"
+  guest_path = "/opt/mastodon/public"
   url_prefix = "/"
