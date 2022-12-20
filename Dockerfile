@@ -72,8 +72,17 @@ RUN apt-get update && \
         ca-certificates \
         tzdata \
         libreadline8 \
+        tmux \
         tini && \
     ln -s /opt/mastodon /mastodon
+
+RUN wget "https://github.com/caddyserver/caddy/releases/download/v2.6.2/caddy_2.6.2_linux_amd64.deb" -O caddy.deb && \
+  dpkg -i caddy.deb \
+
+USER mastodon
+RUN wget "https://github.com/DarthSim/overmind/releases/download/v2.3.0/overmind-v2.3.0-linux-amd64.gz" -O overmind.gz && \
+  gunzip overmind.gz && \
+  chmod +x overmind
 
 # Note: no, cleaning here since Debian does this automatically
 # See the file /etc/apt/apt.conf.d/docker-clean within the Docker image's filesystem
@@ -94,6 +103,7 @@ WORKDIR /opt/mastodon
 RUN OTP_SECRET=precompile_placeholder SECRET_KEY_BASE=precompile_placeholder rails assets:precompile && \
     yarn cache clean
 
-# Set the work dir and the container entry point
-ENTRYPOINT ["/usr/bin/tini", "--"]
-EXPOSE 3000 4000
+ADD Procfile Caddyfile /opt/mastodon/
+
+ENTRYPOINT []
+CMD ["./overmind", "start"]
