@@ -99,7 +99,6 @@ RUN wget "https://github.com/DarthSim/overmind/releases/download/v2.3.0/overmind
 RUN OTP_SECRET=precompile_placeholder SECRET_KEY_BASE=precompile_placeholder rails assets:precompile && \
     yarn cache clean
 
-ADD Procfile Caddyfile /opt/mastodon/
-
 ENTRYPOINT []
+EXPOSE 3000 4000
 CMD ["./overmind", "start"]
