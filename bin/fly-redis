@@ -1,0 +1,2 @@
+#!/bin/sh
+FLY_APP=rough-resonance-1888-redis exec "fly" -c fly.redis.toml "$@"

@@ -1,0 +1,8 @@
+app = "rough-resonance-1888-redis"
+
+[build]
+dockerfile = "Dockerfile.redis"
+
+[[mounts]]
+source = "mastodon_redis"
+destination = "/data"
