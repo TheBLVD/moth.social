@@ -27,7 +27,7 @@ kill_timeout = 5
 
 [processes]
   web = "bin/rails server -b [::] -p 8080"
-  worker = "bundle exec sidekiq -c $MAX_THREADS"
+  worker = "bundle exec sidekiq -c 1"
 
 [[services]]
   processes = ["web"]
