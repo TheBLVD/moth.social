@@ -3,7 +3,6 @@
 app = "rough-resonance-1888"
 kill_signal = "SIGINT"
 kill_timeout = 5
-processes = []
 
 [build]
   [build.args]
@@ -23,12 +22,8 @@ processes = []
   RAILS_ENV = "production"
   RAILS_LOG_TO_STDOUT = "enabled"
   RAILS_SERVE_STATIC_FILES = "false"
-  REDIS_HOST = "fly-rough-resonance-1888-redis.upstash.io"
+  REDIS_HOST = "rough-resonance-1888-redis.internal"
   REDIS_PORT = "6379"
-
-[mounts]
-  source = "mastodon_uploads"
-  destination = "/opt/mastodon/public/system"
 
 [processes]
   web = "bin/rails server -b [::] -p 8080"
