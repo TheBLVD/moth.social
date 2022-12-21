@@ -18,7 +18,6 @@ processes = []
   WEB_CONCURRENCY = "0" # exactly 1 Puma process
   DB_USER = "postgres"
   DB_HOST = "rough-resonance-1888-db.internal"
-  OVERMIND_FORMATION = "sidekiq=1" # exactly 1 sidekiq process
   MALLOC_ARENA_MAX = "2"
   MAX_THREADS = "1"
   RAILS_ENV = "production"
@@ -31,7 +30,12 @@ processes = []
   source = "mastodon_uploads"
   destination = "/opt/mastodon/public/system"
 
+[processes]
+  web = "bin/rails server -b [::] -p 8080"
+  worker = "bundle exec sidekiq -c $MAX_THREADS"
+
 [[services]]
+  processes = ["web"]
   internal_port = 8080
   protocol = "tcp"
 

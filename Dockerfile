@@ -91,14 +91,8 @@ ENV RAILS_ENV="production" \
 USER mastodon
 WORKDIR /opt/mastodon
 
-RUN wget "https://github.com/DarthSim/overmind/releases/download/v2.3.0/overmind-v2.3.0-linux-amd64.gz" -O overmind.gz && \
-  gunzip overmind.gz && \
-  chmod +x overmind
-
 # Precompile assets
 RUN OTP_SECRET=precompile_placeholder SECRET_KEY_BASE=precompile_placeholder rails assets:precompile && \
     yarn cache clean
 
 ENTRYPOINT []
-EXPOSE 3000 4000
-CMD ["./overmind", "start"]
