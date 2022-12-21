@@ -13,7 +13,7 @@ kill_timeout = 5
   release_command = "bin/rails fly:release"
 
 [env]
-  LOCAL_DOMAIN = "rough-resonance-1888.fly.dev"
+  LOCAL_DOMAIN = "moth.social"
   WEB_CONCURRENCY = "0" # exactly 1 Puma process
   DB_USER = "postgres"
   DB_HOST = "rough-resonance-1888-db.internal"
