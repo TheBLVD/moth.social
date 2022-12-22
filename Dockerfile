@@ -82,6 +82,9 @@ RUN apt-get update && \
 COPY --chown=mastodon:mastodon . /opt/mastodon
 COPY --chown=mastodon:mastodon --from=build /opt/mastodon /opt/mastodon
 
+RUN wget "https://github.com/caddyserver/caddy/releases/download/v2.6.2/caddy_2.6.2_linux_amd64.deb" -O caddy.deb && \
+  dpkg -i caddy.deb
+
 ENV RAILS_ENV="production" \
     NODE_ENV="production" \
     RAILS_SERVE_STATIC_FILES="true" \
@@ -91,8 +94,13 @@ ENV RAILS_ENV="production" \
 USER mastodon
 WORKDIR /opt/mastodon
 
+RUN wget "https://github.com/DarthSim/overmind/releases/download/v2.3.0/overmind-v2.3.0-linux-amd64.gz" -O overmind.gz && \
+  gunzip overmind.gz && \
+  chmod +x overmind
+
 # Precompile assets
 RUN OTP_SECRET=precompile_placeholder SECRET_KEY_BASE=precompile_placeholder rails assets:precompile && \
     yarn cache clean
 
 ENTRYPOINT []
+EXPOSE 3000 4000

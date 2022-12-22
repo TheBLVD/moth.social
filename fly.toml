@@ -22,7 +22,6 @@ kill_timeout = 5
   RAILS_ENV = "production"
   RAILS_LOG_TO_STDOUT = "enabled"
   RAILS_SERVE_STATIC_FILES = "false"
-  PORT = "8080"
   S3_ENABLED = "true"
   S3_REGION = "us-west-2"
   S3_BUCKET = "moth-social"
@@ -36,9 +35,8 @@ kill_timeout = 5
   SMTP_FROM_ADDRESS = "postmaster@mail.moth.social"
 
 [processes]
-  web = "bin/heroku-web"
+  web = "./overmind start"
   worker = "bundle exec sidekiq -c 2"
-  # streaming = "RUN_STREAMING=true bin/heroku-web"
 
 [[services]]
   processes = ["web"]
