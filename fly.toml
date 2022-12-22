@@ -18,11 +18,13 @@ kill_timeout = 5
   DB_USER = "postgres"
   DB_HOST = "rough-resonance-1888-db.internal"
   MALLOC_ARENA_MAX = "2"
+  WEB_CONCURRENCY = "2"
   MAX_THREADS = "5"
   RAILS_ENV = "production"
   RAILS_LOG_TO_STDOUT = "enabled"
   RAILS_SERVE_STATIC_FILES = "false"
   S3_ENABLED = "true"
+  S3_REGION = "us-west-2"
   S3_BUCKET = "moth-social"
   REDIS_HOST = "rough-resonance-1888-redis.internal"
   REDIS_PORT = "6379"
@@ -35,7 +37,7 @@ kill_timeout = 5
 
 [processes]
   web = "bin/rails server -b [::] -p 8080"
-  worker = "bundle exec sidekiq -c 1"
+  worker = "bundle exec sidekiq -c 2"
 
 [[services]]
   processes = ["web"]
