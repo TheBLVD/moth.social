@@ -184,6 +184,12 @@ GEM
     crass (1.0.6)
     css_parser (1.12.0)
       addressable
+    ddtrace (1.8.0)
+      debase-ruby_core_source (>= 0.10.16, <= 0.10.18)
+      libdatadog (~> 0.9.0.1.0)
+      libddwaf (~> 1.5.1.0.0)
+      msgpack
+    debase-ruby_core_source (0.10.18)
     debug_inspector (1.0.0)
     devise (4.8.1)
       bcrypt (~> 3.0)
@@ -375,6 +381,9 @@ GEM
       letter_opener (~> 1.7)
       railties (>= 5.2)
       rexml
+    libdatadog (0.9.0.1.0)
+    libddwaf (1.5.1.0.0)
+      ffi (~> 1.0)
     link_header (0.0.8)
     llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
@@ -774,6 +783,7 @@ DEPENDENCIES
   color_diff (~> 0.1)
   concurrent-ruby
   connection_pool
+  ddtrace
   devise (~> 4.8)
   devise-two-factor (~> 4.0)
   devise_pam_authenticatable2 (~> 9.2)
