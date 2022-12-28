@@ -2,7 +2,7 @@
 
 lock '3.17.1'
 
-set :repo_url, ENV.fetch('REPO', 'git@github.com:felipecsl/moth.social.git')
+set :repo_url, ENV.fetch('REPO', 'git@github.com:TheBLVD/moth.social.git')
 set :branch, ENV.fetch('BRANCH', 'main')
 
 set :application, 'mastodon'
