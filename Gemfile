@@ -191,8 +191,9 @@ group :development, :test do
   gem 'rspec-rails', '~> 6.0'
 end
 
-group :production do
+group :production, :staging do
   gem 'lograge', '~> 0.12'
+  gem 'ddtrace', require: 'ddtrace/auto_instrument'
 end
 
 gem 'concurrent-ruby', require: false
