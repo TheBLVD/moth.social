@@ -1,9 +1,8 @@
 require 'ddtrace'
 
-if Rails.env.production?
+if Rails.env.production? || Rails.env.staging?
   Datadog.configure do |c|
-    c.env = 'production'
+    c.env = Rails.env
     c.service = 'moth.social'
-    c.tracing.instrument :rails, **options
   end
 end

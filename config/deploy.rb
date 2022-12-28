@@ -26,6 +26,6 @@ namespace :systemd do
   end
 end
 
-# after 'deploy:publishing', 'systemd:web:reload'
-# after 'deploy:publishing', 'systemd:sidekiq:restart'
-# after 'deploy:publishing', 'systemd:streaming:restart'
+after 'deploy:publishing', 'systemd:web:reload'
+after 'deploy:publishing', 'systemd:sidekiq:restart'
+after 'deploy:publishing', 'systemd:streaming:restart'
