@@ -33,3 +33,12 @@ production:
   host: <%= ENV['DB_HOST'] || 'localhost' %>
   port: <%= ENV['DB_PORT'] || 5432 %>
   prepared_statements: <%= ENV['PREPARED_STATEMENTS'] || 'true' %>
+
+staging:
+  <<: *default
+  database: <%= ENV['DB_NAME'] || 'mastodon_staging' %>
+  username: <%= ENV['DB_USER'] || 'mastodon' %>
+  password: <%= (ENV['DB_PASS'] || '').to_json %>
+  host: <%= ENV['DB_HOST'] || 'localhost' %>
+  port: <%= ENV['DB_PORT'] || 5432 %>
+  prepared_statements: <%= ENV['PREPARED_STATEMENTS'] || 'true' %>

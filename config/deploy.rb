@@ -2,7 +2,7 @@
 
 lock '3.17.1'
 
-set :repo_url, ENV.fetch('REPO', 'https://github.com/mastodon/mastodon.git')
+set :repo_url, ENV.fetch('REPO', 'git@github.com:felipecsl/moth.social.git')
 set :branch, ENV.fetch('BRANCH', 'main')
 
 set :application, 'mastodon'
@@ -10,8 +10,7 @@ set :rbenv_type, :user
 set :rbenv_ruby, File.read('.ruby-version').strip
 set :migration_role, :app
 
-append :linked_files, '.env.production', 'public/robots.txt'
-append :linked_dirs, 'vendor/bundle', 'node_modules', 'public/system'
+append :linked_dirs, 'vendor/bundle', 'public/system'
 
 namespace :systemd do
   %i[sidekiq streaming web].each do |service|
@@ -27,6 +26,6 @@ namespace :systemd do
   end
 end
 
-after 'deploy:publishing', 'systemd:web:reload'
-after 'deploy:publishing', 'systemd:sidekiq:restart'
-after 'deploy:publishing', 'systemd:streaming:restart'
+# after 'deploy:publishing', 'systemd:web:reload'
+# after 'deploy:publishing', 'systemd:sidekiq:restart'
+# after 'deploy:publishing', 'systemd:streaming:restart'
