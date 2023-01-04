@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 class FollowRecommendations
+  # We're making the assumption that these 3 accounts below exist in the local server and they
+  # represent the moth.social staff. Please keep this list up to date!
+  DEFAULT_FOLLOW_LIST = %w(mark bart misspurple).freeze
+
+  # Handle should be in the format `@username@domain`
   def initialize(handle:, limit: 200)
     @handle = handle
     @limit = limit
@@ -12,6 +17,10 @@ class FollowRecommendations
   # See the method `account_follows` below for the hash format
   def account_indirect_follows # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     direct_follows = account_follows(@handle).map(&:symbolize_keys)
+    if direct_follows.empty?
+      Rails.logger.info("No follows found for #{@handle}, defaulting to `DEFAULT_FOLLOW_LIST`")
+      direct_follows = generate_default_follows.map(&:symbolize_keys)
+    end
     direct_follow_ids = Set.new(direct_follows.pluck(:acct))
     direct_follow_ids.add(@handle.sub(/^@/, ''))
     indirect_follow_map = {}
@@ -48,6 +57,16 @@ class FollowRecommendations
 
   private
 
+  # Returns an array of default follows in the same JSON format as the public API using AccountSerializer
+  def generate_default_follows
+    # domain: nil makes sure we're looking for local accounts
+    accounts = Account.where(username: DEFAULT_FOLLOW_LIST, domain: nil)
+    serializer = ActiveModel::Serializer::CollectionSerializer.new(
+      accounts, serializer: REST::AccountSerializer
+    )
+    JSON.parse(serializer.to_json)
+  end
+
   # returns an array of hashes containing all the accounts details followed by `@handle`:
   # type AccountDetails = {
   #   id: string
@@ -69,7 +88,8 @@ class FollowRecommendations
   # }
   def account_follows(handle)
     id, domain = username_to_id(handle)
-    next_page = "https://#{domain}/api/v1/accounts/#{id}/following"
+    scheme = domain.include?('localhost') ? 'http' : 'https'
+    next_page = "#{scheme}://#{domain}/api/v1/accounts/#{id}/following"
     data = []
     while next_page && data.length <= @limit
       response = fetch(next_page)
@@ -101,7 +121,7 @@ class FollowRecommendations
   def fetch(url)
     url = URI(url)
     http = Net::HTTP.new(url.host, url.port)
-    http.use_ssl = true
+    http.use_ssl = true if url.scheme == 'https'
     request = Net::HTTP::Get.new(url)
     http.request(request)
   end
@@ -114,7 +134,8 @@ class FollowRecommendations
     end
     domain = match[2]
     username = match[1]
-    response = fetch("https://#{domain}/api/v1/accounts/lookup?acct=#{username}")
+    scheme = domain.include?('localhost') ? 'http' : 'https'
+    response = fetch("#{scheme}://#{domain}/api/v1/accounts/lookup?acct=#{username}")
     if response.code.to_i != 200
       raise StandardError, 'HTTP request failed'
     end
