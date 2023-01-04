@@ -10,7 +10,7 @@ class FollowRecommendations
   # Returns an array of hashes sorted by most followed accounts first
   # (eg.: N of the people you follow also follow this account).
   # See the method `account_follows` below for the hash format
-  def account_indirect_follows
+  def account_indirect_follows # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     direct_follows = account_follows(@handle).map(&:symbolize_keys)
     direct_follow_ids = Set.new(direct_follows.pluck(:acct))
     direct_follow_ids.add(@handle.sub(/^@/, ''))
