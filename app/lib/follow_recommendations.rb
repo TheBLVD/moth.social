@@ -35,12 +35,15 @@ class FollowRecommendations
         end
         indirect_follow_map[indirect_acct] = account
       end
-    indirect_follow_map.values.uniq { |v| v[:username] }.sort do |a, b|
+    sorted_follows = indirect_follow_map.values.uniq { |v| v[:username] }.sort do |a, b|
       if a[:followed_by].size == b[:followed_by].size
         b[:followers_count] - a[:followers_count]
       else
         b[:followed_by].size - a[:followed_by].size
       end
+    end
+    sorted_follows.map do |follow|
+      follow.tap { |f| f[:followed_by] = f[:followed_by].to_a }
     end
   end
 
