@@ -35,13 +35,14 @@ class FollowRecommendations
         end
         indirect_follow_map[indirect_acct] = account
       end
-    indirect_follow_map.values.uniq { |v| v[:username] }.sort do |a, b|
+    sorted_follows = indirect_follow_map.values.uniq { |v| v[:username] }.sort do |a, b|
       if a[:followed_by].size == b[:followed_by].size
         b[:followers_count] - a[:followers_count]
       else
         b[:followed_by].size - a[:followed_by].size
       end
     end
+    sorted_follows.tap{ |f| f[:followed_by] = f[:followed_by].to_a }
   end
 
   private
@@ -51,9 +52,8 @@ class FollowRecommendations
     threads = direct_follows.pluck(:acct).map do |direct_follow|
       Thread.new do
         indirect_follows.concat(
-          account_follows(direct_follow).map do |account|
+          account_follows(direct_follow).tap do |account|
             account[:followed_by] = Set.new([direct_follow])
-            account
           end
         )
       end
