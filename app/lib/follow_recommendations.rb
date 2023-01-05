@@ -52,8 +52,9 @@ class FollowRecommendations
     threads = direct_follows.pluck(:acct).map do |direct_follow|
       Thread.new do
         indirect_follows.concat(
-          account_follows(direct_follow).tap do |account|
+          account_follows(direct_follow).map do |account|
             account[:followed_by] = Set.new([direct_follow])
+            account
           end
         )
       end
