@@ -42,7 +42,9 @@ class FollowRecommendations
         b[:followed_by].size - a[:followed_by].size
       end
     end
-    sorted_follows.tap{ |f| f[:followed_by] = f[:followed_by].to_a }
+    sorted_follows.map do |follow|
+      follow.tap { |f| f[:followed_by] = f[:followed_by].to_a }
+    end
   end
 
   private
