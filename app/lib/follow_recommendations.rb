@@ -24,18 +24,7 @@ class FollowRecommendations
     direct_follow_ids = Set.new(direct_follows.pluck(:acct))
     direct_follow_ids.add(@handle.sub(/^@/, ''))
     indirect_follow_map = {}
-    indirect_follows = []
-    threads = direct_follows.pluck(:acct).map do |direct_follow|
-      Thread.new do
-        indirect_follows.concat(
-          account_follows(direct_follow).map do |account|
-            account[:followed_by] = Set.new([direct_follow])
-            account
-          end
-        )
-      end
-    end
-    threads.each(&:join)
+    indirect_follows = populate_indirect_follows(direct_follows)
     indirect_follows
       .filter { |ind_follow| direct_follow_ids.exclude?(ind_follow[:acct]) && ind_follow[:discoverable] }
       .each do |account|
@@ -56,6 +45,22 @@ class FollowRecommendations
   end
 
   private
+
+  def populate_indirect_follows(direct_follows)
+    indirect_follows = []
+    threads = direct_follows.pluck(:acct).map do |direct_follow|
+      Thread.new do
+        indirect_follows.concat(
+          account_follows(direct_follow).map do |account|
+            account[:followed_by] = Set.new([direct_follow])
+            account
+          end
+        )
+      end
+    end
+    threads.each(&:join)
+    indirect_follows
+  end
 
   # Returns an array of default follows in the same JSON format as the public API using AccountSerializer
   def generate_default_follows

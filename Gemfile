@@ -113,7 +113,7 @@ group :development, :test do
   gem 'rubocop', require: false
 end
 
-group :production, :test do
+group :production, :staging, :test do
   gem 'private_address_check', '~> 0.5'
 end
 
