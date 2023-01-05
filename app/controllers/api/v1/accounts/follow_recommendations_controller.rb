@@ -9,10 +9,7 @@ class Api::V1::Accounts::FollowRecommendationsController < Api::BaseController
     handle = "@#{@account.acct}@#{local_domain}"
     follow_recs = FollowRecommendations.new(handle: handle)
     recommendations = follow_recs.account_indirect_follows
-    render(
-      json: recommendations.take(limit_param(DEFAULT_ACCOUNTS_LIMIT)),
-      each_serializer: REST::AccountSerializer
-    )
+    render json: recommendations.take(limit_param(DEFAULT_ACCOUNTS_LIMIT))
   end
 
   private
