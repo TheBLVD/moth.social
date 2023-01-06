@@ -25,6 +25,7 @@ class Scheduler::Trends::TrendsUpdateScheduler
         response = HTTP.get("#{server}#{endpoint}statuses")
       rescue HTTP::ConnectionError
         Rails.logger.warn("Couldn't access #{server}")
+        next
       end
 
       response = JSON.parse response.to_s
@@ -51,6 +52,7 @@ class Scheduler::Trends::TrendsUpdateScheduler
         tags = JSON.parse(HTTP.get("#{server}#{endpoint}tags").to_s)
       rescue HTTP::ConnectionError
         Rails.logger.warn("couldn't connect to #{server}")
+        next
       end
 
       tags.each do |tag|
@@ -63,6 +65,7 @@ class Scheduler::Trends::TrendsUpdateScheduler
         links = JSON.parse(HTTP.get("#{server}#{endpoint}links").to_s)
       rescue HTTP::ConnectionError
         Rails.logger.warn("couldn't connect to #{server}")
+        next
       end
 
       links.each do |link|
