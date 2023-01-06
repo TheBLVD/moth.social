@@ -4,6 +4,9 @@ require 'http'
 require 'json'
 
 class Scheduler::Trends::TrendsUpdateScheduler
+  # On small servers especially, the explore tab is not
+  # especially useful.  This worker pulls the trending feed
+  # from a list of popular servers to improve our own
   include Sidekiq::Worker
 
   sidekiq_options retry: 0
@@ -22,18 +25,18 @@ class Scheduler::Trends::TrendsUpdateScheduler
       response = JSON.parse response.to_s
 
       response.each do |status|
-        s = FetchRemoteStatusService.new.call(status['url'])
-        s.status_stat.update(
+        new_status = FetchRemoteStatusService.new.call(status['url'])
+        new_status.status_stat.update(
           replies_count: status['replies_count'],
           favourites_count: status['favourites_count'],
           reblogs_count: status['reblogs_count']
         )
 
-        next unless s
-        FetchLinkCardService.new.call(s)
-        Trends::Statuses.new.register s
+        next unless new_status
+        FetchLinkCardService.new.call(new_status)
+        Trends::Statuses.new.register(new_status)
 
-        s.preview_cards.update_all(trendable: true)
+        new_status.preview_cards.update_all(trendable: true)
       end
 
       acc = Account.new username: 'admin'
@@ -41,18 +44,18 @@ class Scheduler::Trends::TrendsUpdateScheduler
       tags = JSON.parse(HTTP.get("#{server}#{endpoint}tags").to_s)
 
       tags.each do |tag|
-        t = Tag.find_or_create_by_names(tag['name'])[0]
+        new_tag = Tag.find_or_create_by_names(tag['name'])[0]
         max_score = calculate_max_score(tag['history'])
-        t.update(max_score: max_score, max_score_at: Time.now.utc)
+        new_tag.update(max_score: max_score, max_score_at: Time.now.utc)
       end
 
       links = JSON.parse(HTTP.get("#{server}#{endpoint}links").to_s)
       links.each do |link|
-        l = PreviewCard.find_by(url: link['url'])
-        next unless l
+        card = PreviewCard.find_by(url: link['url'])
+        next unless card
 
         max_score = calculate_max_score(link['history'])
-        l.update(max_score: max_score, max_score_at: Time.now.utc)
+        card.update(max_score: max_score, max_score_at: Time.now.utc)
       end
     end
     Trends.refresh!
