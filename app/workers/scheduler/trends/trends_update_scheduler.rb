@@ -21,7 +21,12 @@ class Scheduler::Trends::TrendsUpdateScheduler
 
     endpoint = '/api/v1/trends/'
     servers.each do |server|
-      response = HTTP.get("#{server}#{endpoint}statuses")
+      begin
+        response = HTTP.get("#{server}#{endpoint}statuses")
+      rescue HTTP::ConnectionError
+        Rails.logger.warn("Couldn't access #{server}")
+      end
+
       response = JSON.parse response.to_s
 
       response.each do |status|
@@ -41,7 +46,12 @@ class Scheduler::Trends::TrendsUpdateScheduler
 
       acc = Account.new username: 'admin'
       ActivityPub::FetchFeaturedTagsCollectionService.new.call(acc, "#{server}#{endpoint}tags")
-      tags = JSON.parse(HTTP.get("#{server}#{endpoint}tags").to_s)
+
+      begin
+        tags = JSON.parse(HTTP.get("#{server}#{endpoint}tags").to_s)
+      rescue HTTP::ConnectionError
+        Rails.logger.warn("couldn't connect to #{server}")
+      end
 
       tags.each do |tag|
         new_tag = Tag.find_or_create_by_names(tag['name'])[0]
@@ -49,7 +59,12 @@ class Scheduler::Trends::TrendsUpdateScheduler
         new_tag.update(max_score: max_score, max_score_at: Time.now.utc)
       end
 
-      links = JSON.parse(HTTP.get("#{server}#{endpoint}links").to_s)
+      begin
+        links = JSON.parse(HTTP.get("#{server}#{endpoint}links").to_s)
+      rescue HTTP::ConnectionError
+        Rails.logger.warn("couldn't connect to #{server}")
+      end
+
       links.each do |link|
         card = PreviewCard.find_by(url: link['url'])
         next unless card
