@@ -8,7 +8,7 @@ class Scheduler::Trends::TrendsUpdateScheduler
 
   sidekiq_options retry: 0
 
-  def perform
+  def perform # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     servers = [
       'https://mastodon.social',
       'https://mstdn.social',
