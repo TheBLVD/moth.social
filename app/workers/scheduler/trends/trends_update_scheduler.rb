@@ -15,7 +15,7 @@ class Scheduler::Trends::TrendsUpdateScheduler
     https://mstdn.social
     https://ruby.social
     https://hachyderm.io
-  )
+  ).freeze
 
   ENDPOINT = '/api/v1/trends/'
 
