@@ -34,11 +34,12 @@ class Scheduler::Trends::TrendsUpdateScheduler
   end
 
   def get_statuses(url)
+    #TODO use Request wrapper
     response = HTTP.get(url)
     response = JSON.parse response.to_s
 
     response.each do |status|
-      new_status = FetchRemoteStatusService.new.call(status['url'])
+      new_status = FetchRemoteStatusService.new.call(status['url'], status)
       new_status.status_stat.update(
         replies_count: status['replies_count'],
         favourites_count: status['favourites_count'],
@@ -68,13 +69,19 @@ class Scheduler::Trends::TrendsUpdateScheduler
   end
 
   def get_links(url)
+    # the way mastodon is architected, links must be associated
+    # with a status.  Any links pulled here that aren't already
+    # associated with a status won't show up.  This just makes sure
+    # they're scored appropriately.
     links = JSON.parse(HTTP.get(url).to_s)
 
     links.each do |link|
       card = PreviewCard.find_by(url: link['url'])
       next unless card
       max_score = calculate_max_score(link['history'])
-      card.update(max_score: max_score, max_score_at: Time.now.utc)
+      if max_score >= card.max_score
+        card.update(max_score: max_score, max_score_at: Time.now.utc)
+      end
     end
   end
 
