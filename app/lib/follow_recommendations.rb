@@ -16,34 +16,36 @@ class FollowRecommendations
   # (eg.: N of the people you follow also follow this account).
   # See the method `account_follows` below for the hash format
   def account_indirect_follows # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    direct_follows = account_follows(@handle).map(&:symbolize_keys)
-    if direct_follows.empty?
-      Rails.logger.info("No follows found for #{@handle}, defaulting to `DEFAULT_FOLLOW_LIST`")
-      direct_follows = generate_default_follows.map(&:symbolize_keys)
-    end
-    direct_follow_ids = Set.new(direct_follows.pluck(:acct))
-    direct_follow_ids.add(@handle.sub(/^@/, ''))
-    indirect_follow_map = {}
-    indirect_follows = populate_indirect_follows(direct_follows)
-    indirect_follows
-      .filter { |ind_follow| direct_follow_ids.exclude?(ind_follow[:acct]) && ind_follow[:discoverable] }
-      .each do |account|
-        indirect_acct = account[:acct]
-        if indirect_follow_map.key?(indirect_acct)
-          other_account = indirect_follow_map[indirect_acct]
-          account[:followed_by].merge(other_account[:followed_by].to_a)
+    Rails.cache.fetch("follow_recommendations:#{@handle}", expires_in: 1.day) do
+      direct_follows = account_follows(@handle).map(&:symbolize_keys)
+      if direct_follows.empty?
+        Rails.logger.info("No follows found for #{@handle}, defaulting to `DEFAULT_FOLLOW_LIST`")
+        direct_follows = generate_default_follows.map(&:symbolize_keys)
+      end
+      direct_follow_ids = Set.new(direct_follows.pluck(:acct))
+      direct_follow_ids.add(@handle.sub(/^@/, ''))
+      indirect_follow_map = {}
+      indirect_follows = populate_indirect_follows(direct_follows)
+      indirect_follows
+        .filter { |ind_follow| direct_follow_ids.exclude?(ind_follow[:acct]) && ind_follow[:discoverable] }
+        .each do |account|
+          indirect_acct = account[:acct]
+          if indirect_follow_map.key?(indirect_acct)
+            other_account = indirect_follow_map[indirect_acct]
+            account[:followed_by].merge(other_account[:followed_by].to_a)
+          end
+          indirect_follow_map[indirect_acct] = account
         end
-        indirect_follow_map[indirect_acct] = account
+      sorted_follows = indirect_follow_map.values.uniq { |v| v[:username] }.sort do |a, b|
+        if a[:followed_by].size == b[:followed_by].size
+          b[:followers_count] - a[:followers_count]
+        else
+          b[:followed_by].size - a[:followed_by].size
+        end
       end
-    sorted_follows = indirect_follow_map.values.uniq { |v| v[:username] }.sort do |a, b|
-      if a[:followed_by].size == b[:followed_by].size
-        b[:followers_count] - a[:followers_count]
-      else
-        b[:followed_by].size - a[:followed_by].size
+      sorted_follows.map do |follow|
+        follow.tap { |f| f[:followed_by] = f[:followed_by].to_a }
       end
-    end
-    sorted_follows.map do |follow|
-      follow.tap { |f| f[:followed_by] = f[:followed_by].to_a }
     end
   end
 

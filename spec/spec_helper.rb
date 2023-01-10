@@ -10,7 +10,6 @@ if ENV['DISABLE_SIMPLECOV'] != 'true'
 end
 
 gc_counter = -1
-
 RSpec.configure do |config|
   config.example_status_persistence_file_path = "tmp/rspec/examples.txt"
   config.expect_with :rspec do |expectations|
