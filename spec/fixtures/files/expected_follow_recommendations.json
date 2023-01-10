@@ -1,1 +1,38 @@
-[{"acct":"chadloder@kolektiva.social","avatar":"https://cdn.masto.host/fiascosocial/cache/accounts/avatars/109/327/077/796/036/131/original/d528ea38c39d3f0d.jpeg","avatar_static":"https://cdn.masto.host/fiascosocial/cache/accounts/avatars/109/327/077/796/036/131/original/d528ea38c39d3f0d.jpeg","bot":false,"created_at":"2022-11-11T00:00:00.000Z","discoverable":true,"display_name":"Chad Loder","emojis":[],"fields":[{"name":"Pronouns","value":"they/them","verified_at":null},{"name":"Support","value":"\u003ca href=\"https://opencollective.com/sb-mutual-aid-care-club\" rel=\"nofollow noopener noreferrer\" target=\"_blank\"\u003e\u003cspan class=\"invisible\"\u003ehttps://\u003c/span\u003e\u003cspan class=\"ellipsis\"\u003eopencollective.com/sb-mutual-a\u003c/span\u003e\u003cspan class=\"invisible\"\u003eid-care-club\u003c/span\u003e\u003c/a\u003e","verified_at":null},{"name":"Newsletter","value":"\u003ca href=\"https://newsletter.extremism.io/\" rel=\"nofollow noopener noreferrer\" target=\"_blank\"\u003e\u003cspan class=\"invisible\"\u003ehttps://\u003c/span\u003e\u003cspan class=\"\"\u003enewsletter.extremism.io/\u003c/span\u003e\u003cspan class=\"invisible\"\u003e\u003c/span\u003e\u003c/a\u003e","verified_at":null}],"followed_by":["indirect@fiasco.social"],"followers_count":26442,"following_count":146,"group":false,"header":"https://cdn.masto.host/fiascosocial/cache/accounts/headers/109/327/077/796/036/131/original/7e7e4c96ba2ab8d9.jpeg","header_static":"https://cdn.masto.host/fiascosocial/cache/accounts/headers/109/327/077/796/036/131/original/7e7e4c96ba2ab8d9.jpeg","id":"109327077796036131","last_status_at":"2023-01-10","locked":false,"note":"\u003cp\u003eCommunity activist, cybersecurity expert, citizen journalist based in Los Angeles 🌴☀️ they/them\u003c/p\u003e","statuses_count":325,"url":"https://kolektiva.social/@chadloder","username":"chadloder"}]
+[
+  {
+    "acct": "chadloder@kolektiva.social",
+    "avatar": "https://cdn.masto.host/fiascosocial/cache/accounts/avatars/109/327/077/796/036/131/original/d528ea38c39d3f0d.jpeg",
+    "avatar_static": "https://cdn.masto.host/fiascosocial/cache/accounts/avatars/109/327/077/796/036/131/original/d528ea38c39d3f0d.jpeg",
+    "bot": false,
+    "created_at": "2022-11-11T00:00:00.000Z",
+    "discoverable": true,
+    "display_name": "Chad Loder",
+    "emojis": [],
+    "fields": [
+      { "name": "Pronouns", "value": "they/them", "verified_at": null },
+      {
+        "name": "Support",
+        "value": "\u003ca href=\"https://opencollective.com/sb-mutual-aid-care-club\" rel=\"nofollow noopener noreferrer\" target=\"_blank\"\u003e\u003cspan class=\"invisible\"\u003ehttps://\u003c/span\u003e\u003cspan class=\"ellipsis\"\u003eopencollective.com/sb-mutual-a\u003c/span\u003e\u003cspan class=\"invisible\"\u003eid-care-club\u003c/span\u003e\u003c/a\u003e",
+        "verified_at": null
+      },
+      {
+        "name": "Newsletter",
+        "value": "\u003ca href=\"https://newsletter.extremism.io/\" rel=\"nofollow noopener noreferrer\" target=\"_blank\"\u003e\u003cspan class=\"invisible\"\u003ehttps://\u003c/span\u003e\u003cspan class=\"\"\u003enewsletter.extremism.io/\u003c/span\u003e\u003cspan class=\"invisible\"\u003e\u003c/span\u003e\u003c/a\u003e",
+        "verified_at": null
+      }
+    ],
+    "followed_by": ["indirect@fiasco.social"],
+    "followers_count": 26442,
+    "following_count": 146,
+    "group": false,
+    "header": "https://cdn.masto.host/fiascosocial/cache/accounts/headers/109/327/077/796/036/131/original/7e7e4c96ba2ab8d9.jpeg",
+    "header_static": "https://cdn.masto.host/fiascosocial/cache/accounts/headers/109/327/077/796/036/131/original/7e7e4c96ba2ab8d9.jpeg",
+    "id": "109327077796036131",
+    "last_status_at": "2023-01-10",
+    "locked": false,
+    "note": "\u003cp\u003eCommunity activist, cybersecurity expert, citizen journalist based in Los Angeles 🌴☀️ they/them\u003c/p\u003e",
+    "statuses_count": 325,
+    "url": "https://kolektiva.social/@chadloder",
+    "username": "chadloder"
+  }
+]
