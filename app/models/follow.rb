@@ -44,6 +44,7 @@ class Follow < ApplicationRecord
   before_validation :set_uri, only: :create
   after_create :increment_cache_counters
   after_create :invalidate_hash_cache
+  after_create :populate_follow_recommendations_cache
   after_destroy :remove_endorsements
   after_destroy :decrement_cache_counters
   after_destroy :invalidate_hash_cache
@@ -61,6 +62,12 @@ class Follow < ApplicationRecord
   def increment_cache_counters
     account&.increment_count!(:following_count)
     target_account&.increment_count!(:followers_count)
+  end
+
+  def refresh_follow_recommendations_cache
+    return unless account.local?
+
+    FollowRecommendationsRefreshWorker.perform_async(account.local_username_and_domain)
   end
 
   def decrement_cache_counters
