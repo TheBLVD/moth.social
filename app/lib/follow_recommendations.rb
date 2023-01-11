@@ -16,6 +16,7 @@ class FollowRecommendations
   # (eg.: N of the people you follow also follow this account).
   # See the method `account_follows` below for the hash format
   def account_indirect_follows # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    # TODO(felipecsl): Break this method down into smaller chunks
     Rails.cache.fetch("follow_recommendations:#{@handle}", expires_in: 1.day) do
       direct_follows = account_follows(@handle).map(&:symbolize_keys)
       if direct_follows.empty?

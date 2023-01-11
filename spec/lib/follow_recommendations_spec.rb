@@ -2,12 +2,6 @@
 require 'rails_helper'
 
 RSpec.describe FollowRecommendations do
-  around do |example|
-    WebMock.enable!
-    example.run
-    WebMock.disable!
-  end
-
   describe '#account_indirect_follows' do # rubocop:disable RSpec/MultipleMemoizedHelpers
     let(:user_details) { attachment_fixture('user_details.json') }
     let(:following_details) { attachment_fixture('indirect_user_details.json') }
