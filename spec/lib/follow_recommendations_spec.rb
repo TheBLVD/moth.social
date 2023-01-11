@@ -48,9 +48,9 @@ RSpec.describe FollowRecommendations do
       stubs.each { |stub| remove_request_stub(stub) }
       follow_recommendations = described_class.new(handle: handle)
       # this should attempt to make network requests again and fail
-      expect {
+      expect do
         follow_recommendations.account_indirect_follows(force: true)
-      }.to raise_error(WebMock::NetConnectNotAllowedError)
+      end.to raise_error(WebMock::NetConnectNotAllowedError)
     end
   end
 end
