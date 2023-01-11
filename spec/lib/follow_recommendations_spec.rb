@@ -9,7 +9,7 @@ RSpec.describe FollowRecommendations do
     let(:indirect_following) { attachment_fixture('indirect_following.json') }
     let(:expected_recommendations) do
       JSON.parse(attachment_fixture('expected_follow_recommendations.json').read)
-        .map(&:symbolize_keys)
+          .map(&:symbolize_keys)
     end
     let!(:stubs) do
       [stub_request(:get, 'https://moth.social/api/v1/accounts/lookup?acct=@felipecsl')
