@@ -17,7 +17,7 @@ namespace :systemd do
     %i[reload restart status].each do |action|
       desc "Perform a #{action} on #{service} service"
       task "#{service}:#{action}".to_sym do
-        on roles(:app) do
+        on roles(:web) do
           # runs e.g. "sudo restart mastodon-sidekiq.service"
           sudo :systemctl, action, "#{fetch(:application)}-#{service}.service"
         end

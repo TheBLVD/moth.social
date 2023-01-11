@@ -6,7 +6,7 @@
 
 server 'staging.moth.social', user: 'mastodon', roles: %w[web]
 
-append :linked_files, '.env.staging', 'public/robots.txt'
+append :linked_files, '.env.production', 'public/robots.txt'
 
 # role-based syntax
 # ==================
