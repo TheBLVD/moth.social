@@ -17,7 +17,7 @@ class FollowRecommendations
   # See the method `account_follows` below for the hash format
   # If `force` is `true`, this will invalidate the cache and force a reload
   def account_indirect_follows(force: false) # rubocop:disable Metrics/AbcSize
-    Rails.cache.fetch(cache_key, expires_in: 1.week , force: force) do
+    Rails.cache.fetch(cache_key, expires_in: 1.week, force: force) do
       direct_follows = account_follows(@handle).map(&:symbolize_keys)
       if direct_follows.empty?
         Rails.logger.info("No follows found for #{@handle}, defaulting to `DEFAULT_FOLLOW_LIST`")

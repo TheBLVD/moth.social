@@ -6,6 +6,9 @@
 
 server 'staging.moth.social', user: 'mastodon', roles: %w[web]
 
+# staging is deployed with RAILS_ENV=production for compatibility reasons
+set :rails_env, "production"
+
 append :linked_files, '.env.production', 'public/robots.txt'
 
 # role-based syntax
