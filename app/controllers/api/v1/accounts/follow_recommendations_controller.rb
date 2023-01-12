@@ -5,8 +5,7 @@ class Api::V1::Accounts::FollowRecommendationsController < Api::BaseController
   before_action :set_account
 
   def index
-    local_domain = Rails.configuration.x.local_domain
-    handle = "@#{@account.acct}@#{local_domain}"
+    handle = @account.local_username_and_domain
     follow_recs = FollowRecommendations.new(handle: handle)
     recommendations = follow_recs.account_indirect_follows
     render json: recommendations.take(limit_param(DEFAULT_ACCOUNTS_LIMIT))
