@@ -15,9 +15,9 @@ class FollowRecommendations
   # Returns an array of hashes sorted by most followed accounts first
   # (eg.: N of the people you follow also follow this account).
   # See the method `account_follows` below for the hash format
-  def account_indirect_follows # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
-    # TODO(felipecsl): Break this method down into smaller chunks
-    Rails.cache.fetch("follow_recommendations:#{@handle}", expires_in: 1.day) do
+  # If `force` is `true`, this will invalidate the cache and force a reload
+  def account_indirect_follows(force: false) # rubocop:disable Metrics/AbcSize
+    Rails.cache.fetch(cache_key, expires_in: 1.week, force: force) do
       direct_follows = account_follows(@handle).map(&:symbolize_keys)
       if direct_follows.empty?
         Rails.logger.info("No follows found for #{@handle}, defaulting to `DEFAULT_FOLLOW_LIST`")
@@ -25,18 +25,8 @@ class FollowRecommendations
       end
       direct_follow_ids = Set.new(direct_follows.pluck(:acct))
       direct_follow_ids.add(@handle.sub(/^@/, ''))
-      indirect_follow_map = {}
       indirect_follows = populate_indirect_follows(direct_follows)
-      indirect_follows
-        .filter { |ind_follow| direct_follow_ids.exclude?(ind_follow[:acct]) && ind_follow[:discoverable] }
-        .each do |account|
-          indirect_acct = account[:acct]
-          if indirect_follow_map.key?(indirect_acct)
-            other_account = indirect_follow_map[indirect_acct]
-            account[:followed_by].merge(other_account[:followed_by].to_a)
-          end
-          indirect_follow_map[indirect_acct] = account
-        end
+      indirect_follow_map = build_follow_graph(indirect_follows, direct_follow_ids)
       sorted_follows = indirect_follow_map.values.uniq { |v| v[:username] }.sort do |a, b|
         if a[:followed_by].size == b[:followed_by].size
           b[:followers_count] - a[:followers_count]
@@ -52,6 +42,10 @@ class FollowRecommendations
 
   private
 
+  def cache_key
+    "follow_recommendations:#{@handle}"
+  end
+
   def populate_indirect_follows(direct_follows)
     indirect_follows = []
     threads = direct_follows.pluck(:acct).map do |direct_follow|
@@ -66,6 +60,23 @@ class FollowRecommendations
     end
     threads.each(&:join)
     indirect_follows
+  end
+
+  # Returns a map of account username to account details, populating its `followed_by` field according
+  # to the set of all users that directly or indirectly follow each user in the map
+  def build_follow_graph(indirect_follows, direct_follow_ids)
+    indirect_follow_map = {}
+    indirect_follows
+      .filter { |ind_follow| direct_follow_ids.exclude?(ind_follow[:acct]) && ind_follow[:discoverable] }
+      .each do |account|
+        indirect_acct = account[:acct]
+        if indirect_follow_map.key?(indirect_acct)
+          other_account = indirect_follow_map[indirect_acct]
+          account[:followed_by].merge(other_account[:followed_by].to_a)
+        end
+        indirect_follow_map[indirect_acct] = account
+      end
+    indirect_follow_map
   end
 
   # Returns an array of default follows in the same JSON format as the public API using AccountSerializer

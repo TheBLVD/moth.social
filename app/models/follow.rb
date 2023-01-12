@@ -37,13 +37,21 @@ class Follow < ApplicationRecord
   end
 
   def revoke_request!
-    FollowRequest.create!(account: account, target_account: target_account, show_reblogs: show_reblogs, notify: notify, languages: languages, uri: uri)
+    FollowRequest.create!(
+      account: account,
+      target_account: target_account,
+      show_reblogs: show_reblogs,
+      notify: notify,
+      languages: languages,
+      uri: uri
+    )
     destroy!
   end
 
   before_validation :set_uri, only: :create
   after_create :increment_cache_counters
   after_create :invalidate_hash_cache
+  after_create :refresh_follow_recommendations_cache
   after_destroy :remove_endorsements
   after_destroy :decrement_cache_counters
   after_destroy :invalidate_hash_cache
@@ -61,6 +69,12 @@ class Follow < ApplicationRecord
   def increment_cache_counters
     account&.increment_count!(:following_count)
     target_account&.increment_count!(:followers_count)
+  end
+
+  def refresh_follow_recommendations_cache
+    return unless account.local?
+
+    FollowRecommendationsRefreshWorker.perform_async(account.local_username_and_domain)
   end
 
   def decrement_cache_counters

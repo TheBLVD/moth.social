@@ -17,7 +17,7 @@ namespace :systemd do
     %i[reload restart status].each do |action|
       desc "Perform a #{action} on #{service} service"
       task "#{service}:#{action}".to_sym do
-        on roles(:app) do
+        on roles(:web) do
           # runs e.g. "sudo restart mastodon-sidekiq.service"
           sudo :systemctl, action, "#{fetch(:application)}-#{service}.service"
         end
@@ -26,6 +26,7 @@ namespace :systemd do
   end
 end
 
-after 'deploy:publishing', 'systemd:web:restart'
-after 'deploy:publishing', 'systemd:sidekiq:restart'
-after 'deploy:publishing', 'systemd:streaming:restart'
+# Restart services one at a time
+after 'deploy', 'systemd:web:restart'
+after 'systemd:web:restart', 'systemd:sidekiq:restart'
+after 'systemd:sidekiq:restart', 'systemd:streaming:restart'
