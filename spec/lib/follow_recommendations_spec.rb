@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe FollowRecommendations do
-  describe '#account_indirect_follows' do # rubocop:disable all
+  describe '#account_indirect_follows' do # rubocop:disable RSpec/MultipleMemoizedHelpers
     let(:user_details) { attachment_fixture('user_details.json') }
     let(:following_details) { attachment_fixture('indirect_user_details.json') }
     let(:user_following) { attachment_fixture('user_following.json') }
@@ -40,7 +40,7 @@ RSpec.describe FollowRecommendations do
       expect(recommendations).to eq(expected_recommendations)
     end
 
-    it 'deletes cache entry and re-fetches when force: true' do # rubocop:disable all
+    it 'deletes cache entry and re-fetches when force: true' do # rubocop:disable RSpec/MultipleExpectations, RSpec/ExampleLength
       follow_recommendations = described_class.new(handle: handle)
       recommendations = follow_recommendations.account_indirect_follows
       expect(recommendations).to eq(expected_recommendations)
