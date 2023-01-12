@@ -29,7 +29,7 @@ RSpec.describe FollowRecommendations do
       expect(recommendations).to eq(expected_recommendations)
     end
 
-    it 'does returns recommendations from the cache if available' do # rubocop:disable all
+    it 'does returns recommendations from the cache if available' do # rubocop:disable RSpec/MultipleExpectations, RSpec/ExampleLength
       follow_recommendations = described_class.new(handle: handle)
       recommendations = follow_recommendations.account_indirect_follows
       expect(recommendations).to eq(expected_recommendations)
