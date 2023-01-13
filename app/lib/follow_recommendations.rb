@@ -4,6 +4,13 @@ class FollowRecommendations
   # represent the moth.social staff. Please keep this list up to date!
   DEFAULT_FOLLOW_LIST = %w(mark bart misspurple).freeze
 
+  # We'll set a higher limit for local accounts. This limit affects how many direct follows we'll
+  # traverse to find indirect follows. The higher the limit, the more follow suggestions we may find.
+  # Setting a low limit will make the process faster, but we may miss some indirect follows.
+  # Additionally, in that scenario ,we may suggest the user to follow someone they already follow,
+  # which is not ideal.
+  DEFAULT_LIMIT_LOCAL_ACCOUNTS = 20_000
+
   # Handle should be in the format `@username@domain`
   def initialize(handle:, limit: 200)
     @handle = handle

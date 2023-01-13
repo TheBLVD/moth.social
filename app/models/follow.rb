@@ -74,7 +74,9 @@ class Follow < ApplicationRecord
   def refresh_follow_recommendations_cache
     return unless account.local?
 
-    FollowRecommendationsRefreshWorker.perform_async(account.local_username_and_domain)
+    handle = account.local_username_and_domain
+    limit = FollowRecommendations::DEFAULT_LIMIT_LOCAL_ACCOUNTS
+    FollowRecommendationsRefreshWorker.perform_async(handle, limit)
   end
 
   def decrement_cache_counters
