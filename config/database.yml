@@ -32,6 +32,7 @@ production:
   password: <%= (ENV['DB_PASS'] || '').to_json %>
   host: <%= ENV['DB_HOST'] || 'localhost' %>
   port: <%= ENV['DB_PORT'] || 5432 %>
+  pool: <%= ENV['DB_POOL'] || 100 %>
   prepared_statements: <%= ENV['PREPARED_STATEMENTS'] || 'true' %>
 
 staging:
