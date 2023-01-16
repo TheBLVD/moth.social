@@ -76,7 +76,7 @@ RSpec.describe FollowRecommendations do
 
   # Set the expected recommendation user ID to whatever auto-generated account ID it has in the DB
   def expected_recs
-    expected_recommendations[0][:id] = Account.last.id
+    expected_recommendations[0][:id] = Account.last.id.to_s
     expected_recommendations
   end
 end

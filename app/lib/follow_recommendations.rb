@@ -50,7 +50,7 @@ class FollowRecommendations
             f[:followed_by] = f[:followed_by].to_a
             # ensure that the ID we returned for each recommendation belongs to the local server
             # This may trigger a webfinger request if we don't have this account cached locally
-            f[:id] = ResolveAccountService.new.call(f[:acct])&.id
+            f[:id] = ResolveAccountService.new.call(f[:acct])&.id&.to_s
           end
           results << updated_follow
         rescue StandardError => e
