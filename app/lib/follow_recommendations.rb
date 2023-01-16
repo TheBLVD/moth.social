@@ -35,7 +35,12 @@ class FollowRecommendations
         end
       end
       sorted_follows.map do |follow|
-        follow.tap { |f| f[:followed_by] = f[:followed_by].to_a }
+        follow.tap do |f|
+          f[:followed_by] = f[:followed_by].to_a
+          # ensure that we ID we returned for each recommendation belongs to the local server
+          # This may trigger a webfinger request if we don't have this account cached locally
+          f[:id] = ResolveAccountService.new.call(f[:acct])&.id
+        end
       end
     end
   end
