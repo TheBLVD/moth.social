@@ -3,6 +3,7 @@ class FollowRecommendations
   # We're making the assumption that these 3 accounts below exist in the local server and they
   # represent the moth.social staff. Please keep this list up to date!
   DEFAULT_FOLLOW_LIST = %w(mark bart misspurple).freeze
+  MAX_RESULTS = 50
 
   # Handle should be in the format `@username@domain`
   def initialize(handle:, limit: 200)
@@ -34,23 +35,32 @@ class FollowRecommendations
           b[:followed_by].size - a[:followed_by].size
         end
       end
-      results = []
-      normalized_follow_threads = sorted_follows.take(50).map do |follow|
-        Thread.new do
-          results.push(follow.tap do |f|
-            f[:followed_by] = f[:followed_by].to_a
-            # ensure that the ID we returned for each recommendation belongs to the local server
-            # This may trigger a webfinger request if we don't have this account cached locally
-            f[:id] = ResolveAccountService.new.call(f[:acct])&.id
-          end)
-        end
-      end
-      normalized_follow_threads.map(&:join)
-      results
+      resolve_follow_accounts(sorted_follows)
     end
   end
 
   private
+
+  def resolve_follow_accounts(sorted_follows)
+    results = []
+    normalized_follow_threads = sorted_follows.take(MAX_RESULTS).map do |follow|
+      Thread.new do
+        begin
+          updated_follow = follow.tap do |f|
+            f[:followed_by] = f[:followed_by].to_a
+            # ensure that the ID we returned for each recommendation belongs to the local server
+            # This may trigger a webfinger request if we don't have this account cached locally
+            f[:id] = ResolveAccountService.new.call(f[:acct])&.id
+          end
+          results << updated_follow
+        rescue StandardError => e
+          Rails.logger.warn("FollowRecommendations failed to resolve account #{follow[:acct]}: #{e}")
+        end
+      end
+    end
+    normalized_follow_threads.map(&:join)
+    results
+  end
 
   def cache_key
     "follow_recommendations:#{@handle}"
