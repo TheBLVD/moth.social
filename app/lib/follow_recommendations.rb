@@ -34,14 +34,19 @@ class FollowRecommendations
           b[:followed_by].size - a[:followed_by].size
         end
       end
-      sorted_follows.map do |follow|
-        follow.tap do |f|
-          f[:followed_by] = f[:followed_by].to_a
-          # ensure that we ID we returned for each recommendation belongs to the local server
-          # This may trigger a webfinger request if we don't have this account cached locally
-          f[:id] = ResolveAccountService.new.call(f[:acct])&.id
+      results = []
+      normalized_follow_threads = sorted_follows.take(50).map do |follow|
+        Thread.new do
+          results.push(follow.tap do |f|
+            f[:followed_by] = f[:followed_by].to_a
+            # ensure that the ID we returned for each recommendation belongs to the local server
+            # This may trigger a webfinger request if we don't have this account cached locally
+            f[:id] = ResolveAccountService.new.call(f[:acct])&.id
+          end)
         end
       end
+      normalized_follow_threads.map(&:join)
+      results
     end
   end
 

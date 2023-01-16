@@ -1,1 +1,23 @@
-{"subject":"acct:chadloder@kolektiva.social","aliases":["https://kolektiva.social/@chadloder","https://kolektiva.social/users/chadloder"],"links":[{"rel":"http://webfinger.net/rel/profile-page","type":"text/html","href":"https://kolektiva.social/@chadloder"},{"rel":"self","type":"application/activity+json","href":"https://kolektiva.social/users/chadloder"},{"rel":"http://ostatus.org/schema/1.0/subscribe","template":"https://kolektiva.social/authorize_interaction?uri={uri}"}]}
+{
+  "subject": "acct:chadloder@kolektiva.social",
+  "aliases": [
+    "https://kolektiva.social/@chadloder",
+    "https://kolektiva.social/users/chadloder"
+  ],
+  "links": [
+    {
+      "rel": "http://webfinger.net/rel/profile-page",
+      "type": "text/html",
+      "href": "https://kolektiva.social/@chadloder"
+    },
+    {
+      "rel": "self",
+      "type": "application/activity+json",
+      "href": "https://kolektiva.social/users/chadloder"
+    },
+    {
+      "rel": "http://ostatus.org/schema/1.0/subscribe",
+      "template": "https://kolektiva.social/authorize_interaction?uri={uri}"
+    }
+  ]
+}
