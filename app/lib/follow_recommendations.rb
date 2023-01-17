@@ -3,11 +3,8 @@ class FollowRecommendations
   # We're making the assumption that these 3 accounts below exist in the local server and they
   # represent the moth.social staff. Please keep this list up to date!
   DEFAULT_FOLLOW_LIST = %w(mark bart misspurple).freeze
-<<<<<<< HEAD
   MAX_RESULTS = 50
-=======
   DEFAULT_FOLLOW_LIMIT = 200
->>>>>>> main
 
   # @param [String] handle - Must be in the format `@username@domain`
   # @param [Integer] limit - This limit affects how many direct follows we'll traverse to find indirect
