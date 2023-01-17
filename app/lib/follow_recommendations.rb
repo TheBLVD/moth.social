@@ -3,9 +3,14 @@ class FollowRecommendations
   # We're making the assumption that these 3 accounts below exist in the local server and they
   # represent the moth.social staff. Please keep this list up to date!
   DEFAULT_FOLLOW_LIST = %w(mark bart misspurple).freeze
+  DEFAULT_FOLLOW_LIMIT = 200
 
-  # Handle should be in the format `@username@domain`
-  def initialize(handle:, limit: 200)
+  # @param [String] handle - Must be in the format `@username@domain`
+  # @param [Integer] limit - This limit affects how many direct follows we'll traverse to find indirect
+  #   follows. The higher the limit, the more follow suggestions we may find.
+  #   Setting a low limit will make the process faster, but we may miss some indirect follows.
+  #   Additionally, in that scenario, we may suggest the user to follow someone they already follow.
+  def initialize(handle:, limit: DEFAULT_FOLLOW_LIMIT)
     @handle = handle
     @limit = limit
   end
@@ -16,7 +21,7 @@ class FollowRecommendations
   # (eg.: N of the people you follow also follow this account).
   # See the method `account_follows` below for the hash format
   # If `force` is `true`, this will invalidate the cache and force a reload
-  def account_indirect_follows(force: false) # rubocop:disable Metrics/AbcSize
+  def account_indirect_follows(force: false)
     Rails.cache.fetch(cache_key, expires_in: 1.week, force: force) do
       direct_follows = account_follows(@handle).map(&:symbolize_keys)
       if direct_follows.empty?
@@ -26,21 +31,37 @@ class FollowRecommendations
       direct_follow_ids = Set.new(direct_follows.pluck(:acct))
       direct_follow_ids.add(@handle.sub(/^@/, ''))
       indirect_follows = populate_indirect_follows(direct_follows)
-      indirect_follow_map = build_follow_graph(indirect_follows, direct_follow_ids)
-      sorted_follows = indirect_follow_map.values.uniq { |v| v[:username] }.sort do |a, b|
-        if a[:followed_by].size == b[:followed_by].size
-          b[:followers_count] - a[:followers_count]
-        else
-          b[:followed_by].size - a[:followed_by].size
-        end
-      end
-      sorted_follows.map do |follow|
-        follow.tap { |f| f[:followed_by] = f[:followed_by].to_a }
-      end
+      indirect_follow_map = build_follow_graph(indirect_follows, direct_follow_ids).values
+      sorted_follows = indirect_follow_map
+                       .uniq { |v| v[:username] }
+                       .take(DEFAULT_FOLLOW_LIMIT)
+                       .sort { |a, b| sort_order(a, b) }
+                       .map { |follow| follow.tap { |f| f[:followed_by] = f[:followed_by].to_a } }
+      filter_existing_follows(sorted_follows)
     end
   end
 
   private
+
+  def sort_order(account_a, account_b)
+    if account_a[:followed_by].size == account_b[:followed_by].size
+      account_b[:followers_count] - account_a[:followers_count]
+    else
+      account_b[:followed_by].size - account_a[:followed_by].size
+    end
+  end
+
+  # Filters the provided list of follow recommendations, removing any follows that the user already follows
+  def filter_existing_follows(sorted_follows)
+    username, domain = username_and_domain(@handle)
+    account = Account.find_by(username: username, domain: domain)
+    if account
+      follows = Follow.where(account: account).map { |f| f.target_account.acct }
+      sorted_follows.reject { |follow| follows.include?(follow[:acct]) }
+    else
+      sorted_follows
+    end
+  end
 
   def cache_key
     "follow_recommendations:#{@handle}"
@@ -150,12 +171,7 @@ class FollowRecommendations
 
   # Returns the user ID and domain for the provided handle, eg `@felipecsl@moth.social`
   def username_to_id(handle)
-    match = handle.match(/^(.+)@(.+)$/)
-    if !match || match.length < 2
-      raise StandardError, "Incorrect handle: #{handle}"
-    end
-    domain = match[2]
-    username = match[1]
+    username, domain = username_and_domain(handle)
     scheme = domain.include?('localhost') ? 'http' : 'https'
     response = fetch("#{scheme}://#{domain}/api/v1/accounts/lookup?acct=#{username}")
     if response.code.to_i != 200
@@ -163,5 +179,15 @@ class FollowRecommendations
     end
     id = JSON.parse(response.body).symbolize_keys[:id]
     [id, domain]
+  end
+
+  def username_and_domain(handle)
+    match = handle.match(/^(.+)@(.+)$/)
+    if !match || match.length < 2
+      raise StandardError, "Incorrect handle: #{handle}"
+    end
+    domain = match[2]
+    username = match[1]
+    [username, domain]
   end
 end
