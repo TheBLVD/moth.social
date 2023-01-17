@@ -9,7 +9,7 @@ describe FollowRecommendationsRefreshWorker do
   let(:limit) { 10 }
 
   describe 'perform' do
-    it 'call FollowRecommendationsService and ResolveAccountWorker' do # rubocop:disable all
+    it 'call FollowRecommendationsService and ResolveAccountWorker' do
       allow_any_instance_of(FollowRecommendationsService).to receive(:call)
         .with(handle: handle, limit: limit, force: true)
         .and_return(%w(john@foo.bar doe@baz.qux))

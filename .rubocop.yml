@@ -22,7 +22,6 @@ AllCops:
     - 'vendor/**/*'
     - 'lib/json_ld/*'
     - 'lib/templates/**/*'
-    - 'spec/**/*'
 
 Bundler/OrderedGems:
   Enabled: false
@@ -31,6 +30,18 @@ Layout/AccessModifierIndentation:
   EnforcedStyle: indent
 
 Layout/EmptyLineAfterMagicComment:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/AnyInstance:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
   Enabled: false
 
 Layout/EmptyLineAfterGuardClause:

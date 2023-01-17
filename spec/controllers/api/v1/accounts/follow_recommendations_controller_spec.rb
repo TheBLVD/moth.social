@@ -16,7 +16,7 @@ RSpec.describe Api::V1::Accounts::FollowRecommendationsController do
   end
 
   describe 'GET #index' do
-    it 'returns http success with follow recommendations' do # rubocop:disable all
+    it 'returns http success with follow recommendations' do
       allow_any_instance_of(FollowRecommendationsService).to receive(:call).and_return(['foo@bar.baz'])
       get :index, params: { account_id: account.id }
 
@@ -25,7 +25,7 @@ RSpec.describe Api::V1::Accounts::FollowRecommendationsController do
       expect(body_as_json).to eq([JSON.parse(serializer.to_json, symbolize_names: true)])
     end
 
-    it 'excludes from recommendations response accounts that already being followed' do # rubocop:disable all
+    it 'excludes from recommendations response accounts that already being followed' do
       expect(FollowRecommendationsRefreshWorker).to receive(:perform_async)
       account.follow!(followed_account)
       allow_any_instance_of(FollowRecommendationsService).to receive(:call).and_return(%w[foo@bar.baz alice@moth.social])

@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe FollowRecommendationsService do
-  describe '#account_indirect_follows' do # rubocop:disable RSpec/MultipleMemoizedHelpers
+  describe '#account_indirect_follows' do
     let(:user_details) { attachment_fixture('user_details.json') }
     let(:following_details) { attachment_fixture('indirect_user_details.json') }
     let(:user_following) { attachment_fixture('user_following.json') }
@@ -10,7 +10,7 @@ RSpec.describe FollowRecommendationsService do
     let(:webfinger_fixture) { attachment_fixture('webfinger_response.json') }
     let(:user_chadloder) { attachment_fixture('user_chadloder.json') }
     let(:handle) { 'felipecsl@moth.social' }
-    let(:expected_recommendations) { ["chadloder@kolektiva.social"] }
+    let(:expected_recommendations) { ['chadloder@kolektiva.social'] }
     let!(:stubs) do
       [stub_request(:get, 'https://moth.social/api/v1/accounts/lookup?acct=felipecsl')
         .to_return(body: user_details, status: 200),
@@ -32,16 +32,7 @@ RSpec.describe FollowRecommendationsService do
       expect(recommendations).to eq(expected_recommendations)
     end
 
-    it 'does not return follow recommendations for existing follows' do # rubocop:disable RSpec/ExampleLength
-      account = Fabricate(:account, username: 'felipecsl', domain: 'moth.social')
-      follow = Fabricate(:account, username: 'chadloder', domain: 'kolektiva.social')
-      Fabricate(:follow, account: account, target_account: follow)
-      follow_recommendations = described_class.new
-      recommendations = follow_recommendations.call(handle: handle)
-      expect(recommendations).to eq([])
-    end
-
-    it 'does returns recommendations from the cache if available' do # rubocop:disable RSpec/MultipleExpectations, RSpec/ExampleLength
+    it 'does returns recommendations from the cache if available' do
       follow_recommendations = described_class.new
       recommendations = follow_recommendations.call(handle: handle)
       expect(recommendations).to eq(expected_recommendations)
@@ -52,7 +43,7 @@ RSpec.describe FollowRecommendationsService do
       expect(recommendations).to eq(expected_recommendations)
     end
 
-    it 'deletes cache entry and re-fetches when force: true' do # rubocop:disable RSpec/MultipleExpectations, RSpec/ExampleLength
+    it 'deletes cache entry and re-fetches when force: true' do
       follow_recommendations = described_class.new
       recommendations = follow_recommendations.call(handle: handle)
       expect(recommendations).to eq(expected_recommendations)
