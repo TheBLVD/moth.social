@@ -4,8 +4,7 @@ jobs:
   rspec:
     name: rspec
     runs-on: ubuntu-latest
-    container:
-      image: ruby:3.0.4
+
     services:
       postgres:
         image: postgres:14.0
@@ -14,6 +13,10 @@ jobs:
           POSTGRES_PASSWORD: ""
           POSTGRES_DB: mastodon-test
         ports: ["5432:5432"]
+      redis:
+        image: redis
+        ports: ["6379:6379"]
+        options: --entrypoint redis-server
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -21,7 +24,6 @@ jobs:
       - name: setup ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.0.4
           bundler-cache: true
 
       - name: Set-up Node.js
