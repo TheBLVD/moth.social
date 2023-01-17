@@ -4,44 +4,9 @@ jobs:
   rspec:
     name: rspec
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:14.0
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ""
-          POSTGRES_DB: mastodon-test
-        ports: ["5432:5432"]
-      redis:
-        image: redis
-        ports: ["6379:6379"]
-        options: --entrypoint redis-server
+    uses: ./build-image
+    env:
+      RAILS_ENV: test
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: setup ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-
-      - name: Set-up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: .nvmrc
-          cache: yarn
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Setup test database
-        env:
-          RAILS_ENV: test
-          PGHOST: localhost
-          PGUSER: postgres
-        run: |
-          bin/rails db:setup
-
       - name: run tests
         run: bundle exec rspec
