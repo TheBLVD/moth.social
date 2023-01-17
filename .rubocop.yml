@@ -32,6 +32,9 @@ Layout/AccessModifierIndentation:
 Layout/EmptyLineAfterMagicComment:
   Enabled: false
 
+RSpec/MessageSpies:
+  Enabled: false
+
 RSpec/ExampleLength:
   Enabled: false
 
