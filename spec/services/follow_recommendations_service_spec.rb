@@ -1,18 +1,6 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-WEBFINGER_URLS = %w(
-  https://kolektiva.social/system/accounts/avatars/109/322/338/908/834/415/original/63f9c075823c4001.jpeg
-  https://kolektiva.social/system/accounts/headers/109/322/338/908/834/415/original/c2d94420989abed4.jpeg
-  https://kolektiva.social/users/chadloder/outbox
-  https://kolektiva.social/users/chadloder/following
-  https://kolektiva.social/users/chadloder/followers
-  https://kolektiva.social/users/chadloder/collections/featured
-  https://kolektiva.social/users/chadloder/collections/tags
-  https://opencollective.com/sb-mutual-aid-care-club
-  https://newsletter.extremism.io/
-).freeze
-
 RSpec.describe FollowRecommendationsService do
   describe '#account_indirect_follows' do # rubocop:disable RSpec/MultipleMemoizedHelpers
     let(:user_details) { attachment_fixture('user_details.json') }
@@ -35,9 +23,7 @@ RSpec.describe FollowRecommendationsService do
        stub_request(:get, 'https://kolektiva.social/.well-known/webfinger?resource=acct:chadloder@kolektiva.social')
          .to_return(body: webfinger_fixture, status: 200),
        stub_request(:get, 'https://kolektiva.social/users/chadloder')
-         .to_return(body: user_chadloder, status: 200)] + WEBFINGER_URLS.map do |url|
-                                                            stub_request(:get, url).to_return(status: 200, body: '')
-                                                          end
+         .to_return(body: user_chadloder, status: 200)]
     end
 
     it 'returns follow recommendations' do

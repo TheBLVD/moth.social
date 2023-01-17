@@ -11,7 +11,7 @@ class Api::V1::Accounts::FollowRecommendationsController < Api::BaseController
     follows = Follow.where(account: @account).map { |f| f.target_account.acct }
     recommendations = recommendation_handles
                       .reject { |recommendation| follows.include?(recommendation) }
-                      .filter_map { |handle| handle_to_account(handle) }
+                      .filter_map { |h| handle_to_account(h) }
                       .take(limit_param(DEFAULT_ACCOUNTS_LIMIT))
     render json: recommendations, each_serializer: REST::AccountSerializer
   end
