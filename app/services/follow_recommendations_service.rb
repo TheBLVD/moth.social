@@ -32,12 +32,11 @@ class FollowRecommendationsService < BaseService
       direct_follow_ids.add(@handle.sub(/^@/, ''))
       indirect_follows = populate_indirect_follows(direct_follows)
       indirect_follow_map = build_follow_graph(indirect_follows, direct_follow_ids).values
-      sorted_follows = indirect_follow_map
-                       .uniq { |v| v[:username] }
-                       .take(DEFAULT_FOLLOW_LIMIT)
-                       .sort { |a, b| sort_order(a, b) }
-                       .pluck(:acct)
-      filter_existing_follows(sorted_follows)
+      indirect_follow_map
+        .uniq { |v| v[:username] }
+        .take(DEFAULT_FOLLOW_LIMIT)
+        .sort { |a, b| sort_order(a, b) }
+        .pluck(:acct)
     end
   end
 
@@ -48,18 +47,6 @@ class FollowRecommendationsService < BaseService
       account_b[:followers_count] - account_a[:followers_count]
     else
       account_b[:followed_by].size - account_a[:followed_by].size
-    end
-  end
-
-  # Filters the provided list of follow recommendations, removing any follows that the user already follows
-  def filter_existing_follows(follow_recommendations)
-    username, domain = username_and_domain(@handle)
-    account = Account.find_by(username: username, domain: domain)
-    if account
-      follows = Follow.where(account: account).map { |f| f.target_account.acct }
-      follow_recommendations.reject { |recommendation| follows.include?(recommendation) }
-    else
-      follow_recommendations
     end
   end
 

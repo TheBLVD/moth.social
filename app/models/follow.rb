@@ -72,11 +72,8 @@ class Follow < ApplicationRecord
   end
 
   def refresh_follow_recommendations_cache
-    # We'll currently only prefetch follow recommendations for moth.social users.
-    return unless account.local?
-
     handle = account.local_username_and_domain
-    limit = FollowRecommendations::DEFAULT_FOLLOW_LIMIT
+    limit = FollowRecommendationsService::DEFAULT_FOLLOW_LIMIT
     FollowRecommendationsRefreshWorker.perform_async(handle, limit)
   end
 
