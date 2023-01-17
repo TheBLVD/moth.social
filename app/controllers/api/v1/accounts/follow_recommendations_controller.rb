@@ -6,14 +6,22 @@ class Api::V1::Accounts::FollowRecommendationsController < Api::BaseController
 
   def index
     handle = @account.local_username_and_domain
-    follow_recs = FollowRecommendations.new(handle: handle)
-    recommendations = follow_recs.account_indirect_follows
-    render json: recommendations.take(limit_param(DEFAULT_ACCOUNTS_LIMIT))
+    service = FollowRecommendationsService.new
+    recommendation_handles = service.call(handle: handle)
+    recommendations = recommendation_handles
+                      .filter_map { |handle| handle_to_account(handle) }
+                      .take(limit_param(DEFAULT_ACCOUNTS_LIMIT))
+    render json: recommendations, each_serializer: REST::AccountSerializer
   end
 
   private
 
   def set_account
     @account = Account.find(params[:account_id])
+  end
+
+  def handle_to_account(handle)
+    username, domain = handle.strip.gsub(/\A@/, '').split('@')
+    Account.find_remote(username, domain)
   end
 end

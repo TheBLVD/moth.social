@@ -36,34 +36,12 @@ class FollowRecommendationsService < BaseService
                        .uniq { |v| v[:username] }
                        .take(DEFAULT_FOLLOW_LIMIT)
                        .sort { |a, b| sort_order(a, b) }
-                       .map { |follow| follow.tap { |f| f[:followed_by] = f[:followed_by].to_a } }
-      filtered_follows = filter_existing_follows(sorted_follows)
-      resolve_follow_accounts(filtered_follows)
+                       .pluck(:acct)
+      filter_existing_follows(sorted_follows)
     end
   end
 
   private
-
-  def resolve_follow_accounts(sorted_follows)
-    results = []
-    normalized_follow_threads = sorted_follows.take(MAX_RESULTS).map do |follow|
-      Thread.new do
-        begin
-          updated_follow = follow.tap do |f|
-            f[:followed_by] = f[:followed_by].to_a
-            # ensure that the ID we returned for each recommendation belongs to the local server
-            # This may trigger a webfinger request if we don't have this account cached locally
-            f[:id] = ResolveAccountService.new.call(f[:acct])&.id&.to_s
-          end
-          results << updated_follow
-        rescue StandardError => e
-          Rails.logger.warn("FollowRecommendations failed to resolve account #{follow[:acct]}: #{e}")
-        end
-      end
-    end
-    normalized_follow_threads.map(&:join)
-    results
-  end
 
   def sort_order(account_a, account_b)
     if account_a[:followed_by].size == account_b[:followed_by].size

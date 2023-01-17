@@ -22,10 +22,7 @@ RSpec.describe FollowRecommendationsService do
     let(:webfinger_fixture) { attachment_fixture('webfinger_response.json') }
     let(:user_chadloder) { attachment_fixture('user_chadloder.json') }
     let(:handle) { 'felipecsl@moth.social' }
-    let(:expected_recommendations) do
-      JSON.parse(attachment_fixture('expected_follow_recommendations.json').read)
-          .map(&:symbolize_keys)
-    end
+    let(:expected_recommendations) { ["chadloder@kolektiva.social"] }
     let!(:stubs) do
       [stub_request(:get, 'https://moth.social/api/v1/accounts/lookup?acct=felipecsl')
         .to_return(body: user_details, status: 200),
@@ -44,48 +41,42 @@ RSpec.describe FollowRecommendationsService do
     end
 
     it 'returns follow recommendations' do
-      follow_recommendations = described_class.new(handle: handle)
-      recommendations = follow_recommendations.call
-      expect(recommendations).to eq(expected_recs)
+      follow_recommendations = described_class.new
+      recommendations = follow_recommendations.call(handle: handle)
+      expect(recommendations).to eq(expected_recommendations)
     end
 
     it 'does not return follow recommendations for existing follows' do # rubocop:disable RSpec/ExampleLength
       account = Fabricate(:account, username: 'felipecsl', domain: 'moth.social')
       follow = Fabricate(:account, username: 'chadloder', domain: 'kolektiva.social')
       Fabricate(:follow, account: account, target_account: follow)
-      follow_recommendations = described_class.new(handle: handle)
-      recommendations = follow_recommendations.call
+      follow_recommendations = described_class.new
+      recommendations = follow_recommendations.call(handle: handle)
       expect(recommendations).to eq([])
     end
 
     it 'does returns recommendations from the cache if available' do # rubocop:disable RSpec/MultipleExpectations, RSpec/ExampleLength
-      follow_recommendations = described_class.new(handle: handle)
-      recommendations = follow_recommendations.call
-      expect(recommendations).to eq(expected_recs)
+      follow_recommendations = described_class.new
+      recommendations = follow_recommendations.call(handle: handle)
+      expect(recommendations).to eq(expected_recommendations)
       # remove stubs to ensure we're not making the same requests again
       stubs.each { |stub| remove_request_stub(stub) }
-      follow_recommendations = described_class.new(handle: handle)
-      recommendations = follow_recommendations.call
-      expect(recommendations).to eq(expected_recs)
+      follow_recommendations = described_class.new
+      recommendations = follow_recommendations.call(handle: handle)
+      expect(recommendations).to eq(expected_recommendations)
     end
 
     it 'deletes cache entry and re-fetches when force: true' do # rubocop:disable RSpec/MultipleExpectations, RSpec/ExampleLength
-      follow_recommendations = described_class.new(handle: handle)
-      recommendations = follow_recommendations.call
-      expect(recommendations).to eq(expected_recs)
+      follow_recommendations = described_class.new
+      recommendations = follow_recommendations.call(handle: handle)
+      expect(recommendations).to eq(expected_recommendations)
       # remove stubs to ensure we're not making the same requests again
       stubs.each { |stub| remove_request_stub(stub) }
-      follow_recommendations = described_class.new(handle: handle)
+      follow_recommendations = described_class.new
       # this should attempt to make network requests again and fail
       expect do
-        follow_recommendations.call(force: true)
+        follow_recommendations.call(handle: handle, force: true)
       end.to raise_error(WebMock::NetConnectNotAllowedError)
     end
-  end
-
-  # Set the expected recommendation user ID to whatever auto-generated account ID it has in the DB
-  def expected_recs
-    expected_recommendations[0][:id] = Account.last.id.to_s
-    expected_recommendations
   end
 end
