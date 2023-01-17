@@ -49,6 +49,15 @@ RSpec.describe FollowRecommendations do
       expect(recommendations).to eq(expected_recs)
     end
 
+    it 'does not return follow recommendations for existing follows' do # rubocop:disable RSpec/ExampleLength
+      account = Fabricate(:account, username: 'felipecsl', domain: 'moth.social')
+      follow = Fabricate(:account, username: 'chadloder', domain: 'kolektiva.social')
+      Fabricate(:follow, account: account, target_account: follow)
+      follow_recommendations = described_class.new(handle: handle)
+      recommendations = follow_recommendations.account_indirect_follows
+      expect(recommendations).to eq([])
+    end
+
     it 'does returns recommendations from the cache if available' do # rubocop:disable RSpec/MultipleExpectations, RSpec/ExampleLength
       follow_recommendations = described_class.new(handle: handle)
       recommendations = follow_recommendations.account_indirect_follows
