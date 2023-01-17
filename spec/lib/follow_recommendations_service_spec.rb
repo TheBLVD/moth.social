@@ -13,7 +13,7 @@ WEBFINGER_URLS = %w(
   https://newsletter.extremism.io/
 ).freeze
 
-RSpec.describe FollowRecommendations do
+RSpec.describe FollowRecommendationsService do
   describe '#account_indirect_follows' do # rubocop:disable RSpec/MultipleMemoizedHelpers
     let(:user_details) { attachment_fixture('user_details.json') }
     let(:following_details) { attachment_fixture('indirect_user_details.json') }
@@ -45,7 +45,7 @@ RSpec.describe FollowRecommendations do
 
     it 'returns follow recommendations' do
       follow_recommendations = described_class.new(handle: handle)
-      recommendations = follow_recommendations.account_indirect_follows
+      recommendations = follow_recommendations.call
       expect(recommendations).to eq(expected_recs)
     end
 
@@ -54,31 +54,31 @@ RSpec.describe FollowRecommendations do
       follow = Fabricate(:account, username: 'chadloder', domain: 'kolektiva.social')
       Fabricate(:follow, account: account, target_account: follow)
       follow_recommendations = described_class.new(handle: handle)
-      recommendations = follow_recommendations.account_indirect_follows
+      recommendations = follow_recommendations.call
       expect(recommendations).to eq([])
     end
 
     it 'does returns recommendations from the cache if available' do # rubocop:disable RSpec/MultipleExpectations, RSpec/ExampleLength
       follow_recommendations = described_class.new(handle: handle)
-      recommendations = follow_recommendations.account_indirect_follows
+      recommendations = follow_recommendations.call
       expect(recommendations).to eq(expected_recs)
       # remove stubs to ensure we're not making the same requests again
       stubs.each { |stub| remove_request_stub(stub) }
       follow_recommendations = described_class.new(handle: handle)
-      recommendations = follow_recommendations.account_indirect_follows
+      recommendations = follow_recommendations.call
       expect(recommendations).to eq(expected_recs)
     end
 
     it 'deletes cache entry and re-fetches when force: true' do # rubocop:disable RSpec/MultipleExpectations, RSpec/ExampleLength
       follow_recommendations = described_class.new(handle: handle)
-      recommendations = follow_recommendations.account_indirect_follows
+      recommendations = follow_recommendations.call
       expect(recommendations).to eq(expected_recs)
       # remove stubs to ensure we're not making the same requests again
       stubs.each { |stub| remove_request_stub(stub) }
       follow_recommendations = described_class.new(handle: handle)
       # this should attempt to make network requests again and fail
       expect do
-        follow_recommendations.account_indirect_follows(force: true)
+        follow_recommendations.call(force: true)
       end.to raise_error(WebMock::NetConnectNotAllowedError)
     end
   end
