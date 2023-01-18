@@ -26,8 +26,8 @@ jobs:
         ports:
           - 5432:5432
         env:
-          DB_USER: ${{ env.POSTGRES_USER }}
-          DB_PASS: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_USER: ${{ env.DB_USER }}
+          POSTGRES_PASSWORD: ${{ env.DB_PASS }}
       redis:
         image: redis
         # Set health checks to wait until redis has started
