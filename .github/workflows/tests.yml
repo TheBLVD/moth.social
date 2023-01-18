@@ -1,8 +1,7 @@
 env:
-  POSTGRES_USER: postgres
-  POSTGRES_HOST: localhost
-  POSTGRES_PASSWORD: postgres
-  POSTGRES_DB: mastodon_test
+  DB_USER: postgres
+  DB_HOST: localhost
+  DB_PASS: postgres
   RAILS_ENV: test
 
 name: Rails tests
@@ -27,8 +26,8 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_USER: ${{ env.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          DB_USER: ${{ env.POSTGRES_USER }}
+          DB_PASS: ${{ env.POSTGRES_PASSWORD }}
       redis:
         image: redis
         # Set health checks to wait until redis has started
