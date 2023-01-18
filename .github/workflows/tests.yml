@@ -62,5 +62,4 @@ jobs:
       - name: Run Rails tests
         run: |
           bin/rails assets:precompile
-          bin/rails db:create db:schema:load db:seed
-          bin/rails test:prepare test
+          bin/rails db:create db:schema:load db:seed spec
