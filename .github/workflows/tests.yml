@@ -1,7 +1,7 @@
 env:
   DB_USER: postgres
-  DB_HOST: localhost
   DB_PASS: postgres
+  DB_HOST: localhost
   RAILS_ENV: test
 
 name: Rails tests

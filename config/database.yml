@@ -19,11 +19,11 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: <%= ENV['DB_NAME'] || 'mastodon' %>_test<%= ENV['TEST_ENV_NUMBER'] %>
+  database: mastodon_test
   username: <%= ENV['DB_USER'] %>
-  password: <%= (ENV['DB_PASS'] || '').to_json %>
+  password: <%= ENV['DB_PASS'] %>
   host: <%= ENV['DB_HOST'] %>
-  port: <%= ENV['DB_PORT'] %>
+  sslmode:
 
 production:
   <<: *default
