@@ -6,8 +6,9 @@ class FollowRecommendationsRefreshWorker
   include Sidekiq::Worker
 
   def perform(handle, limit)
-    recommendations = FollowRecommendations.new(handle: handle, limit: limit)
+    service = FollowRecommendationsService.new
     # Calling this method will have the side effect of force-caching the results in Redis
-    recommendations.account_indirect_follows(force: true)
+    handles = service.call(handle: handle, limit: limit, force: true)
+    handles.each { |h| ResolveAccountWorker.perform_async(h) }
   end
 end
