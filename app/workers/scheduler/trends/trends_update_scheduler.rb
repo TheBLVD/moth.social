@@ -42,7 +42,7 @@ class Scheduler::Trends::TrendsUpdateScheduler
       statuses = body_to_json(body)
 
       statuses.each do |status|
-        new_status = FetchRemoteStatusService.new.call(status['url'], status)
+        new_status = ActivityPub::FetchRemoteStatusService.new.call(status['uri'])
         new_status.status_stat.update(
           replies_count: status['replies_count'],
           favourites_count: status['favourites_count'],
