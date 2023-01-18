@@ -1,8 +1,12 @@
 # frozen_string_literal: true
-class FollowRecommendations
+
+# Returns an array of string user handles (eg: johndoe@mastodon.server) with follow recommendations
+# for the provided user, according to other users that are the most followed by their existing follows.
+class FollowRecommendationsService < BaseService
   # We're making the assumption that these 3 accounts below exist in the local server and they
   # represent the moth.social staff. Please keep this list up to date!
   DEFAULT_FOLLOW_LIST = %w(mark bart misspurple).freeze
+  MAX_RESULTS = 50
   DEFAULT_FOLLOW_LIMIT = 200
 
   # @param [String] handle - Must be in the format `@username@domain`
@@ -10,18 +14,14 @@ class FollowRecommendations
   #   follows. The higher the limit, the more follow suggestions we may find.
   #   Setting a low limit will make the process faster, but we may miss some indirect follows.
   #   Additionally, in that scenario, we may suggest the user to follow someone they already follow.
-  def initialize(handle:, limit: DEFAULT_FOLLOW_LIMIT)
+  # @param [Boolean] force - If `true`, this will invalidate the cache and force a reload
+  # @return a string array of account follow handles recommendations for the provided handle, sorted
+  #    by most followed accounts first (eg.: N of the people you follow also follow this account).
+  # This is basically a Ruby port of https://followgraph.vercel.app/
+  def call(handle:, limit: DEFAULT_FOLLOW_LIMIT, force: false)
+    cache_key = "follow_recommendations:#{@handle}"
     @handle = handle
     @limit = limit
-  end
-
-  # Returns an array of account follow recommendations for the provided handle
-  # This is basically a ruby port of https://followgraph.vercel.app/
-  # Returns an array of hashes sorted by most followed accounts first
-  # (eg.: N of the people you follow also follow this account).
-  # See the method `account_follows` below for the hash format
-  # If `force` is `true`, this will invalidate the cache and force a reload
-  def account_indirect_follows(force: false)
     Rails.cache.fetch(cache_key, expires_in: 1.week, force: force) do
       direct_follows = account_follows(@handle).map(&:symbolize_keys)
       if direct_follows.empty?
@@ -32,12 +32,11 @@ class FollowRecommendations
       direct_follow_ids.add(@handle.sub(/^@/, ''))
       indirect_follows = populate_indirect_follows(direct_follows)
       indirect_follow_map = build_follow_graph(indirect_follows, direct_follow_ids).values
-      sorted_follows = indirect_follow_map
-                       .uniq { |v| v[:username] }
-                       .take(DEFAULT_FOLLOW_LIMIT)
-                       .sort { |a, b| sort_order(a, b) }
-                       .map { |follow| follow.tap { |f| f[:followed_by] = f[:followed_by].to_a } }
-      filter_existing_follows(sorted_follows)
+      indirect_follow_map
+        .uniq { |v| v[:username] }
+        .take(DEFAULT_FOLLOW_LIMIT)
+        .sort { |a, b| sort_order(a, b) }
+        .pluck(:acct)
     end
   end
 
@@ -49,22 +48,6 @@ class FollowRecommendations
     else
       account_b[:followed_by].size - account_a[:followed_by].size
     end
-  end
-
-  # Filters the provided list of follow recommendations, removing any follows that the user already follows
-  def filter_existing_follows(sorted_follows)
-    username, domain = username_and_domain(@handle)
-    account = Account.find_by(username: username, domain: domain)
-    if account
-      follows = Follow.where(account: account).map { |f| f.target_account.acct }
-      sorted_follows.reject { |follow| follows.include?(follow[:acct]) }
-    else
-      sorted_follows
-    end
-  end
-
-  def cache_key
-    "follow_recommendations:#{@handle}"
   end
 
   def populate_indirect_follows(direct_follows)

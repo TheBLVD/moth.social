@@ -32,6 +32,21 @@ Layout/AccessModifierIndentation:
 Layout/EmptyLineAfterMagicComment:
   Enabled: false
 
+RSpec/MessageSpies:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/AnyInstance:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
 Layout/EmptyLineAfterGuardClause:
   Enabled: false
 
