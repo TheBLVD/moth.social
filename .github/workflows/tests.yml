@@ -3,6 +3,7 @@ env:
   POSTGRES_HOST: localhost
   POSTGRES_PASSWORD: postgres
   POSTGRES_DB: mastodon_test
+  RAILS_ENV: test
 
 name: Rails tests
 
