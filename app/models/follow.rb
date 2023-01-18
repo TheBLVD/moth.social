@@ -74,7 +74,7 @@ class Follow < ApplicationRecord
   def refresh_follow_recommendations_cache
     handle = account.local_username_and_domain
     limit = FollowRecommendationsService::DEFAULT_FOLLOW_LIMIT
-    FollowRecommendationsRefreshWorker.perform_async(handle, limit)
+    FollowRecommendationsRefreshWorker.perform_async(handle, limit) unless Rails.env.test?
   end
 
   def decrement_cache_counters
