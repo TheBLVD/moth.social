@@ -19,9 +19,9 @@ class FollowRecommendationsService < BaseService
   #    by most followed accounts first (eg.: N of the people you follow also follow this account).
   # This is basically a Ruby port of https://followgraph.vercel.app/
   def call(handle:, limit: DEFAULT_FOLLOW_LIMIT, force: false)
-    cache_key = "follow_recommendations:#{@handle}"
     @handle = handle
     @limit = limit
+    cache_key = "follow_recommendations:#{@handle}"
     Rails.cache.fetch(cache_key, expires_in: 1.week, force: force) do
       direct_follows = account_follows(@handle).map(&:symbolize_keys)
       if direct_follows.empty?
