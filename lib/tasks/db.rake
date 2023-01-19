@@ -33,11 +33,10 @@ namespace :db do
     password = ActiveRecord::Base.connection_db_config.configuration_hash[:password]
 
     backup_dir = "#{Rails.root}/backups"
+    sh "mkdir -p #{backup_dir}"
+    file_name = "#{backup_dir}/#{Time.now.utc.strftime('%Y%m%d%H%M%S')}_#{db}.dump"
+    sh "PGPASSWORD=#{password} pg_dump -U #{username} -h #{host} -d #{db} -f #{file_name}"
 
-    file_name = Time.now.strftime("%Y%m%d%H%M%S") + "_" + db + '.dump'
-    cmd = "PGPASSWORD=#{password} mkdir -p #{backup_dir} && pg_dump -U #{username} -h #{host} -d #{db} -f #{backup_dir}/#{file_name}"
-    pry
-    puts cmd
-    exec cmd
+    sh "aws s3 cp #{file_name} s3://moth-social/db_backups/"
   end
 end
