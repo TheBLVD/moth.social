@@ -23,4 +23,21 @@ namespace :db do
   end
 
   Rake::Task['db:migrate'].enhance(['db:pre_migration_check'])
+
+  # based on https://gist.github.com/amit/45e750edde94b70431f5d42caadee423
+  desc 'generate pg backups'
+  task backup: :environment do
+    db = ActiveRecord::Base.connection_db_config.database
+    host = ActiveRecord::Base.connection_db_config.host
+    username = ActiveRecord::Base.connection_db_config.configuration_hash[:username] || '""'
+    password = ActiveRecord::Base.connection_db_config.configuration_hash[:password]
+
+    backup_dir = "#{Rails.root}/backups"
+
+    file_name = Time.now.strftime("%Y%m%d%H%M%S") + "_" + db + '.dump'
+    cmd = "PGPASSWORD=#{password} mkdir -p #{backup_dir} && pg_dump -U #{username} -h #{host} -d #{db} -f #{backup_dir}/#{file_name}"
+    pry
+    puts cmd
+    exec cmd
+  end
 end
