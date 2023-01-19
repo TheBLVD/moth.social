@@ -14,8 +14,8 @@ describe Scheduler::Trends::TrendsUpdateScheduler do
                                         headers: {})
       statuses.each do |status|
         stub_request(:get, status[:uri]).to_return(status: 200,
-                                                    body: status.to_json,
-                                                    headers: {})
+                                                   body: status.to_json,
+                                                   headers: {})
       end
     end
 
@@ -24,15 +24,15 @@ describe Scheduler::Trends::TrendsUpdateScheduler do
         1.upto(20).map do |i|
           {
             '@context': 'https://www.w3.org/ns/activitystreams',
-            id: "https://example.com/@foo/#{i}",
-            url: "https://example.com/@foo/#{i}",
-            uri: "https://example.com/@foo/#{i}",
-            type: 'Note',
-            content: 'Lorem ipsum',
-            attributedTo: ActivityPub::TagManager.instance.uri_for(account),
-            replies_count: 1,
-            favourites_count: 1,
-            reblogs_count: 1,
+           id: "https://example.com/@foo/#{i}",
+           url: "https://example.com/@foo/#{i}",
+           uri: "https://example.com/@foo/#{i}",
+           type: 'Note',
+           content: 'Lorem ipsum',
+           attributedTo: ActivityPub::TagManager.instance.uri_for(account),
+           replies_count: 1,
+           favourites_count: 1,
+           reblogs_count: 1,
           }
         end
       end
