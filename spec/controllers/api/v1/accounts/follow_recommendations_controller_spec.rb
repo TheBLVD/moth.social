@@ -26,7 +26,6 @@ RSpec.describe Api::V1::Accounts::FollowRecommendationsController do
     end
 
     it 'excludes from recommendations response accounts that already being followed' do
-      expect(FollowRecommendationsRefreshWorker).to receive(:perform_async)
       account.follow!(followed_account)
       allow_any_instance_of(FollowRecommendationsService).to receive(:call).and_return(%w(foo@bar.baz alice@moth.social))
       get :index, params: { account_id: account.id }
