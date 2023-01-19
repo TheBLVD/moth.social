@@ -12,6 +12,11 @@ describe Scheduler::Trends::TrendsUpdateScheduler do
       stub_request(:get, url).to_return(status: 200,
                                         body: statuses.to_json,
                                         headers: {})
+      statuses.each do |status|
+        stub_request(:get, status[:uri]).to_return(status: 200,
+                                                   body: status.to_json,
+                                                   headers: {})
+      end
     end
 
     context 'when simple status' do
@@ -21,6 +26,7 @@ describe Scheduler::Trends::TrendsUpdateScheduler do
             '@context': 'https://www.w3.org/ns/activitystreams',
            id: "https://example.com/@foo/#{i}",
            url: "https://example.com/@foo/#{i}",
+           uri: "https://example.com/@foo/#{i}",
            type: 'Note',
            content: 'Lorem ipsum',
            attributedTo: ActivityPub::TagManager.instance.uri_for(account),
