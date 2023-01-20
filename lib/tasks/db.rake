@@ -23,4 +23,21 @@ namespace :db do
   end
 
   Rake::Task['db:migrate'].enhance(['db:pre_migration_check'])
+
+  # based on https://gist.github.com/amit/45e750edde94b70431f5d42caadee423
+  desc 'generate pg backups'
+  task backup: :environment do
+    return unless Rails.env.production?
+    db = ActiveRecord::Base.connection_db_config.database
+    host = ActiveRecord::Base.connection_db_config.host
+    username = ActiveRecord::Base.connection_db_config.configuration_hash[:username] || '""'
+    password = ActiveRecord::Base.connection_db_config.configuration_hash[:password]
+
+    backup_dir = "#{Rails.root}/backups"
+    sh "mkdir -p #{backup_dir}"
+    file_name = "#{backup_dir}/#{Time.now.utc.strftime('%Y%m%d%H%M%S')}_#{db}.dump"
+    sh "PGPASSWORD=#{password} pg_dump -U #{username} -h #{host} -d #{db} -f #{file_name}"
+
+    sh "aws s3 cp #{file_name} s3://moth-social/db_backups/"
+  end
 end
