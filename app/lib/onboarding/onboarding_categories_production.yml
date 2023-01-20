@@ -1,26 +1,26 @@
 ---
-  - name: Tech
-    color: "#f1e05aff"
-    accounts:
-      - "@Techmeme@techhub.social"
-      - "@b0rk@jvns.ca"
-      - "@briankrebs@infosec.exchange"
-      - "@donmelton@mstdn.social"
-      - "@caseynewton@mastodon.social"
-  - name: News & Journalists
-    color: "#f1e05aff"
-    accounts:
-      - "@w7voa@journa.host"
-      - "@taylorlorenz@mastodon.social"
-      - "@helenprejean@mindly.social"
-      - "@Emilyalpertreyes@mas.to"
-      - "@drewharwell@mastodon.social"
-  - name: Art & Photography
-    color: "#f1e05aff"
-    accounts:
-      - "@pnwres@mastodon.scot"
-      - "@Curator@mastodon.art"
-      - "@ewen@photog.social"
-      - "@stevenlawson@photog.social"
-      - "@ObsidianUrbex@photog.social"
-      - "@ginaperry@socel.net"
+- name: Tech
+  color: '#f1e05aff'
+  accounts:
+    - '@Techmeme@techhub.social'
+    - '@b0rk@jvns.ca'
+    - '@briankrebs@infosec.exchange'
+    - '@donmelton@mstdn.social'
+    - '@caseynewton@mastodon.social'
+- name: News & Journalists
+  color: '#f1e05aff'
+  accounts:
+    - '@w7voa@journa.host'
+    - '@taylorlorenz@mastodon.social'
+    - '@helenprejean@mindly.social'
+    - '@Emilyalpertreyes@mas.to'
+    - '@drewharwell@mastodon.social'
+- name: Art & Photography
+  color: '#f1e05aff'
+  accounts:
+    - '@pnwres@mastodon.scot'
+    - '@Curator@mastodon.art'
+    - '@ewen@photog.social'
+    - '@stevenlawson@photog.social'
+    - '@ObsidianUrbex@photog.social'
+    - '@ginaperry@socel.net'
