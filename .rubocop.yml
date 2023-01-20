@@ -495,3 +495,7 @@ RSpec/DescribeClass:
   Enabled: false
 RSpec/LetSetup:
   Enabled: false
+RSpec/Rails/HttpStatus:
+  Enabled: false
+RSpec/StubbedMock:
+  Enabled: false
