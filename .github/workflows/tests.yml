@@ -75,7 +75,7 @@ jobs:
           ruby-version: 3.0.4
           bundler-cache: true
       - name: Deploy to Production
-        uses: felipecsl/capistrano-deploy@d1b1341ed83e881b24b700890d86768ee0f94e0f
+        uses: miloserdow/capistrano-deploy@master
         with:
           target: production
           deploy_key: ${{ secrets.DEPLOY_ENC_KEY }}
