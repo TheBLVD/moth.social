@@ -89,4 +89,11 @@ describe Api::BaseController do
       end
     end
   end
+
+  describe '#limit_param' do
+    it "doesn't return more than the max limit" do
+      allow(controller).to receive(:params).and_return({ limit: 1000 })
+      expect(controller.send(:limit_param, 20)).to eq(Api::BaseController::MAX_LIMIT)
+    end
+  end
 end
