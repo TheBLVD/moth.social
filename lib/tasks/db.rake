@@ -27,6 +27,7 @@ namespace :db do
   # based on https://gist.github.com/amit/45e750edde94b70431f5d42caadee423
   desc 'generate pg backups'
   task backup: :environment do
+    return unless Rails.env.production?
     db = ActiveRecord::Base.connection_db_config.database
     host = ActiveRecord::Base.connection_db_config.host
     username = ActiveRecord::Base.connection_db_config.configuration_hash[:username] || '""'
