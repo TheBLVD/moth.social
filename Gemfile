@@ -160,3 +160,6 @@ gem 'concurrent-ruby', require: false
 gem 'connection_pool', require: false
 gem 'xorcist', '~> 1.1'
 gem 'cocoon', '~> 1.2'
+# https://github.com/net-ssh/net-ssh/issues/565#issuecomment-491321965
+gem 'ed25519', '>= 1.2', '< 2.0'
+gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
