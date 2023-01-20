@@ -30,4 +30,3 @@ end
 after 'deploy', 'systemd:web:restart'
 after 'systemd:web:restart', 'systemd:sidekiq:restart'
 after 'systemd:sidekiq:restart', 'systemd:streaming:restart'
-after 'systemd:streaming:restart', 'systemd:backups:restart'
