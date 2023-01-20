@@ -501,3 +501,7 @@ RSpec/StubbedMock:
   Enabled: false
 RSpec/LeakyConstantDeclaration:
   Enabled: false
+Lint/ConstantDefinitionInBlock:
+  Enabled: false
+Lint/EmptyClass:
+  Enabled: false
