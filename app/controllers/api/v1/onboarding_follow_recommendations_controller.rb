@@ -18,7 +18,8 @@ class Api::V1::OnboardingFollowRecommendationsController < Api::BaseController
       Onboarding::FollowRecommendationCategory.new(
         name: category['name'],
         theme_color: category['color'],
-        accounts: category['accounts'].map { |a| Account.find_remote(*username_and_domain(a)) }
+        # If any of YML accounts are invalid or not found in the database, we'll omit them from the response
+        accounts: category['accounts'].filter_map { |a| Account.find_remote(*username_and_domain(a)) }
       )
     end
   end
