@@ -26,9 +26,4 @@ class Api::V1::Accounts::FollowRecommendationsController < Api::BaseController
     username, domain = username_and_domain(handle)
     Account.find_remote(username, domain)
   end
-
-  def username_and_domain(handle)
-    username, domain = handle.strip.gsub(/\A@/, '').split('@')
-    [username, domain]
-  end
 end

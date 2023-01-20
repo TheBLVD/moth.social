@@ -1,0 +1,11 @@
+---
+- name: Tech
+  color: "#f1e05aff"
+  accounts:
+    - "@foo@bar.baz"
+    - "@roberto@gomez.bolanos"
+- name: News & Journalists
+  color: "#f1e05a00"
+  accounts:
+    - "@elchavo@del.ocho"
+    - "@carlos@villa.gran"
