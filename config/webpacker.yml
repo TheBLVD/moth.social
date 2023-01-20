@@ -77,7 +77,9 @@ test:
 
   # CircleCI precompiles packs prior to running the tests.
   # Also avoids race conditions in parallel_tests.
-  compile: false
+  compile: true
+  dev_server:
+    compress: true
 
   # Compile test packs to a separate directory
   public_output_path: packs-test
