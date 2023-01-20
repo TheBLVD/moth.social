@@ -1,0 +1,10 @@
+[Unit]
+Description=daily backups for pg
+Requires=mastodon-pg-backup.service
+
+[Timer]
+Unit=mastodon-pg-backup.service
+OnCalendar=daily
+
+[Install]
+WantedBy=timers.target

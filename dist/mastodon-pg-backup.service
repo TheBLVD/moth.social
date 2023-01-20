@@ -1,0 +1,15 @@
+[Unit]
+Description=mastodon-pg-backup
+After=network.target
+
+[Service]
+Type=simple
+User=mastodon
+WorkingDirectory=/home/mastodon/live
+Environment="RAILS_ENV=production"
+Environment="PORT=3000"
+Environment="LD_PRELOAD=libjemalloc.so"
+ExecStart=/home/mastodon/.rbenv/shims/bundle exec rails db:backup
+
+[Install]
+WantedBy=multi-user.target
