@@ -570,6 +570,8 @@ Rails.application.routes.draw do
         resources :familiar_followers, only: :index
       end
 
+      resources :onboarding_follow_recommendations, only: :index, controller: 'onboarding_follow_recommendations'
+
       resources :accounts, only: [:create, :show] do
         resources :statuses, only: :index, controller: 'accounts/statuses'
         resources :followers, only: :index, controller: 'accounts/follower_accounts'
