@@ -499,3 +499,5 @@ RSpec/Rails/HttpStatus:
   Enabled: false
 RSpec/StubbedMock:
   Enabled: false
+RSpec/LeakyConstantDeclaration:
+  Enabled: false
