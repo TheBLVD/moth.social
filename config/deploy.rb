@@ -24,9 +24,16 @@ namespace :systemd do
       end
     end
   end
+
+  desc 'restart backup service'
+  task 'backups:restart'.to_sym do |t|
+    sudo :systemctl, :restart, 'mastodon-pg-backup.service'
+    sudo :systemctl, :enable, 'mastodon-pg-backup.timer'
+  end
 end
 
 # Restart services one at a time
 after 'deploy', 'systemd:web:restart'
 after 'systemd:web:restart', 'systemd:sidekiq:restart'
 after 'systemd:sidekiq:restart', 'systemd:streaming:restart'
+after 'systemd:streaming:restart', 'systemd:backups:restart'
