@@ -30,6 +30,7 @@ class RequestPool
   MAX_IDLE_TIME = 30
   WAIT_TIMEOUT  = 5
   MAX_POOL_SIZE = ENV.fetch('MAX_REQUEST_POOL_SIZE', 512).to_i
+  FREQUENCY = 30
 
   class Connection
     attr_reader :site, :last_used_at, :created_at, :in_use, :dead, :fresh
@@ -98,7 +99,7 @@ class RequestPool
 
   def initialize
     @pool   = ConnectionPool::SharedConnectionPool.new(size: MAX_POOL_SIZE, timeout: WAIT_TIMEOUT) { |site| Connection.new(site) }
-    @reaper = Reaper.new(self, 30)
+    @reaper = Reaper.new(self, FREQUENCY)
     @reaper.run
   end
 

@@ -49,14 +49,15 @@ describe RequestPool do
     end
 
     it 'closes idle connections' do
+      stub_const('RequestPool::FREQUENCY', 1)
       stub_request(:get, 'http://example.com/').to_return(status: 200, body: 'Hello!')
-
       subject.with('http://example.com') do |http_client|
         http_client.get('/').flush
       end
 
       expect(subject.size).to eq 1
-      sleep RequestPool::MAX_IDLE_TIME + 30 + 1
+      allow(Process).to receive(:clock_gettime) { Time.now.to_i + 100 }
+      sleep(2)
       expect(subject.size).to eq 0
     end
   end
