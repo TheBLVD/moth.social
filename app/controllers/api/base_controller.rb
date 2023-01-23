@@ -154,6 +154,11 @@ class Api::BaseController < ApplicationController
     ENV['DISALLOW_UNAUTHENTICATED_API_ACCESS'] == 'true' || Rails.configuration.x.limited_federation_mode
   end
 
+  def username_and_domain(handle)
+    username, domain = handle.strip.gsub(/\A@/, '').split('@')
+    [username, domain]
+  end
+
   private
 
   def respond_with_error(code)

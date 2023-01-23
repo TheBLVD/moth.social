@@ -1,0 +1,42 @@
+---
+- name: Tech
+  accounts:
+    - '@Techmeme@techhub.social'
+    - '@b0rk@jvns.ca'
+    - '@briankrebs@infosec.exchange'
+    - '@donmelton@mstdn.social'
+    - '@caseynewton@mastodon.social'
+- name: News & Journalists
+  accounts:
+    - '@w7voa@journa.host'
+    - '@taylorlorenz@mastodon.social'
+    - '@helenprejean@mindly.social'
+    - '@Emilyalpertreyes@mas.to'
+    - '@drewharwell@mastodon.social'
+- name: Art & Photography
+  accounts:
+    - '@pnwres@mastodon.scot'
+    - '@Curator@mastodon.art'
+    - '@ewen@photog.social'
+    - '@stevenlawson@photog.social'
+    - '@ObsidianUrbex@photog.social'
+    - '@ginaperry@socel.net'
+- name: Celebrities & Pop Culture
+  accounts:
+    - '@RollingStone@mstdn.social'
+    - '@MarkRuffalo@mastodon.social'
+    - '@neilhimself@mastodon.social'
+    - '@kathygriffin@mstdn.social'
+    - '@alexwinter@mastodon.social'
+    - '@morgfair@newsie.social'
+    - '@BethanyBlack@mastodon.social'
+    - '@jquillin@fashionsocial.host'
+    - '@Sheril@mastodon.social'
+- name: Content Creators & Influencers
+  accounts:
+    - '@snazzyq@mas.to'
+    - '@rebeccawatson@mstdn.social'
+    - '@oatmeal@mastodon.social'
+- name: Left/Progressive
+  accounts:
+    - '@RitchieTorres@universeodon.com'

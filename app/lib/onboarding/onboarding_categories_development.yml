@@ -1,0 +1,9 @@
+---
+- name: Tech
+  accounts:
+    - '@Techmeme@techhub.social'
+    - '@b0rk@jvns.ca'
+- name: News & Journalists
+  accounts:
+    - '@w7voa@journa.host'
+    - '@taylorlorenz@mastodon.social'
