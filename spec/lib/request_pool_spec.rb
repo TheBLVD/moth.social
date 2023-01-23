@@ -48,6 +48,9 @@ describe RequestPool do
       expect(subject.size).to be > 1
     end
 
+    # The frequency is how often the request pool reaper checks
+    # for idle connections.  In real-world usage, it's 30 seconds,
+    # but we change it to one here so the test doesn't take as long.
     it 'closes idle connections' do
       stub_const('RequestPool::FREQUENCY', 1)
       stub_request(:get, 'http://example.com/').to_return(status: 200, body: 'Hello!')
@@ -57,7 +60,7 @@ describe RequestPool do
 
       expect(subject.size).to eq 1
       allow(Process).to receive(:clock_gettime) { Time.now.to_i + 100 }
-      sleep(2)
+      sleep(RequestPool::FREQUENCY * 2)
       expect(subject.size).to eq 0
     end
   end
