@@ -74,8 +74,14 @@ def request_fixture(name)
   File.read(Rails.root.join('spec', 'fixtures', 'requests', name))
 end
 
+$attachments = {}
 def attachment_fixture(name)
-  File.open(Rails.root.join('spec', 'fixtures', 'files', name))
+  if $attachments.key? name
+    $attachments[name].rewind
+    return $attachments[name].dup
+  end
+  $attachments[name] = File.open(Rails.root.join('spec', 'fixtures', 'files', name))
+  $attachments[name].dup
 end
 
 def stub_jsonld_contexts!
