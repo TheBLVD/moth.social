@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 
-abort("The Rails environment is running in production mode!") if Rails.env.production?
+abort('The Rails environment is running in production mode!') if Rails.env.production?
 
 require 'spec_helper'
 require 'rspec/rails'
@@ -33,7 +35,7 @@ Devise::Test::ControllerHelpers.module_eval do
 end
 
 RSpec.configure do |config|
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.fixture_path = "#{Rails.root}/spec/fixtures"
   config.use_transactional_fixtures = true
   config.order = 'random'
   config.infer_spec_type_from_file_location!
@@ -58,7 +60,7 @@ RSpec.configure do |config|
     stub_jsonld_contexts!
   end
 
-  config.after :each do
+  config.after do
     Rails.cache.clear
     redis.del(redis.keys)
   end
@@ -74,6 +76,7 @@ def request_fixture(name)
   File.read(Rails.root.join('spec', 'fixtures', 'requests', name))
 end
 
+# rubocop:disable Style/GlobalVars
 $attachments = {}
 def attachment_fixture(name)
   if $attachments.key? name
@@ -83,6 +86,7 @@ def attachment_fixture(name)
   $attachments[name] = File.open(Rails.root.join('spec', 'fixtures', 'files', name))
   $attachments[name].dup
 end
+# rubocop:enable Style/GlobalVars
 
 def stub_jsonld_contexts!
   stub_request(:get, 'https://www.w3.org/ns/activitystreams').to_return(request_fixture('json-ld.activitystreams.txt'))
