@@ -76,17 +76,15 @@ def request_fixture(name)
   Rails.root.join('spec', 'fixtures', 'requests', name).read
 end
 
-# rubocop:disable Style/GlobalVars
-$attachments = {}
 def attachment_fixture(name)
-  if $attachments.key? name
-    $attachments[name].rewind
-    return $attachments[name].dup
+  @attachments ||= {}
+  if @attachments.key? name
+    @attachments[name].rewind
+    return @attachments[name].clone
   end
-  $attachments[name] = File.open(Rails.root.join('spec', 'fixtures', 'files', name))
-  $attachments[name].dup
+  @attachments[name] = File.open(Rails.root.join('spec', 'fixtures', 'files', name))
+  @attachments[name].clone
 end
-# rubocop:enable Style/GlobalVars
 
 def stub_jsonld_contexts!
   stub_request(:get, 'https://www.w3.org/ns/activitystreams').to_return(request_fixture('json-ld.activitystreams.txt'))
