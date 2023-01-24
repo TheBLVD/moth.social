@@ -77,6 +77,7 @@ def request_fixture(name)
 end
 
 def attachment_fixture(name)
+  # Caching the file to speed up tests
   @attachments ||= {}
   if @attachments.key? name
     @attachments[name].rewind
