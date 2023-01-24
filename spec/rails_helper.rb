@@ -11,7 +11,7 @@ require 'webmock/rspec'
 require 'paperclip/matchers'
 require 'capybara/rspec'
 
-Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec/support/**/*.rb')].sort.each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
 WebMock.disable_net_connect!(allow: Chewy.settings[:host])
@@ -73,7 +73,7 @@ end
 RSpec::Matchers.define_negated_matcher :not_change, :change
 
 def request_fixture(name)
-  File.read(Rails.root.join('spec', 'fixtures', 'requests', name))
+  Rails.root.join('spec', 'fixtures', 'requests', name).read
 end
 
 # rubocop:disable Style/GlobalVars
