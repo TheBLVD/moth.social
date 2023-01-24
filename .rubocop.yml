@@ -505,3 +505,9 @@ Lint/ConstantDefinitionInBlock:
   Enabled: false
 Lint/EmptyClass:
   Enabled: false
+RSpec/NotToNot:
+  Enabled: false
+Performance/TimesMap:
+  Enabled: false
+Lint/UnusedBlockArgument:
+  Enabled: false
