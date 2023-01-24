@@ -80,10 +80,10 @@ def attachment_fixture(name)
   @attachments ||= {}
   if @attachments.key? name
     @attachments[name].rewind
-    return @attachments[name].clone
+    return @attachments[name].dup
   end
   @attachments[name] = File.open(Rails.root.join('spec', 'fixtures', 'files', name))
-  @attachments[name].clone
+  @attachments[name].dup
 end
 
 def stub_jsonld_contexts!
