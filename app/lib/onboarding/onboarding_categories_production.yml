@@ -1,42 +1,67 @@
 ---
-- name: Tech
+- name: Celebrities and Pop Culture
   accounts:
-    - '@Techmeme@techhub.social'
-    - '@b0rk@jvns.ca'
-    - '@briankrebs@infosec.exchange'
-    - '@donmelton@mstdn.social'
-    - '@caseynewton@mastodon.social'
-- name: News & Journalists
-  accounts:
-    - '@w7voa@journa.host'
-    - '@taylorlorenz@mastodon.social'
-    - '@helenprejean@mindly.social'
-    - '@Emilyalpertreyes@mas.to'
-    - '@drewharwell@mastodon.social'
-- name: Art & Photography
-  accounts:
-    - '@pnwres@mastodon.scot'
-    - '@Curator@mastodon.art'
-    - '@ewen@photog.social'
-    - '@stevenlawson@photog.social'
-    - '@ObsidianUrbex@photog.social'
-    - '@ginaperry@socel.net'
-- name: Celebrities & Pop Culture
-  accounts:
-    - '@RollingStone@mstdn.social'
+    - '@elonjet@mastodon.social'
     - '@MarkRuffalo@mastodon.social'
+    - '@georgetakei@universeodon.com'
     - '@neilhimself@mastodon.social'
     - '@kathygriffin@mstdn.social'
     - '@alexwinter@mastodon.social'
     - '@morgfair@newsie.social'
     - '@BethanyBlack@mastodon.social'
     - '@jquillin@fashionsocial.host'
-    - '@Sheril@mastodon.social'
-- name: Content Creators & Influencers
+- name: Journalists and Publications
   accounts:
+    - '@Sheril@mastodon.social'
+    - '@Techmeme@techhub.social'
+    - '@RollingStone@mstdn.social'
+    - '@w7voa@journa.host'
+    - '@briankrebs@infosec.exchange'
+    - '@drewharwell@mastodon.social'
+    - '@taylorlorenz@mastodon.social'
+    - '@damemagazine@newsie.social'
+    - '@chrisgeidner@journa.host'
+    - '@Emilyalpertreyes@mas.to'
+- name: Tech and Business
+  accounts:
+    - '@anildash@me.dm'
+    - '@b0rk@jvns.ca'
     - '@snazzyq@mas.to'
-    - '@rebeccawatson@mstdn.social'
-    - '@oatmeal@mastodon.social'
-- name: Left/Progressive
+    - '@donmelton@mstdn.social'
+    - '@caseynewton@mastodon.social'
+    - '@DetroitBORG@techhub.social'
+    - '@craignewmark@mastodon.social'
+- name: Academics and Thinkers
+  accounts:
+    - '@helenprejean@mindly.social'
+    - '@thesiswhisperer@aus.social'
+    - '@drcaberry@blacktwitter.io'
+    - '@brooklynmarie@mastodon.lol'
+    - '@kityates@mas.to'
+    - '@absolutspacegrl@mastodon.social'
+- name: Politics and Activism
   accounts:
     - '@RitchieTorres@universeodon.com'
+    - '@rubenbolling@mastodon.social'
+    - '@TheWarOnCars@mastodon.social'
+    - '@zhivi@blacktwitter.io'
+    - '@RepShontelBrown@mastodon.social'
+    - '@Tinu@mastodon.social'
+    - '@timnitGebru@dair-community.social'
+    - '@QasimRashid@mastodon.social'
+    - '@BigAngBlack@fosstodon.org'
+    - '@futurebird@sauropods.win'
+- name: Content Creators
+  accounts:
+    - '@rebeccawatson@mstdn.social'
+    - '@TechConnectify@mas.to'
+    - '@oatmeal@mastodon.social'
+    - '@notjustbikes@notjustbikes.com'
+- name: Art and Photographers
+  accounts:
+    - '@Curator@mastodon.art'
+    - '@pnwres@mastodon.scot'
+    - '@ewen@photog.social'
+    - '@stevenlawson@photog.social'
+    - '@ObsidianUrbex@photog.social'
+    - '@ginaperry@socel.net'
