@@ -5,6 +5,7 @@ if Rails.env.production? || Rails.env.staging?
     if Rails.configuration.hosts[0].include? 'staging'
       c.env = 'staging'
     else
+      c.profiling.enabled = true
       c.env = Rails.env
     end
     c.service = 'moth.social'
