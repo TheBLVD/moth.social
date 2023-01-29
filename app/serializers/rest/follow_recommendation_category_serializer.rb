@@ -6,5 +6,14 @@ class REST::FollowRecommendationCategorySerializer < ActiveModel::Serializer
 
   attributes :name, :theme_color
 
-  has_many :accounts, each_serializer: REST::FollowRecommendationAccountSerializer
+  has_many :accounts
+
+  def accounts
+    object.accounts.map do |a|
+      {
+        account: REST::AccountSerializer.new(a[:account]).as_json,
+        summary: a[:summary],
+      }
+    end
+  end
 end
