@@ -44,7 +44,7 @@ RSpec.describe Api::V1::OnboardingFollowRecommendationsController do
               acct: 'foo@bar.baz',
               **default_props,
             },
-            summary: 'asdf1'
+            summary: 'asdf1',
           },
           {
             account: {
@@ -70,7 +70,7 @@ RSpec.describe Api::V1::OnboardingFollowRecommendationsController do
               created_at: accounts[2].created_at.midnight.as_json,
               **default_props,
             },
-            summary: 'asdf3'
+            summary: 'asdf3',
           },
           {
             account: {
@@ -80,7 +80,7 @@ RSpec.describe Api::V1::OnboardingFollowRecommendationsController do
               created_at: accounts[3].created_at.midnight.as_json,
               **default_props,
             },
-            summary: 'asdf4'
+            summary: 'asdf4',
           },
         ],
       },
