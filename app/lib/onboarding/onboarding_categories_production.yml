@@ -1,119 +1,67 @@
 ---
-- name: Celebrities & Pop Culture
+- name: Celebrities and Pop Culture
   accounts:
-    - account: '@elonjet@mastodon.social'
-      summary: The official, uncensored ElonJet account.
-    - account: '@MarkRuffalo@mastodon.social'
-      summary: Award-winning actor, Oscar nominee.
-    - account: '@georgetakei@universeodon.com'
-      summary: "Actor, author, and activist. \U0001F596"
-    - account: '@neilhimself@mastodon.social'
-      summary: English author of fiction, novels.
-    - account: '@kathygriffin@mstdn.social'
-      summary: Comedian, actress, Emmy Award winner.
-    - account: '@alexwinter@mastodon.social'
-      summary: Actor and filmmaker.
-    - account: '@morgfair@newsie.social'
-      summary: Actress. Foreign policy, politics and science.
-    - account: '@BethanyBlack@mastodon.social'
-      summary: English stand-up comedian, actor, writer.
-    - account: '@jquillin@fashionsocial.host'
-      summary: Glass Magazine Fmr Fashion editor.
-- name: Journalists & Publications
+    - '@elonjet@mastodon.social'
+    - '@MarkRuffalo@mastodon.social'
+    - '@georgetakei@universeodon.com'
+    - '@neilhimself@mastodon.social'
+    - '@kathygriffin@mstdn.social'
+    - '@alexwinter@mastodon.social'
+    - '@morgfair@newsie.social'
+    - '@BethanyBlack@mastodon.social'
+    - '@jquillin@fashionsocial.host'
+- name: Journalists and Publications
   accounts:
-    - account: '@Sheril@mastodon.social'
-      summary: Author, scientist, PBS host.
-    - account: '@Techmeme@techhub.social'
-      summary: Top tech news and commentary.
-    - account: '@RollingStone@mstdn.social'
-      summary: Rolling Stone magazine, official account.
-    - account: '@w7voa@journa.host'
-      summary: VoA Chief National Correspondent.
-    - account: '@briankrebs@infosec.exchange'
-      summary: Investigative journalist. Cybercrime, security and privacy.
-    - account: '@drewharwell@mastodon.social'
-      summary: WaPo Technology Reporter.
-    - account: '@taylorlorenz@mastodon.social'
-      summary: WaPo Technology Columnist.
-    - account: '@damemagazine@newsie.social'
-      summary: Women-led, independent magazine.
-    - account: '@chrisgeidner@journa.host'
-      summary: Award-winning law journalist.
-    - account: '@Emilyalpertreyes@mas.to'
-      summary: LA Times covering Public Health.
-- name: Tech & Business
+    - '@Sheril@mastodon.social'
+    - '@Techmeme@techhub.social'
+    - '@RollingStone@mstdn.social'
+    - '@w7voa@journa.host'
+    - '@briankrebs@infosec.exchange'
+    - '@drewharwell@mastodon.social'
+    - '@taylorlorenz@mastodon.social'
+    - '@damemagazine@newsie.social'
+    - '@chrisgeidner@journa.host'
+    - '@Emilyalpertreyes@mas.to'
+- name: Tech and Business
   accounts:
-    - account: '@anildash@me.dm'
-      summary: Technology entrepreneur, EFF board member.
-    - account: '@b0rk@jvns.ca'
-      summary: Software developer from Montreal.
-    - account: '@snazzyq@mas.to'
-      summary: Popular technology YouTuber with 1M subscribers.
-    - account: '@donmelton@mstdn.social'
-      summary: The “Walmart Welcome Greeter” of Mastodon.
-    - account: '@caseynewton@mastodon.social'
-      summary: Technology journalist. Editor, Platformer.
-    - account: '@DetroitBORG@techhub.social'
-      summary: Popular Apple and tech YouTuber.
-    - account: '@craignewmark@mastodon.social'
-      summary: Founder of Craigslist.
-- name: Academics & Thinkers
+    - '@anildash@me.dm'
+    - '@b0rk@jvns.ca'
+    - '@snazzyq@mas.to'
+    - '@donmelton@mstdn.social'
+    - '@caseynewton@mastodon.social'
+    - '@DetroitBORG@techhub.social'
+    - '@craignewmark@mastodon.social'
+- name: Academics and Thinkers
   accounts:
-    - account: '@helenprejean@mindly.social'
-      summary: Advocate, campaigner for ending death penalty.
-    - account: '@thesiswhisperer@aus.social'
-      summary: Professor Inger Mewburn, ANU Australia.
-    - account: '@drcaberry@blacktwitter.io'
-      summary: Electrical Engineering & Robotics Professor.
-    - account: '@brooklynmarie@mastodon.lol'
-      summary: Your friendly neighborhood debunker.
-    - account: '@kityates@mas.to'
-      summary: Mathematical biologist, book author.
-    - account: '@absolutspacegrl@mastodon.social'
-      summary: NASA engineer, furthering lunar exploration.
-- name: Politics & Activism
+    - '@helenprejean@mindly.social'
+    - '@thesiswhisperer@aus.social'
+    - '@drcaberry@blacktwitter.io'
+    - '@brooklynmarie@mastodon.lol'
+    - '@kityates@mas.to'
+    - '@absolutspacegrl@mastodon.social'
+- name: Politics and Activism
   accounts:
-    - account: '@RitchieTorres@universeodon.com'
-      summary: NY15 Congressman.
-    - account: '@rubenbolling@mastodon.social'
-      summary: Political cartoonist, journalism award winner.
-    - account: '@TheWarOnCars@mastodon.social'
-      summary: Popular podcast on car dependency.
-    - account: '@zhivi@blacktwitter.io'
-      summary: Health, Wellness and Fitness Accountability Coach
-    - account: '@RepShontelBrown@mastodon.social'
-      summary: OH11 Congresswoman.
-    - account: '@Tinu@mastodon.social'
-      summary: Digital community organiser.
-    - account: '@timnitGebru@dair-community.social'
-      summary: Founder, Executive Director, Distributed AI Research Institute.
-    - account: '@QasimRashid@mastodon.social'
-      summary: Human rights lawyer, author.
-    - account: '@BigAngBlack@fosstodon.org'
-      summary: Black culture student on a quest for knowledge.
-    - account: '@futurebird@sauropods.win'
-      summary: Sci-fi writer, mathematics, CS teacher.
+    - '@RitchieTorres@universeodon.com'
+    - '@rubenbolling@mastodon.social'
+    - '@TheWarOnCars@mastodon.social'
+    - '@zhivi@blacktwitter.io'
+    - '@RepShontelBrown@mastodon.social'
+    - '@Tinu@mastodon.social'
+    - '@timnitGebru@dair-community.social'
+    - '@QasimRashid@mastodon.social'
+    - '@BigAngBlack@fosstodon.org'
+    - '@futurebird@sauropods.win'
 - name: Content Creators
   accounts:
-    - account: '@rebeccawatson@mstdn.social'
-      summary: Feminist blogger and podcast host
-    - account: '@TechConnectify@mas.to'
-      summary: Educational YouTuber, focusing on technology/science.
-    - account: '@oatmeal@mastodon.social'
-      summary: Popular web comic by Matthew Inman.
-    - account: '@notjustbikes@notjustbikes.com'
-      summary: Urbanist commentator, YouTuber from the Netherlands
+    - '@rebeccawatson@mstdn.social'
+    - '@TechConnectify@mas.to'
+    - '@oatmeal@mastodon.social'
+    - '@notjustbikes@notjustbikes.com'
 - name: Art and Photographers
   accounts:
-    - account: '@Curator@mastodon.art'
-      summary: The best of artists on Mastodon.
-    - account: '@pnwres@mastodon.scot'
-      summary: Professional pet photographer from Seattle
-    - account: '@ewen@photog.social'
-      summary: Australian editorial photographer, author,  writer.
-    - account: '@stevenlawson@photog.social'
-      summary: Scottish landscape and urban photographer.
-    - account: '@ObsidianUrbex@photog.social'
-      summary: English urban explorer and photographer.
-    - account: '@ginaperry@socel.net'
-      summary: Children’s book author and illustrator.
+    - '@Curator@mastodon.art'
+    - '@pnwres@mastodon.scot'
+    - '@ewen@photog.social'
+    - '@stevenlawson@photog.social'
+    - '@ObsidianUrbex@photog.social'
+    - '@ginaperry@socel.net'
