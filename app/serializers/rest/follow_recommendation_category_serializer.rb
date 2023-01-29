@@ -6,5 +6,5 @@ class REST::FollowRecommendationCategorySerializer < ActiveModel::Serializer
 
   attributes :name, :theme_color
 
-  has_many :accounts, serializer: REST::AccountSerializer
+  has_many :accounts, each_serializer: REST::FollowRecommendationAccountSerializer
 end
