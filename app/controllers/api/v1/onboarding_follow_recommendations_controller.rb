@@ -19,7 +19,9 @@ class Api::V1::OnboardingFollowRecommendationsController < Api::BaseController
         name: category['name'],
         theme_color: category['color'],
         # If any of YML accounts are invalid or not found in the database, we'll omit them from the response
-        accounts: category['accounts'].filter_map { |a| Account.find_remote(*username_and_domain(a)) }
+        accounts: category['accounts']
+          .map { |a| { account: Account.find_remote(*username_and_domain(a['account'])), summary: a['summary'] } }
+          .filter { |a| a['account'].nil? }
       )
     end
   end
