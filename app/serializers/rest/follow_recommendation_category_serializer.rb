@@ -11,8 +11,9 @@ class REST::FollowRecommendationCategorySerializer < ActiveModel::Serializer
   def accounts
     object.accounts.map do |a|
       {
-        account: REST::AccountSerializer.new(a[:account]).as_json,
-        summary: a[:summary],
+        account: REST::AccountSerializer.new(a[:account])
+                                        .as_json
+                                        .merge(summary: a[:summary]),
       }
     end
   end
