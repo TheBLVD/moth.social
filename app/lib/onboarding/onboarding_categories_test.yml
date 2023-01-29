@@ -2,14 +2,10 @@
 - name: Tech
   color: '#f1e05aff'
   accounts:
-    - account: '@foo@bar.baz'
-      summary: 'asdf1'
-    - account: '@roberto@gomez.bolanos'
-      summary: 'asdf2'
+    - '@foo@bar.baz'
+    - '@roberto@gomez.bolanos'
 - name: News & Journalists
   color: '#f1e05a00'
   accounts:
-    - account: '@elchavo@del.ocho'
-      summary: 'asdf3'
-    - account: '@carlos@villa.gran'
-      summary: 'asdf4'
+    - '@elchavo@del.ocho'
+    - '@carlos@villa.gran'
