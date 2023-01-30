@@ -71,7 +71,7 @@ describe Scheduler::Trends::TrendsUpdateScheduler do
 
     let(:url) { 'https://example.com' }
     let(:card) { Fabricate(:preview_card, url: url, max_score: nil) }
-    let(:links) { [REST::PreviewCardSerializer.new(card).as_json.merge({history: []})] }
+    let(:links) { [REST::PreviewCardSerializer.new(card).as_json.merge({ history: [] })] }
 
     it 'handles a missing max_score' do
       expect { subject.get_links(url) }.not_to raise_error
