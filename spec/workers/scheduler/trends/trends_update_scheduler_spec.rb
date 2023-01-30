@@ -61,4 +61,20 @@ describe Scheduler::Trends::TrendsUpdateScheduler do
       end
     end
   end
+
+  describe '#get_links' do
+    before do
+      stub_request(:get, url).to_return(status: 200,
+                                        body: links.to_json,
+                                        headers: {})
+    end
+
+    let(:url) { 'https://example.com' }
+    let(:card) { Fabricate(:preview_card, url: url, max_score: nil) }
+    let(:links) { [REST::PreviewCardSerializer.new(card).as_json.merge({ history: [] })] }
+
+    it 'handles a missing max_score' do
+      expect { subject.get_links(url) }.not_to raise_error
+    end
+  end
 end
