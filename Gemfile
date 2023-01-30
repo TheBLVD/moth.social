@@ -153,6 +153,7 @@ end
 group :production, :staging do
   gem 'lograge', '~> 0.12'
   gem 'ddtrace', require: 'ddtrace/auto_instrument'
+  gem 'google-protobuf', '~> 3.0'
 end
 
 gem 'concurrent-ruby', require: false

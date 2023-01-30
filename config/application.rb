@@ -12,6 +12,7 @@ require 'active_job/railtie'
 #require 'action_mailbox/engine'
 #require 'action_text/engine'
 #require 'rails/test_unit/railtie'
+require 'datadog/profiling/preload'
 require 'sprockets/railtie'
 
 # Used to be implicitly required in action_mailbox/engine
