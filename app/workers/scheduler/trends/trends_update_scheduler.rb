@@ -86,7 +86,7 @@ class Scheduler::Trends::TrendsUpdateScheduler
         card = PreviewCard.find_by(url: link['url'])
         next unless card
         max_score = calculate_max_score(link['history'])
-        if max_score >= card.max_score
+        if max_score >= card.max_score.to_i
           card.update(max_score: max_score, max_score_at: Time.now.utc)
         end
       end
