@@ -42,6 +42,7 @@ RSpec.describe Api::V1::OnboardingFollowRecommendationsController do
             username: 'foo',
             acct: 'foo@bar.baz',
             **default_props,
+            summary: 'asdf1',
           },
           {
             id: accounts[1].id.to_s,
@@ -49,6 +50,7 @@ RSpec.describe Api::V1::OnboardingFollowRecommendationsController do
             acct: 'roberto@gomez.bolanos',
             created_at: accounts[1].created_at.midnight.as_json,
             **default_props,
+            summary: 'asdf2',
           },
         ],
       },
@@ -62,6 +64,7 @@ RSpec.describe Api::V1::OnboardingFollowRecommendationsController do
             acct: 'elchavo@del.ocho',
             created_at: accounts[2].created_at.midnight.as_json,
             **default_props,
+            summary: 'asdf3',
           },
           {
             id: accounts[3].id.to_s,
@@ -69,6 +72,7 @@ RSpec.describe Api::V1::OnboardingFollowRecommendationsController do
             acct: 'carlos@villa.gran',
             created_at: accounts[3].created_at.midnight.as_json,
             **default_props,
+            summary: 'asdf4',
           },
         ],
       },
