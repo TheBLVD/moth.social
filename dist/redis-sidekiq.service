@@ -41,4 +41,3 @@ ProtectSystem=full
 
 [Install]
 WantedBy=multi-user.target
-Alias=redis.service
