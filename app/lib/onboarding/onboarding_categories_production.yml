@@ -2,7 +2,7 @@
 - name: Celebrities & Pop Culture
   accounts:
     - account: '@elonjet@mastodon.social'
-      summary: The official, uncensored ElonJet account.
+      summary: The official ElonJet account.
     - account: '@MarkRuffalo@mastodon.social'
       summary: Award-winning actor, Oscar nominee.
     - account: '@georgetakei@universeodon.com'
@@ -14,9 +14,9 @@
     - account: '@alexwinter@mastodon.social'
       summary: Actor and filmmaker.
     - account: '@morgfair@newsie.social'
-      summary: Actress. Foreign policy, politics and science.
+      summary: Actress, Primetime Emmy nominee.
     - account: '@BethanyBlack@mastodon.social'
-      summary: English stand-up comedian, actor, writer.
+      summary: English stand-up comedian.
     - account: '@jquillin@fashionsocial.host'
       summary: Glass Magazine Fmr Fashion editor.
 - name: Journalists & Publications
@@ -26,11 +26,11 @@
     - account: '@Techmeme@techhub.social'
       summary: Top tech news and commentary.
     - account: '@RollingStone@mstdn.social'
-      summary: Rolling Stone magazine, official account.
+      summary: Rolling Stone magazine official account.
     - account: '@w7voa@journa.host'
       summary: VoA Chief National Correspondent.
     - account: '@briankrebs@infosec.exchange'
-      summary: Investigative journalist. Cybercrime, security and privacy.
+      summary: 'Cybercrime investigative journalist. '
     - account: '@drewharwell@mastodon.social'
       summary: WaPo Technology Reporter.
     - account: '@taylorlorenz@mastodon.social'
@@ -44,15 +44,15 @@
 - name: Tech & Business
   accounts:
     - account: '@anildash@me.dm'
-      summary: Technology entrepreneur, EFF board member.
+      summary: Technology entrepreneur.
     - account: '@b0rk@jvns.ca'
       summary: Software developer from Montreal.
     - account: '@snazzyq@mas.to'
-      summary: Popular technology YouTuber with 1M subscribers.
+      summary: Popular technology YouTuber.
     - account: '@donmelton@mstdn.social'
-      summary: The “Walmart Welcome Greeter” of Mastodon.
+      summary: Mastodon’s “Store Welcome Greeter”.
     - account: '@caseynewton@mastodon.social'
-      summary: Technology journalist. Editor, Platformer.
+      summary: Tech journalist. Editor, Platformer.
     - account: '@DetroitBORG@techhub.social'
       summary: Popular Apple and tech YouTuber.
     - account: '@craignewmark@mastodon.social'
@@ -60,37 +60,37 @@
 - name: Academics & Thinkers
   accounts:
     - account: '@helenprejean@mindly.social'
-      summary: Advocate, campaigner for ending death penalty.
+      summary: Death penalty activist.
     - account: '@thesiswhisperer@aus.social'
-      summary: Professor Inger Mewburn, ANU Australia.
+      summary: Professor Inger Mewburn, ANU.
     - account: '@drcaberry@blacktwitter.io'
-      summary: Electrical Engineering & Robotics Professor.
+      summary: Elec. Engineering, Robotics professor.
     - account: '@brooklynmarie@mastodon.lol'
       summary: Your friendly neighborhood debunker.
     - account: '@kityates@mas.to'
       summary: Mathematical biologist, book author.
     - account: '@absolutspacegrl@mastodon.social'
-      summary: NASA engineer, furthering lunar exploration.
+      summary: NASA engineer.
 - name: Politics & Activism
   accounts:
     - account: '@RitchieTorres@universeodon.com'
       summary: NY15 Congressman.
     - account: '@rubenbolling@mastodon.social'
-      summary: Political cartoonist, journalism award winner.
+      summary: Award winning political cartoonist.
     - account: '@TheWarOnCars@mastodon.social'
       summary: Popular podcast on car dependency.
     - account: '@zhivi@blacktwitter.io'
-      summary: Health, Wellness and Fitness Accountability Coach
+      summary: Health, fitness, accountability coach.
     - account: '@RepShontelBrown@mastodon.social'
       summary: OH11 Congresswoman.
     - account: '@Tinu@mastodon.social'
       summary: Digital community organiser.
     - account: '@timnitGebru@dair-community.social'
-      summary: Founder, Executive Director, Distributed AI Research Institute.
+      summary: Founder, Distributed AI Research Institute.
     - account: '@QasimRashid@mastodon.social'
       summary: Human rights lawyer, author.
     - account: '@BigAngBlack@fosstodon.org'
-      summary: Black culture student on a quest for knowledge.
+      summary: Black culture student.
     - account: '@futurebird@sauropods.win'
       summary: Sci-fi writer, mathematics, CS teacher.
 - name: Content Creators
@@ -98,21 +98,21 @@
     - account: '@rebeccawatson@mstdn.social'
       summary: Feminist blogger and podcast host
     - account: '@TechConnectify@mas.to'
-      summary: Educational YouTuber, focusing on technology/science.
+      summary: Educational technology YouTuber.
     - account: '@oatmeal@mastodon.social'
       summary: Popular web comic by Matthew Inman.
     - account: '@notjustbikes@notjustbikes.com'
-      summary: Urbanist commentator, YouTuber from the Netherlands
-- name: Art and Photographers
+      summary: Urbanist commentator, YouTuber.
+- name: Art & Photographers
   accounts:
     - account: '@Curator@mastodon.art'
       summary: The best of artists on Mastodon.
     - account: '@pnwres@mastodon.scot'
-      summary: Professional pet photographer from Seattle
+      summary: Professional pet photographer.
     - account: '@ewen@photog.social'
-      summary: Australian editorial photographer, author,  writer.
+      summary: Australian editorial photographer.
     - account: '@stevenlawson@photog.social'
-      summary: Scottish landscape and urban photographer.
+      summary: Scottish landscape photographer.
     - account: '@ObsidianUrbex@photog.social'
       summary: English urban explorer and photographer.
     - account: '@ginaperry@socel.net'
