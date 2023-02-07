@@ -30,7 +30,7 @@
     - account: '@w7voa@journa.host'
       summary: VoA Chief National Correspondent.
     - account: '@briankrebs@infosec.exchange'
-      summary: 'Cybercrime investigative journalist. '
+      summary: Cybercrime investigative journalist.
     - account: '@drewharwell@mastodon.social'
       summary: WaPo Technology Reporter.
     - account: '@taylorlorenz@mastodon.social'
@@ -117,3 +117,9 @@
       summary: English urban explorer and photographer.
     - account: '@ginaperry@socel.net'
       summary: Children’s book author and illustrator.
+- name: Mammoth
+  accounts:
+    - account: '@mammoth@moth.social'
+      summary: The official Mammoth account.
+    - account: '@daily@moth.social'
+      summary: Light-hearted and wholesome content.
