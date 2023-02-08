@@ -20,10 +20,19 @@ class Api::V1::OnboardingFollowRecommendationsController < Api::BaseController
         theme_color: category['color'],
         # If any of YML accounts are invalid or not found in the database, we'll omit them from the response
         accounts: category['accounts']
-          .map { |a| { account: Account.find_remote(*username_and_domain(a['account'])), summary: a['summary'] } }
+          .map { |a| { account: find_account(a), summary: a['summary'] } }
           .reject { |a| a[:account].nil? }
       )
     end
+  end
+
+  def find_account(account)
+    # TODO: this probably belongs in account_finder_concern.rb.
+    # I'm putting it here for now to avoid messing with mastodon code.
+    # if we need it elsewhere, we should move it. SD
+    username, domain = *username_and_domain(account['account'])
+    Account.find_remote(username, domain) ||
+      Account.find_local(username)
   end
 
   def yaml_file_location
