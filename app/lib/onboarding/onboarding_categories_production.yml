@@ -1,4 +1,10 @@
 ---
+- name: Mammoth
+  accounts:
+    - account: '@mammoth@moth.social'
+      summary: The official Mammoth account.
+    - account: '@daily@moth.social'
+      summary: Light-hearted and wholesome content.
 - name: Celebrities & Pop Culture
   accounts:
     - account: '@elonjet@mastodon.social'
@@ -117,9 +123,3 @@
       summary: English urban explorer and photographer.
     - account: '@ginaperry@socel.net'
       summary: Children’s book author and illustrator.
-- name: Mammoth
-  accounts:
-    - account: '@mammoth@moth.social'
-      summary: The official Mammoth account.
-    - account: '@daily@moth.social'
-      summary: Light-hearted and wholesome content.
