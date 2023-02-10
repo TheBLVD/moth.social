@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 require 'rails_helper'
-
+# rubocop:disable Layout/LineLength
 RSpec.describe Api::V1::StatusesController, type: :controller do
   render_views
 
@@ -79,7 +79,7 @@ RSpec.describe Api::V1::StatusesController, type: :controller do
         let(:status) { Fabricate(:status, reblog: Fabricate(:status, text: 'this toot is about that banned word')) }
 
         before do
-          user.account.custom_filters.create!(phrase: 'filter1', context: %w(home), action: :hide, keywords_attributes: [{ keyword: 'banned' }, { keyword: 'irrelevant' }]) # rubocop:disable Layout/LineLength
+          user.account.custom_filters.create!(phrase: 'filter1', context: %w(home), action: :hide, keywords_attributes: [{ keyword: 'banned' }, { keyword: 'irrelevant' }])
         end
 
         it 'returns http success' do
@@ -251,3 +251,4 @@ RSpec.describe Api::V1::StatusesController, type: :controller do
     end
   end
 end
+# rubocop:enable Layout/LineLength
