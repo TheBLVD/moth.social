@@ -511,3 +511,13 @@ Performance/TimesMap:
   Enabled: false
 Lint/UnusedBlockArgument:
   Enabled: false
+RSpec/NestedGroups:
+  Enabled: false
+RSpec/ReturnFromStub:
+  Enabled: false
+RSpec/BeNil:
+  Enabled: false
+RSpec/MissingExampleGroupArgument:
+  Enabled: false
+RSpec/Rails/InferredSpecType:
+  Enabled: false
