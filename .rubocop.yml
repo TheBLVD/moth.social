@@ -513,3 +513,7 @@ Lint/UnusedBlockArgument:
   Enabled: false
 RSpec/NestedGroups:
   Enabled: false
+RSpec/ReturnFromStub:
+  Enabled: false
+RSpec/*:
+  Enabled: false
