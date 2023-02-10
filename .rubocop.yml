@@ -511,3 +511,5 @@ Performance/TimesMap:
   Enabled: false
 Lint/UnusedBlockArgument:
   Enabled: false
+RSpec/NestedGroups:
+  Enabled: false
