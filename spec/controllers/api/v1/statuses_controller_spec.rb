@@ -150,7 +150,7 @@ RSpec.describe Api::V1::StatusesController, type: :controller do
       context 'when exceeding rate limit' do
         before do
           rate_limiter = RateLimiter.new(user.account, family: :statuses)
-          300.times { rate_limiter.record! }
+          600.times { rate_limiter.record! }
           post :create, params: { status: 'Hello world' }
         end
 

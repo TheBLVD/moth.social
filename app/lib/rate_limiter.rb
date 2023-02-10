@@ -44,6 +44,7 @@ class RateLimiter
     redis.decr(key)
   end
 
+  # rubocop:disable Lint/AmbiguousOperatorPrecedence
   def to_headers(now = Time.now.utc)
     {
       'X-RateLimit-Limit' => @limit.to_s,
@@ -51,6 +52,7 @@ class RateLimiter
       'X-RateLimit-Reset' => (now + (@period - now.to_i % @period)).iso8601(6),
     }
   end
+  # rubocop:enable Lint/AmbiguousOperatorPrecedence
 
   private
 
