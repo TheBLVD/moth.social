@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe Api::V1::StatusesController, type: :controller do
@@ -25,7 +26,7 @@ RSpec.describe Api::V1::StatusesController, type: :controller do
         let(:status) { Fabricate(:status, text: 'this toot is about that banned word') }
 
         before do
-          user.account.custom_filters.create!(phrase: 'filter1', context: %w(home), action: :hide, keywords_attributes: [{ keyword: 'banned' }, { keyword: 'irrelevant' }])
+          user.account.custom_filters.create!(phrase: 'filter1', context: %w(home), action: :hide, keywords_attributes: [{ keyword: 'banned' }, { keyword: 'irrelevant' }]) # rubocop:disable Layout/LineLength
         end
 
         it 'returns http success' do
