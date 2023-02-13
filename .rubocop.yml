@@ -521,3 +521,5 @@ RSpec/MissingExampleGroupArgument:
   Enabled: false
 RSpec/Rails/InferredSpecType:
   Enabled: false
+RSpec/EmptyLineAfterLet:
+  Enabled: false
