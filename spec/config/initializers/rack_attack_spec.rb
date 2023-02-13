@@ -46,7 +46,7 @@ describe Rack::Attack do
     end
 
     context 'through the API' do
-      let(:limit) { 5 }
+      let(:limit) { 10 }
       let(:request) { ->() { post path, {}, 'REMOTE_ADDR' => remote_ip } }
 
       context 'for exact path' do
