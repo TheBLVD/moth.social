@@ -82,26 +82,26 @@ class Rack::Attack
     req.authenticated_user_id if req.post? && req.path.match?(%r{\A/api/v\d+/media\z}i)
   end
 
-  throttle('throttle_media_proxy', limit: 30, period: 10.minutes) do |req|
+  throttle('throttle_media_proxy', limit: 60, period: 10.minutes) do |req|
     req.throttleable_remote_ip if req.path.start_with?('/media_proxy')
   end
 
-  throttle('throttle_api_sign_up', limit: 5, period: 30.minutes) do |req|
+  throttle('throttle_api_sign_up', limit: 10, period: 30.minutes) do |req|
     req.throttleable_remote_ip if req.post? && req.path == '/api/v1/accounts'
   end
 
-  throttle('throttle_authenticated_paging', limit: 300, period: 15.minutes) do |req|
+  throttle('throttle_authenticated_paging', limit: 600, period: 15.minutes) do |req|
     req.authenticated_user_id if req.paging_request?
   end
 
-  throttle('throttle_unauthenticated_paging', limit: 300, period: 15.minutes) do |req|
+  throttle('throttle_unauthenticated_paging', limit: 600, period: 15.minutes) do |req|
     req.throttleable_remote_ip if req.paging_request? && req.unauthenticated?
   end
 
   API_DELETE_REBLOG_REGEX = %r{\A/api/v1/statuses/\d+/unreblog\z}
   API_DELETE_STATUS_REGEX = %r{\A/api/v1/statuses/\d+\z}
 
-  throttle('throttle_api_delete', limit: 30, period: 30.minutes) do |req|
+  throttle('throttle_api_delete', limit: 60, period: 30.minutes) do |req|
     req.authenticated_user_id if (req.post? && req.path.match?(API_DELETE_REBLOG_REGEX)) || (req.delete? && req.path.match?(API_DELETE_STATUS_REGEX))
   end
 

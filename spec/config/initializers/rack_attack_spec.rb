@@ -104,3 +104,4 @@ describe Rack::Attack, type: :request do
     end
   end
 end
+# rubocop:enable all
