@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-# rubocop:disable
+# rubocop:disable all
 describe Rack::Attack do
   include Rack::Test::Methods
 
@@ -82,4 +82,4 @@ describe Rack::Attack do
     end
   end
 end
-# rubocop:enable
+# rubocop:enable all
