@@ -36,12 +36,12 @@ describe Rack::Attack do
       let(:request) { ->() { post path, {}, 'REMOTE_ADDR' => remote_ip } }
 
       context 'for exact path' do
-        let(:path)  { '/auth' }
+        let(:path) { '/auth' }
         it_behaves_like 'throttled endpoint'
       end
 
       context 'for path with format' do
-        let(:path)  { '/auth.html' }
+        let(:path) { '/auth.html' }
         it_behaves_like 'throttled endpoint'
       end
     end
@@ -51,12 +51,12 @@ describe Rack::Attack do
       let(:request) { ->() { post path, {}, 'REMOTE_ADDR' => remote_ip } }
 
       context 'for exact path' do
-        let(:path)  { '/api/v1/accounts' }
+        let(:path) { '/api/v1/accounts' }
         it_behaves_like 'throttled endpoint'
       end
 
       context 'for path with format' do
-        let(:path)  { '/api/v1/accounts.json' }
+        let(:path) { '/api/v1/accounts.json' }
 
         it 'returns http not found' do
           request.call
@@ -71,12 +71,12 @@ describe Rack::Attack do
     let(:request) { ->() { post path, {}, 'REMOTE_ADDR' => remote_ip } }
 
     context 'for exact path' do
-      let(:path)  { '/auth/sign_in' }
+      let(:path) { '/auth/sign_in' }
       it_behaves_like 'throttled endpoint'
     end
 
     context 'for path with format' do
-      let(:path)  { '/auth/sign_in.html' }
+      let(:path) { '/auth/sign_in.html' }
       it_behaves_like 'throttled endpoint'
     end
   end
