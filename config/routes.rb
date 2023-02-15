@@ -688,6 +688,8 @@ Rails.application.routes.draw do
       namespace :admin do
         resources :accounts, only: [:index]
       end
+
+      resources :onboarding_follow_recommendations, only: :index, controller: 'onboarding_follow_recommendations'
     end
 
     namespace :web do

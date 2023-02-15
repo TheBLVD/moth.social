@@ -1,0 +1,13 @@
+---
+- name: Tech
+  accounts:
+    - account: '@foo@bar.baz'
+      summary: 'asdf1'
+    - account: '@roberto@gomez.bolanos'
+      summary: 'asdf2'
+- name: News & Journalists
+  accounts:
+    - account: '@elchavo@del.ocho'
+      summary: 'asdf3'
+    - account: '@carlos@villa.gran'
+      summary: 'asdf4'
