@@ -1,0 +1,179 @@
+---
+- name: Mammoth
+  items:
+    - name: '@mammoth@moth.social'
+      type: 'account'
+      summary: The official Mammoth account.
+    - name: '@daily@moth.social'
+      type: 'account'
+      summary: Light-hearted and wholesome content.
+- name: Celebrities & Pop Culture
+  items:
+    - name: '@elonjet@mastodon.social'
+      type: 'account'
+      summary: The official ElonJet account.
+    - name: '@MarkRuffalo@mastodon.social'
+      type: 'account'
+      summary: Award-winning actor, Oscar nominee.
+    - name: '@georgetakei@universeodon.com'
+      type: 'account'
+      summary: "Actor, author, and activist. \U0001F596"
+    - name: '@neilhimself@mastodon.social'
+      type: 'account'
+      summary: English author of fiction, novels.
+    - name: '@kathygriffin@mstdn.social'
+      type: 'account'
+      summary: Comedian, actress, Emmy Award winner.
+    - name: '@alexwinter@mastodon.social'
+      type: 'account'
+      summary: Actor and filmmaker.
+    - name: '@morgfair@newsie.social'
+      type: 'account'
+      summary: Actress, Primetime Emmy nominee.
+    - name: '@BethanyBlack@mastodon.social'
+      type: 'account'
+      summary: English stand-up comedian.
+    - name: '@jquillin@fashionsocial.host'
+      type: 'account'
+      summary: Glass Magazine Fmr Fashion editor.
+- name: Journalists & Publications
+  items:
+    - name: '@Sheril@mastodon.social'
+      type: 'account'
+      summary: Author, scientist, PBS host.
+    - name: '@Techmeme@techhub.social'
+      type: 'account'
+      summary: Top tech news and commentary.
+    - name: '@RollingStone@mstdn.social'
+      type: 'account'
+      summary: Rolling Stone magazine official account.
+    - name: '@w7voa@journa.host'
+      type: 'account'
+      summary: VoA Chief National Correspondent.
+    - name: '@briankrebs@infosec.exchange'
+      type: 'account'
+      summary: Cybercrime investigative journalist.
+    - name: '@drewharwell@mastodon.social'
+      type: 'account'
+      summary: WaPo Technology Reporter.
+    - name: '@taylorlorenz@mastodon.social'
+      type: 'account'
+      summary: WaPo Technology Columnist.
+    - name: '@damemagazine@newsie.social'
+      type: 'account'
+      summary: Women-led, independent magazine.
+    - name: '@chrisgeidner@journa.host'
+      type: 'account'
+      summary: Award-winning law journalist.
+    - name: '@Emilyalpertreyes@mas.to'
+      type: 'account'
+      summary: LA Times covering Public Health.
+- name: Tech & Business
+  items:
+    - name: '@anildash@me.dm'
+      type: 'account'
+      summary: Technology entrepreneur.
+    - name: '@b0rk@jvns.ca'
+      type: 'account'
+      summary: Software developer from Montreal.
+    - name: '@snazzyq@mas.to'
+      type: 'account'
+      summary: Popular technology YouTuber.
+    - name: '@donmelton@mstdn.social'
+      type: 'account'
+      summary: Mastodon’s “Store Welcome Greeter”.
+    - name: '@caseynewton@mastodon.social'
+      type: 'account'
+      summary: Tech journalist. Editor, Platformer.
+    - name: '@DetroitBORG@techhub.social'
+      type: 'account'
+      summary: Popular Apple and tech YouTuber.
+    - name: '@craignewmark@mastodon.social'
+      type: 'account'
+      summary: Founder of Craigslist.
+- name: Academics & Thinkers
+  items:
+    - name: '@helenprejean@mindly.social'
+      type: 'account'
+      summary: Death penalty activist.
+    - name: '@thesiswhisperer@aus.social'
+      type: 'account'
+      summary: Professor Inger Mewburn, ANU.
+    - name: '@drcaberry@blacktwitter.io'
+      type: 'account'
+      summary: Elec. Engineering, Robotics professor.
+    - name: '@brooklynmarie@mastodon.lol'
+      type: 'account'
+      summary: Your friendly neighborhood debunker.
+    - name: '@kityates@mas.to'
+      type: 'account'
+      summary: Mathematical biologist, book author.
+    - name: '@absolutspacegrl@mastodon.social'
+      type: 'account'
+      summary: NASA engineer.
+- name: Politics & Activism
+  items:
+    - name: '@RitchieTorres@universeodon.com'
+      type: 'account'
+      summary: NY15 Congressman.
+    - name: '@rubenbolling@mastodon.social'
+      type: 'account'
+      summary: Award winning political cartoonist.
+    - name: '@TheWarOnCars@mastodon.social'
+      type: 'account'
+      summary: Popular podcast on car dependency.
+    - name: '@zhivi@blacktwitter.io'
+      type: 'account'
+      summary: Health, fitness, accountability coach.
+    - name: '@RepShontelBrown@mastodon.social'
+      type: 'account'
+      summary: OH11 Congresswoman.
+    - name: '@Tinu@mastodon.social'
+      type: 'account'
+      summary: Digital community organiser.
+    - name: '@timnitGebru@dair-community.social'
+      type: 'account'
+      summary: Founder, Distributed AI Research Institute.
+    - name: '@QasimRashid@mastodon.social'
+      type: 'account'
+      summary: Human rights lawyer, author.
+    - name: '@BigAngBlack@fosstodon.org'
+      type: 'account'
+      summary: Black culture student.
+    - name: '@futurebird@sauropods.win'
+      type: 'account'
+      summary: Sci-fi writer, mathematics, CS teacher.
+- name: Content Creators
+  items:
+    - name: '@rebeccawatson@mstdn.social'
+      type: 'account'
+      summary: Feminist blogger and podcast host
+    - name: '@TechConnectify@mas.to'
+      type: 'account'
+      summary: Educational technology YouTuber.
+    - name: '@oatmeal@mastodon.social'
+      type: 'account'
+      summary: Popular web comic by Matthew Inman.
+    - name: '@notjustbikes@notjustbikes.com'
+      type: 'account'
+      summary: Urbanist commentator, YouTuber.
+- name: Art & Photographers
+  items:
+    - name: '@Curator@mastodon.art'
+      type: 'account'
+      summary: The best of artists on Mastodon.
+    - name: '@pnwres@mastodon.scot'
+      type: 'account'
+      summary: Professional pet photographer.
+    - name: '@ewen@photog.social'
+      type: 'account'
+      summary: Australian editorial photographer.
+    - name: '@stevenlawson@photog.social'
+      type: 'account'
+      summary: Scottish landscape photographer.
+    - name: '@ObsidianUrbex@photog.social'
+      type: 'account'
+      summary: English urban explorer and photographer.
+    - name: '@ginaperry@socel.net'
+      type: 'account'
+      summary: Children’s book author and illustrator.
