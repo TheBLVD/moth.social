@@ -30,8 +30,8 @@ class Api::V2::OnboardingFollowRecommendationsController < Api::BaseController
               type: :hashtag,
               summary: item['summary'],
               bio: item['bio'] }
-          end.compact
-        end
+          end
+        end.compact
       )
     end
   end
