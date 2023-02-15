@@ -1,0 +1,21 @@
+---
+- name: Tech
+  items:
+    - account: '@foo@bar.baz'
+      summary: 'asdf1'
+      type: account
+    - account: '@roberto@gomez.bolanos'
+      type: account
+      summary: 'asdf2'
+    - hashtag: '#rubyonrails'
+      type: hashtag
+      summary: 'mastodon runs on rails!'
+      bio: 'sinatra is better tho'
+- name: News & Journalists
+  items:
+    - account: '@elchavo@del.ocho'
+      type: 'account'
+      summary: 'asdf3'
+    - account: '@carlos@villa.gran'
+      type: account
+      summary: 'asdf4'
