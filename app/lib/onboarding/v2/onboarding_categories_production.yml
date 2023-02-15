@@ -36,6 +36,9 @@
     - account: '@jquillin@fashionsocial.host'
       type: 'account'
       summary: Glass Magazine Fmr Fashion editor.
+    - hashtag: "#catsofmastodon"
+      bio: cats!
+      summary: "everyone loves cats!"
 - name: Journalists & Publications
   items:
     - account: '@Sheril@mastodon.social'
@@ -91,6 +94,9 @@
     - account: '@craignewmark@mastodon.social'
       type: 'account'
       summary: Founder of Craigslist.
+    - hashtag: '#rubyonrails'
+      bio: 'the software Mastodon itself runs on'
+      summary: 'An all-in-one server framework that heavily relies on convention over configuratoin.'
 - name: Academics & Thinkers
   items:
     - account: '@helenprejean@mindly.social'
@@ -177,3 +183,6 @@
     - account: '@ginaperry@socel.net'
       type: 'account'
       summary: Children’s book author and illustrator.
+    - hashtag: '#mosstodon'
+      bio: lovely pictures of moss.
+      summary: One of the old-school Mastodon hashtags, calming pictures of moss.
