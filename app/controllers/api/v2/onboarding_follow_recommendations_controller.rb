@@ -18,7 +18,7 @@ class Api::V2::OnboardingFollowRecommendationsController < Api::BaseController
       Onboarding::V2::FollowRecommendationCategory.new(
         name: category['name'],
         # If any of YML accounts are invalid or not found in the database, we'll omit them from the response
-        items: category['items'].map do |item|
+        items: category['items'].filter_map do |item|
           if item['type'] == 'account'
             account = find_account(item)
             next if account.nil?
@@ -31,7 +31,7 @@ class Api::V2::OnboardingFollowRecommendationsController < Api::BaseController
               summary: item['summary'],
               bio: item['bio'] }
           end
-        end.compact
+        end
       )
     end
   end
