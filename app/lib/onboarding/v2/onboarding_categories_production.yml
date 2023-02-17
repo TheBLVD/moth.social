@@ -2,186 +2,248 @@
 - name: Mammoth
   items:
     - account: '@mammoth@moth.social'
-      type: 'account'
+      type: account
       summary: The official Mammoth account.
     - account: '@daily@moth.social'
-      type: 'account'
+      type: account
       summary: Light-hearted and wholesome content.
 - name: Celebrities & Pop Culture
   items:
     - account: '@elonjet@mastodon.social'
-      type: 'account'
+      type: account
       summary: The official ElonJet account.
     - account: '@MarkRuffalo@mastodon.social'
-      type: 'account'
+      type: account
       summary: Award-winning actor, Oscar nominee.
     - account: '@georgetakei@universeodon.com'
-      type: 'account'
+      type: account
       summary: "Actor, author, and activist. \U0001F596"
+    - hashtag: '#popculture'
+      type: hashtag
+      bio: Pop culture discussion; celebrities, news, etc.
+      summary: General pop culture.
     - account: '@neilhimself@mastodon.social'
-      type: 'account'
+      type: account
       summary: English author of fiction, novels.
     - account: '@kathygriffin@mstdn.social'
-      type: 'account'
+      type: account
       summary: Comedian, actress, Emmy Award winner.
     - account: '@alexwinter@mastodon.social'
-      type: 'account'
+      type: account
       summary: Actor and filmmaker.
+    - hashtag: '#movies'
+      type: hashtag
+      bio: General movies and film discussion.
+      summary: Movies discussion.
     - account: '@morgfair@newsie.social'
-      type: 'account'
+      type: account
       summary: Actress, Primetime Emmy nominee.
     - account: '@BethanyBlack@mastodon.social'
-      type: 'account'
+      type: account
       summary: English stand-up comedian.
     - account: '@jquillin@fashionsocial.host'
-      type: 'account'
+      type: account
       summary: Glass Magazine Fmr Fashion editor.
+    - hashtag: '#throwbackthursday'
+      type: hashtag
+      bio: Nostalgia posts and old pop-culture, every Thursday.
+      summary: Throwback Thursday!
 - name: Journalists & Publications
   items:
     - account: '@Sheril@mastodon.social'
-      type: 'account'
+      type: account
       summary: Author, scientist, PBS host.
     - account: '@Techmeme@techhub.social'
-      type: 'account'
+      type: account
       summary: Top tech news and commentary.
+    - hashtag: '#journalism'
+      type: hashtag
+      bio: Discussion and news regarding journalism, and journalists.
+      summary: Journalists and journalism news.
     - account: '@RollingStone@mstdn.social'
-      type: 'account'
+      type: account
       summary: Rolling Stone magazine official account.
     - account: '@w7voa@journa.host'
-      type: 'account'
+      type: account
       summary: VoA Chief National Correspondent.
     - account: '@briankrebs@infosec.exchange'
-      type: 'account'
+      type: account
       summary: Cybercrime investigative journalist.
     - account: '@drewharwell@mastodon.social'
-      type: 'account'
+      type: account
       summary: WaPo Technology Reporter.
+    - hashtag: '#media'
+      type: hashtag
+      bio: Discussion and news regarding mainstream and alternative media.
+      summary: Media-related discussion.
     - account: '@taylorlorenz@mastodon.social'
-      type: 'account'
+      type: account
       summary: WaPo Technology Columnist.
     - account: '@damemagazine@newsie.social'
-      type: 'account'
+      type: account
       summary: Women-led, independent magazine.
     - account: '@chrisgeidner@journa.host'
-      type: 'account'
+      type: account
       summary: Award-winning law journalist.
     - account: '@Emilyalpertreyes@mas.to'
-      type: 'account'
+      type: account
       summary: LA Times covering Public Health.
+- name: Content Creators
+  items:
+    - account: '@rebeccawatson@mstdn.social'
+      type: account
+      summary: Feminist blogger and podcast host
+    - account: '@TechConnectify@mas.to'
+      type: account
+      summary: Educational technology YouTuber.
+    - hashtag: '#blogging'
+      type: hashtag
+      bio: Discussion related to blogging, and interesting blog posts people have shared.
+      summary: Blog content and discussion.
+    - account: '@oatmeal@mastodon.social'
+      type: account
+      summary: Popular web comic by Matthew Inman.
+    - account: '@notjustbikes@notjustbikes.com'
+      type: account
+      summary: Urbanist commentator, YouTuber.
+    - hashtag: '#youtube'
+      type: hashtag
+      bio: Discussion related to the YouTube video website, YouTubers and YouTuber culture.
+      summary: YouTube-related discussion.
 - name: Tech & Business
   items:
     - account: '@anildash@me.dm'
-      type: 'account'
+      type: account
       summary: Technology entrepreneur.
     - account: '@b0rk@jvns.ca'
-      type: 'account'
+      type: account
       summary: Software developer from Montreal.
     - account: '@snazzyq@mas.to'
-      type: 'account'
+      type: account
       summary: Popular technology YouTuber.
+    - hashtag: '#apple'
+      type: hashtag
+      bio: Discussion related to the Apple company, products, services, and software.
+      summary: Apple-related discussion.
     - account: '@donmelton@mstdn.social'
-      type: 'account'
+      type: account
       summary: Mastodon’s “Store Welcome Greeter”.
     - account: '@caseynewton@mastodon.social'
-      type: 'account'
+      type: account
       summary: Tech journalist. Editor, Platformer.
     - account: '@DetroitBORG@techhub.social'
-      type: 'account'
+      type: account
       summary: Popular Apple and tech YouTuber.
+    - hashtag: '#startup'
+      type: hashtag
+      bio: Discussion related to startups, entrepreneurship, and general industry happenings.
+      summary: Startups and entrepreneurship.
     - account: '@craignewmark@mastodon.social'
-      type: 'account'
+      type: account
       summary: Founder of Craigslist.
-    - hashtag: '#rubyonrails'
-      type: 'hashtag'
-      bio: 'The software Mastodon itself runs on.'
-      summary: 'An all-in-one server framework that heavily relies on convention over configuration.'
 - name: Academics & Thinkers
   items:
     - account: '@helenprejean@mindly.social'
-      type: 'account'
+      type: account
       summary: Death penalty activist.
     - account: '@thesiswhisperer@aus.social'
-      type: 'account'
+      type: account
       summary: Professor Inger Mewburn, ANU.
+    - hashtag: '#urbanism'
+      type: hashtag
+      bio: Discussion surrounding urbanism movements, transport and city planning.
+      summary: Urbanist news and discussion.
     - account: '@drcaberry@blacktwitter.io'
-      type: 'account'
+      type: account
       summary: Elec. Engineering, Robotics professor.
     - account: '@brooklynmarie@mastodon.lol'
-      type: 'account'
+      type: account
       summary: Your friendly neighborhood debunker.
+    - hashtag: '#academia'
+      type: hashtag
+      bio: 'Academics on Mastodon: research, news, papers and general discussion.'
+      summary: Academia and academics.
     - account: '@kityates@mas.to'
-      type: 'account'
+      type: account
       summary: Mathematical biologist, book author.
     - account: '@absolutspacegrl@mastodon.social'
-      type: 'account'
+      type: account
       summary: NASA engineer.
 - name: Politics & Activism
   items:
     - account: '@RitchieTorres@universeodon.com'
-      type: 'account'
+      type: account
       summary: NY15 Congressman.
     - account: '@rubenbolling@mastodon.social'
-      type: 'account'
+      type: account
       summary: Award winning political cartoonist.
-    - account: '@TheWarOnCars@mastodon.social'
-      type: 'account'
-      summary: Popular podcast on car dependency.
+    - hashtag: '#Activism'
+      type: hashtag
+      bio: Discussion covering activism and activist movements across the world.
+      summary: General activism discussion.
     - account: '@zhivi@blacktwitter.io'
-      type: 'account'
+      type: account
       summary: Health, fitness, accountability coach.
+    - hashtag: '#BlackLivesMatter'
+      type: hashtag
+      bio:
+        Discussion around the Black Lives Matter decentralized political and social
+        movement.
+      summary: Activism movement.
     - account: '@RepShontelBrown@mastodon.social'
-      type: 'account'
+      type: account
       summary: OH11 Congresswoman.
     - account: '@Tinu@mastodon.social'
-      type: 'account'
+      type: account
       summary: Digital community organiser.
     - account: '@timnitGebru@dair-community.social'
-      type: 'account'
+      type: account
       summary: Founder, Distributed AI Research Institute.
-    - account: '@QasimRashid@mastodon.social'
-      type: 'account'
-      summary: Human rights lawyer, author.
-    - account: '@BigAngBlack@fosstodon.org'
-      type: 'account'
-      summary: Black culture student.
     - account: '@futurebird@sauropods.win'
-      type: 'account'
+      type: account
       summary: Sci-fi writer, mathematics, CS teacher.
-- name: Content Creators
-  items:
-    - account: '@rebeccawatson@mstdn.social'
-      type: 'account'
-      summary: Feminist blogger and podcast host
-    - account: '@TechConnectify@mas.to'
-      type: 'account'
-      summary: Educational technology YouTuber.
-    - account: '@oatmeal@mastodon.social'
-      type: 'account'
-      summary: Popular web comic by Matthew Inman.
-    - account: '@notjustbikes@notjustbikes.com'
-      type: 'account'
-      summary: Urbanist commentator, YouTuber.
+    - account: '@QasimRashid@mastodon.social'
+      type: account
+      summary: Human rights lawyer, author.
+    - account: '@TheWarOnCars@mastodon.social'
+      type: account
+      summary: Popular podcast on car dependency.
+    - hashtag: '#politics'
+      type: hashtag
+      bio: Political news and discussion, United States and worldwide.
+      summary: US & international politics.
+    - account: '@BigAngBlack@fosstodon.org'
+      type: account
+      summary: Black culture student.
 - name: Art & Photographers
   items:
     - account: '@Curator@mastodon.art'
-      type: 'account'
+      type: account
       summary: The best of artists on Mastodon.
     - account: '@pnwres@mastodon.scot'
-      type: 'account'
+      type: account
       summary: Professional pet photographer.
     - account: '@ewen@photog.social'
-      type: 'account'
+      type: account
       summary: Australian editorial photographer.
+    - hashtag: '#mastoart'
+      type: hashtag
+      bio: Artists and art discussion, primarily from those who call Mastodon home.
+      summary: Artists on Mastodon.
     - account: '@stevenlawson@photog.social'
-      type: 'account'
+      type: account
       summary: Scottish landscape photographer.
+    - hashtag: '#mosstodon'
+      type: hashtag
+      bio: One of the old-school Mastodon hashtags, calming pictures of moss.
+      summary: Moss on Mastodon. Mosstodon.
     - account: '@ObsidianUrbex@photog.social'
-      type: 'account'
+      type: account
       summary: English urban explorer and photographer.
     - account: '@ginaperry@socel.net'
-      type: 'account'
+      type: account
       summary: Children’s book author and illustrator.
-    - hashtag: '#mosstodon'
-      type: 'hashtag'
-      bio: 'Lovely pictures of moss.'
-      summary: 'One of the old-school Mastodon hashtags, calming pictures of moss.'
+    - hashtag: '#photography'
+      type: hashtag
+      bio: Photographers and interesting photos on Mastodon.
+      summary: Photos and photography.
