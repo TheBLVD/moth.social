@@ -20,8 +20,8 @@
       summary: "Actor, author, and activist. \U0001F596"
     - hashtag: '#popculture'
       type: hashtag
-      bio: General pop culture.
-      summary: Pop culture discussion; celebrities, news, etc.
+      bio: Pop culture discussion; celebrities, news, etc.
+      summary: General pop culture.
     - account: '@neilhimself@mastodon.social'
       type: account
       summary: English author of fiction, novels.
@@ -33,8 +33,8 @@
       summary: Actor and filmmaker.
     - hashtag: '#movies'
       type: hashtag
-      bio: Movies discussion.
-      summary: General movies and film discussion.
+      bio: General movies and film discussion.
+      summary: Movies discussion.
     - account: '@morgfair@newsie.social'
       type: account
       summary: Actress, Primetime Emmy nominee.
@@ -46,8 +46,8 @@
       summary: Glass Magazine Fmr Fashion editor.
     - hashtag: '#throwbackthursday'
       type: hashtag
-      bio: Throwback Thursday!
-      summary: Nostalgia posts and old pop-culture, every Thursday.
+      bio: Nostalgia posts and old pop-culture, every Thursday.
+      summary: Throwback Thursday!
 - name: Journalists & Publications
   items:
     - account: '@Sheril@mastodon.social'
@@ -58,8 +58,8 @@
       summary: Top tech news and commentary.
     - hashtag: '#journalism'
       type: hashtag
-      bio: Journalists and journalism news.
-      summary: Discussion and news regarding journalism, and journalists.
+      bio: Discussion and news regarding journalism, and journalists.
+      summary: Journalists and journalism news.
     - account: '@RollingStone@mstdn.social'
       type: account
       summary: Rolling Stone magazine official account.
@@ -74,8 +74,8 @@
       summary: WaPo Technology Reporter.
     - hashtag: '#media'
       type: hashtag
-      bio: Media-related discussion.
-      summary: Discussion and news regarding mainstream and alternative media.
+      bio: Discussion and news regarding mainstream and alternative media.
+      summary: Media-related discussion.
     - account: '@taylorlorenz@mastodon.social'
       type: account
       summary: WaPo Technology Columnist.
@@ -98,10 +98,8 @@
       summary: Educational technology YouTuber.
     - hashtag: '#blogging'
       type: hashtag
-      bio: Blog content and discussion.
-      summary:
-        Discussion related to blogging, and interesting blog posts people have
-        shared.
+      bio: Discussion related to blogging, and interesting blog posts people have shared.
+      summary: Blog content and discussion.
     - account: '@oatmeal@mastodon.social'
       type: account
       summary: Popular web comic by Matthew Inman.
@@ -110,10 +108,8 @@
       summary: Urbanist commentator, YouTuber.
     - hashtag: '#youtube'
       type: hashtag
-      bio: YouTube-related discussion.
-      summary:
-        Discussion related to the YouTube video website, YouTubers and YouTuber
-        culture.
+      bio: Discussion related to the YouTube video website, YouTubers and YouTuber culture.
+      summary: YouTube-related discussion.
 - name: Tech & Business
   items:
     - account: '@anildash@me.dm'
@@ -127,8 +123,8 @@
       summary: Popular technology YouTuber.
     - hashtag: '#apple'
       type: hashtag
-      bio: Apple-related discussion.
-      summary: Discussion related to the Apple company, products, services, and software.
+      bio: Discussion related to the Apple company, products, services, and software.
+      summary: Apple-related discussion.
     - account: '@donmelton@mstdn.social'
       type: account
       summary: Mastodon’s “Store Welcome Greeter”.
@@ -140,10 +136,8 @@
       summary: Popular Apple and tech YouTuber.
     - hashtag: '#startup'
       type: hashtag
-      bio: Startups and entrepreneurship.
-      summary:
-        Discussion related to startups, entrepreneurship, and general industry
-        happenings.
+      bio: Discussion related to startups, entrepreneurship, and general industry happenings.
+      summary: Startups and entrepreneurship.
     - account: '@craignewmark@mastodon.social'
       type: account
       summary: Founder of Craigslist.
@@ -157,8 +151,8 @@
       summary: Professor Inger Mewburn, ANU.
     - hashtag: '#urbanism'
       type: hashtag
-      bio: Urbanist news and discussion.
-      summary: Discussion surrounding urbanism movements, transport and city planning.
+      bio: Discussion surrounding urbanism movements, transport and city planning.
+      summary: Urbanist news and discussion.
     - account: '@drcaberry@blacktwitter.io'
       type: account
       summary: Elec. Engineering, Robotics professor.
@@ -167,8 +161,8 @@
       summary: Your friendly neighborhood debunker.
     - hashtag: '#academia'
       type: hashtag
-      bio: Academia and academics.
-      summary: 'Academics on Mastodon: research, news, papers and general discussion.'
+      bio: 'Academics on Mastodon: research, news, papers and general discussion.'
+      summary: Academia and academics.
     - account: '@kityates@mas.to'
       type: account
       summary: Mathematical biologist, book author.
@@ -185,17 +179,17 @@
       summary: Award winning political cartoonist.
     - hashtag: '#Activism'
       type: hashtag
-      bio: General activism discussion.
-      summary: Discussion covering activism and activist movements across the world.
+      bio: Discussion covering activism and activist movements across the world.
+      summary: General activism discussion.
     - account: '@zhivi@blacktwitter.io'
       type: account
       summary: Health, fitness, accountability coach.
     - hashtag: '#BlackLivesMatter'
       type: hashtag
-      bio: Activism movement.
-      summary:
-        Discussion around the Black Lives Matter decentralized political and
-        social movement.
+      bio:
+        Discussion around the Black Lives Matter decentralized political and social
+        movement.
+      summary: Activism movement.
     - account: '@RepShontelBrown@mastodon.social'
       type: account
       summary: OH11 Congresswoman.
@@ -216,8 +210,8 @@
       summary: Popular podcast on car dependency.
     - hashtag: '#politics'
       type: hashtag
-      bio: US & international politics.
-      summary: Political news and discussion, United States and worldwide.
+      bio: Political news and discussion, United States and worldwide.
+      summary: US & international politics.
     - account: '@BigAngBlack@fosstodon.org'
       type: account
       summary: Black culture student.
@@ -234,15 +228,15 @@
       summary: Australian editorial photographer.
     - hashtag: '#mastoart'
       type: hashtag
-      bio: Artists on Mastodon.
-      summary: Artists and art discussion, primarily from those who call Mastodon home.
+      bio: Artists and art discussion, primarily from those who call Mastodon home.
+      summary: Artists on Mastodon.
     - account: '@stevenlawson@photog.social'
       type: account
       summary: Scottish landscape photographer.
     - hashtag: '#mosstodon'
       type: hashtag
-      bio: Moss on Mastodon. Mosstodon.
-      summary: One of the old-school Mastodon hashtags, calming pictures of moss.
+      bio: One of the old-school Mastodon hashtags, calming pictures of moss.
+      summary: Moss on Mastodon. Mosstodon.
     - account: '@ObsidianUrbex@photog.social'
       type: account
       summary: English urban explorer and photographer.
@@ -251,5 +245,5 @@
       summary: Children’s book author and illustrator.
     - hashtag: '#photography'
       type: hashtag
-      bio: Photos and photography.
-      summary: Photographers and interesting photos on Mastodon.
+      bio: Photographers and interesting photos on Mastodon.
+      summary: Photos and photography.
