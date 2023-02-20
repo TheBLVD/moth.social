@@ -23,5 +23,8 @@ module.exports = {
     NODE_ENV: env.NODE_ENV,
     PUBLIC_OUTPUT_PATH: settings.public_output_path,
   },
+  experiments: {
+    futureDefaults: true,
+  },
   output,
 };
