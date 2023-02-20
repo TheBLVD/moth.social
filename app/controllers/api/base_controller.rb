@@ -18,7 +18,7 @@ class Api::BaseController < ApplicationController
   protect_from_forgery with: :null_session
 
   content_security_policy do |p|
-    # Set every directive that does not have a fallback
+    # Set every directive that does not have a fallback.  Test addition.
     p.default_src :none
     p.frame_ancestors :none
     p.form_action :none
