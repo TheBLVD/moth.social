@@ -22,7 +22,7 @@ namespace :systemd do
       task "#{service}:#{action}".to_sym do
         on roles(:web) do
           # runs e.g. "sudo restart mastodon-sidekiq.service"
-          sudo :systemctl, action, "#{fetch(:application)}-#{service}"
+          sudo :systemctl, action, "#{fetch(:application)}-#{service}*"
         end
       end
     end
