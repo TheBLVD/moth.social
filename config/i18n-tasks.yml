@@ -65,3 +65,4 @@ ignore_unused:
 
 ignore_inconsistent_interpolations:
   - '*.one'
+  - 'user_mailer.welcome.title'
