@@ -249,18 +249,41 @@
       summary: Photos and photography.
 - name: Developers
   items:
-    - account: '@chockenberry@mastodon.social'
-      type: account
-      summary: Developer of Twitterrific.
-    - account: '@gruber@mastodon.social'
-      type: account
-      summary: Creator of Markdown.
-    - account: '@christianselig@mastodon.social'
-      type: account
-      summary: Developer of Apollo Reddit app.
-    - account: '@cabel@panic.com'
-      type: account
-      summary: Founder of Panic Inc.
     - account: '@shantini@techhub.social'
       type: account
       summary: Software engineer at Apple.
+    - account: '@cabel@panic.com'
+      type: account
+      summary: Founder of Panic Inc.
+    - account: '@christianselig@mastodon.social'
+      type: account
+      summary: Developer of Apollo Reddit app.
+    - account: '@gruber@mastodon.social'
+      type: account
+      summary: Creator of Markdown.
+    - account: '@chockenberry@mastodon.social'
+      type: account
+      summary: Developer of Twitterrific.
+- name: Mammoth Team
+  items:
+    - account: '@bart@moth.social'
+      type: account
+      summary: Co-Founder, Mammoth.
+    - account: '@nick@moth.social'
+      type: account
+      summary: Community at Mammoth.
+    - account: '@misspurple@moth.social'
+      type: account
+      summary: Community at Mammoth.
+    - account: '@sdubinsky@moth.social'
+      type: account
+      summary: Backend Engineer at Mammoth.
+    - account: '@JPEGuin@moth.social'
+      type: account
+      summary: App Developer at Mammoth.
+    - account: '@rileyhBat@moth.social'
+      type: account
+      summary: Engineer at Mammoth.
+    - account: '@mmayo@hachyderm.io'
+      type: account
+      summary: Board Member, Mammoth.
