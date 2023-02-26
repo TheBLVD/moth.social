@@ -247,23 +247,6 @@
       type: hashtag
       bio: Photographers and interesting photos on Mastodon.
       summary: Photos and photography.
-- name: Developers
-  items:
-    - account: '@shantini@techhub.social'
-      type: account
-      summary: Software engineer at Apple.
-    - account: '@cabel@panic.com'
-      type: account
-      summary: Founder of Panic Inc.
-    - account: '@christianselig@mastodon.social'
-      type: account
-      summary: Developer of Apollo Reddit app.
-    - account: '@gruber@mastodon.social'
-      type: account
-      summary: Creator of Markdown.
-    - account: '@chockenberry@mastodon.social'
-      type: account
-      summary: Developer of Twitterrific.
 - name: Mammoth Team
   items:
     - account: '@bart@moth.social'
