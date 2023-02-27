@@ -77,9 +77,9 @@ class LinkFooter extends React.PureComponent {
         <p>
           <strong>Mastodon</strong>:
           {' '}
-          <a href='https://joinmastodon.org' target='_blank'><FormattedMessage id='footer.about' defaultMessage='About Mastodon' /></a>
+          <a href='https://joinmastodon.org' target='_blank'><FormattedMessage id='footer.about' defaultMessage='About' /></a>
           {' · '}
-          <a href='https://getmammoth.app' target='_blank'><FormattedMessage id='footer.get_app' defaultMessage='Get the Mammoth app' /></a>
+          <a href='https://getmammoth.app' target='_blank'><FormattedMessage id='footer.get_app' defaultMessage='Get the app' /></a>
           {' · '}
           <Link to='/keyboard-shortcuts'><FormattedMessage id='footer.keyboard_shortcuts' defaultMessage='Keyboard shortcuts' /></Link>
           {' · '}
