@@ -21,7 +21,7 @@ class Api::V2::OnboardingFollowRecommendationsController < Api::BaseController
         items: category['items'].filter_map do |item|
           if item['type'] == 'account'
             account = find_account(item)
-            next if account.nil?
+            next if account.nil? || !account.discoverable?
             { name: account,
               type: :account,
               summary: item['summary'] }
