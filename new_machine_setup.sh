@@ -1,7 +1,7 @@
 if [ "$(uname -s)" == "Darwin" ]; then
     xcode-select --install
 
-    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install)"
 
     brew install coreutils curl git openssl@3 readline libyaml gmp
 
