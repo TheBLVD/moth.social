@@ -428,6 +428,12 @@ Rails.application.routes.draw do
     get '/oembed', to: 'oembed#show', as: :oembed
 
     # JSON / REST API
+    namespace :v0 do
+      namespace :timelines do
+        resource :popular, only: :show, controller: :popular
+      end
+    end
+
     namespace :v1 do
       resources :statuses, only: [:create, :show, :update, :destroy] do
         scope module: :statuses do
