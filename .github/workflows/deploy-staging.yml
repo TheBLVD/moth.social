@@ -2,15 +2,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      -uses: actions/@checkout@v3
-      -name: Set up Ruby
-      uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.0.4
           bundler-cache: true
-      - name: Deploy to staging
+      - name: Deploy to Production
         uses: miloserdow/capistrano-deploy@master
         with:
           target: staging
           deploy_key: ${{ secrets.DEPLOY_ENC_KEY }}
-
