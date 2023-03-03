@@ -1,5 +1,7 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
+require 'rails_helper'
+# rubocop:disable all
 RSpec.describe Api::V1::TagsController, type: :controller do
   render_views
 
@@ -67,33 +69,35 @@ RSpec.describe Api::V1::TagsController, type: :controller do
       end
     end
 
-  context 'with non-existing tag' do
-    let(:name) { 'hoge' }
+    context 'with non-existing tag' do
+      let(:name) { 'hoge' }
+
+      it 'returns http success' do
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'creates follow' do
+        expect(TagFollow.where(tag: Tag.find_by!(name: name), account: user.account).exists?).to be true
+      end
+    end
+  end
+
+  describe 'POST #unfollow' do
+    let!(:tag) { Fabricate(:tag, name: 'foo') }
+    let!(:tag_follow) { Fabricate(:tag_follow, account: user.account, tag: tag) }
+
+    before do
+      post :unfollow, params: { id: tag.name }
+    end
 
     it 'returns http success' do
       expect(response).to have_http_status(:success)
     end
 
-    it 'creates follow' do
-      expect(TagFollow.where(tag: Tag.find_by!(name: name), account: user.account).exists?).to be true
+    it 'removes the follow' do
+      expect(TagFollow.where(tag: tag, account: user.account).exists?).to be false
     end
   end
 end
 
-describe 'POST #unfollow' do
-  let!(:tag) { Fabricate(:tag, name: 'foo') }
-  let!(:tag_follow) { Fabricate(:tag_follow, account: user.account, tag: tag) }
-
-  before do
-    post :unfollow, params: { id: tag.name }
-  end
-
-  it 'returns http success' do
-    expect(response).to have_http_status(:success)
-  end
-
-  it 'removes the follow' do
-    expect(TagFollow.where(tag: tag, account: user.account).exists?).to be false
-  end
-end
-end
+# rubocop:enable all
