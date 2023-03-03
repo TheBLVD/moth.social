@@ -25,6 +25,18 @@ describe Api::V1::Timelines::TagController do
         expect(response.headers['Link'].links.size).to eq(2)
       end
     end
+
+    describe 'GET #follow' do
+      before do
+        PostStatusService.new.call(user.account, text: 'It is a #test')
+      end
+
+      it 'rebuilds if necessary' do
+        get :follow, params: { id: 1, rebuild: true}
+        expect(response).to have_http_status(200)
+        expect(RegenerationWorker).to receive(:perform_async)
+      end
+    end
   end
 
   context 'without a user context' do
