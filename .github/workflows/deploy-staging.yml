@@ -12,7 +12,7 @@ jobs:
         with:
           ruby-version: 3.0.4
           bundler-cache: true
-      - name: Deploy to Production
+      - name: Deploy to Staging
         uses: miloserdow/capistrano-deploy@master
         with:
           target: staging
