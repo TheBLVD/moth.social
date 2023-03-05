@@ -85,9 +85,11 @@ RSpec.describe Api::V1::TagsController, type: :controller do
   describe 'POST #unfollow' do
     let!(:tag) { Fabricate(:tag, name: 'foo') }
     let!(:tag_follow) { Fabricate(:tag_follow, account: user.account, tag: tag) }
+    let!(:params) { { id: tag.name } }
 
     before do
-      post :unfollow, params: { id: tag.name }
+      allow(RegenerationWorker).to receive(:perform_async)
+      post :unfollow, params: params
     end
 
     it 'returns http success' do
@@ -97,6 +99,15 @@ RSpec.describe Api::V1::TagsController, type: :controller do
     it 'removes the follow' do
       expect(TagFollow.where(tag: tag, account: user.account).exists?).to be false
     end
+
+    context 'with a rebuild param' do
+      let!(:params) { super().merge(rebuild: true) }
+
+      it 'rebuilds if necessary' do
+        expect(RegenerationWorker).to have_received(:perform_async)
+      end
+    end
+
   end
 end
 

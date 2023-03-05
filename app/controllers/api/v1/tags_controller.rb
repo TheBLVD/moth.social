@@ -21,6 +21,9 @@ class Api::V1::TagsController < Api::BaseController
 
   def unfollow
     TagFollow.find_by(account: current_account, tag: @tag)&.destroy!
+    if params[:rebuild]
+      RegenerationWorker.perform_async(current_account.id)
+    end
     render json: @tag, serializer: REST::TagSerializer
   end
 
