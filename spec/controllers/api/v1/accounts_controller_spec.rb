@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
+# rubocop:disable all
 
 RSpec.describe Api::V1::AccountsController, type: :controller do
   render_views
@@ -368,3 +371,5 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
     it_behaves_like 'forbidden for wrong scope', 'read:accounts'
   end
 end
+
+#rubocop:enable all
