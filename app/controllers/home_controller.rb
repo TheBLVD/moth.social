@@ -9,6 +9,10 @@ class HomeController < ApplicationController
     expires_in 0, public: true unless user_signed_in?
   end
 
+  def apple_app_site_association
+    render formats: :json
+  end
+
   private
 
   def set_instance_presenter

@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: 'letter_opener' if Rails.env.development?
 
   get 'health', to: 'health#show'
+  get 'apple-app-site-association', to: 'home#apple_app_site_association'
 
   authenticate :user, lambda { |u| u.role&.can?(:view_devops) } do
     mount Sidekiq::Web, at: 'sidekiq', as: :sidekiq
