@@ -97,6 +97,7 @@ class Scheduler::Trends::TrendsUpdateScheduler
     return 0 if history.length < 2
     expected = history[1]['accounts'].to_f
     observed = history[0]['accounts'].to_f
+    return 0 if expected.zero?
     ((observed - expected)**2) / expected
   end
 end

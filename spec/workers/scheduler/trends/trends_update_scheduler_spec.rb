@@ -53,6 +53,13 @@ describe Scheduler::Trends::TrendsUpdateScheduler do
       end
     end
 
+    context 'when history only has one' do
+      let(:history) { [{ 'accounts' => 4 }, { 'accounts' => 0 }] }
+      it 'returns 0' do
+        expect(subject.calculate_max_score(history)).to eq(0)
+      end
+    end
+
     context 'when history exists' do
       let(:history) { [{ 'accounts' => 4 }, { 'accounts' => 5 }] }
 
