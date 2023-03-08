@@ -241,8 +241,8 @@ class FeedManager
     account.statuses.limit(limit).each do |status|
       add_to_feed(:home, account.id, status, aggregate_reblogs: aggregate)
     end
-
     account.following.includes(:account_stat).find_each do |target_account|
+
       if redis.zcard(timeline_key) >= limit
         oldest_home_score = redis.zrange(timeline_key, 0, 0, with_scores: true).first.last.to_i
         last_status_score = Mastodon::Snowflake.id_at(target_account.last_status_at)
@@ -252,13 +252,12 @@ class FeedManager
         # because none of its statuses would stay on the feed anyway
         next if last_status_score < oldest_home_score
       end
-
       statuses = target_account.statuses.where(visibility: [:public, :unlisted, :private]).includes(:preloadable_poll, :media_attachments, :account, reblog: :account).limit(limit)
+
       crutches = build_crutches(account.id, statuses)
 
       statuses.each do |status|
         next if filter_from_home?(status, account.id, crutches)
-
         add_to_feed(:home, account.id, status, aggregate_reblogs: aggregate)
       end
 
@@ -266,12 +265,11 @@ class FeedManager
     end
 
     TagFollow.where(account_id: account.id).find_each do |target_tag|
-      statuses = taget_tag.statuses.where(visibility: [:public, :unlisted, :private]).limit(limit)
+      statuses = target_tag.tag.statuses.where(visibility: [:public, :unlisted, :private]).limit(limit)
       crutches = build_crutches(account.id, statuses)
 
       statuses.each do |status|
         next if filter_from_home?(status, account.id, crutches)
-
         add_to_feed(:home, account.id, status)
       end
 

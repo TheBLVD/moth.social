@@ -504,20 +504,25 @@ RSpec.describe FeedManager do
   end
 
   describe '#populate_home' do
-    let(:account)          { Fabricate(:account) }
-    let(:followed_account) { Fabricate(:account) }
-    let(:target_account)   { Fabricate(:account) }
-    let(:status_1)         { Fabricate(:status, account: followed_account) }
-    let(:status_2)         { Fabricate(:status, account: target_account) }
-    let(:status_3)         { Fabricate(:status, account: followed_account, mentions: [Fabricate(:mention, account: target_account)]) }
-    let(:status_4)         { Fabricate(:status, mentions: [Fabricate(:mention, account: target_account)]) }
-    let(:status_5)         { Fabricate(:status, account: followed_account, reblog: status_4) }
-    let(:status_6)         { Fabricate(:status, account: followed_account, reblog: status_2) }
-    let(:status_7)         { Fabricate(:status, account: followed_account) }
+    let!(:account)          { Fabricate(:account) }
+    let!(:followed_account) { Fabricate(:account) }
+    let!(:status_1)         { Fabricate(:status, account: followed_account) }
+    let!(:status_2)         { Fabricate(:status, account: followed_account) }
+    let!(:status_3)         { Fabricate(:status, account: followed_account) }
+
+    let!(:tag) { Fabricate(:tag) }
+    let!(:status_4) { Fabricate(:status, account: Fabricate(:account), tags: [tag]) }
 
     it 'adds statuses from followed accounts' do
+      account.follow!(followed_account)
       FeedManager.instance.populate_home(account)
-      expect(HomeFeed.new(account).get.count).to_be greater_than 0
+      expect(HomeFeed.new(account).get(FeedManager::MAX_ITEMS).to_a.count).to eq 3
+    end
+
+    it 'adds statuses from followed tags' do
+      Fabricate(:tag_follow, account: account, tag: tag)
+      FeedManager.instance.populate_home(account)
+      expect(HomeFeed.new(account).get(FeedManager::MAX_ITEMS).to_a.count).to eq 1
     end
   end
 end
