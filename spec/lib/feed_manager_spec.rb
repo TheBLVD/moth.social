@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# rubocop:disable all
+
 require 'rails_helper'
 
 RSpec.describe FeedManager do
@@ -498,4 +502,23 @@ RSpec.describe FeedManager do
       expect(redis.zrange("feed:home:#{account.id}", 0, -1)).to eq [status_1.id.to_s, status_7.id.to_s]
     end
   end
+
+  describe '#populate_home' do
+    let(:account)          { Fabricate(:account) }
+    let(:followed_account) { Fabricate(:account) }
+    let(:target_account)   { Fabricate(:account) }
+    let(:status_1)         { Fabricate(:status, account: followed_account) }
+    let(:status_2)         { Fabricate(:status, account: target_account) }
+    let(:status_3)         { Fabricate(:status, account: followed_account, mentions: [Fabricate(:mention, account: target_account)]) }
+    let(:status_4)         { Fabricate(:status, mentions: [Fabricate(:mention, account: target_account)]) }
+    let(:status_5)         { Fabricate(:status, account: followed_account, reblog: status_4) }
+    let(:status_6)         { Fabricate(:status, account: followed_account, reblog: status_2) }
+    let(:status_7)         { Fabricate(:status, account: followed_account) }
+
+    it 'adds statuses from followed accounts' do
+      FeedManager.instance.populate_home(account)
+      expect(HomeFeed.new(account).get.count).to_be greater_than 0
+    end
+  end
 end
+# rubocop:enable all
