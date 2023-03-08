@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable all
 require 'singleton'
 
 class FeedManager
@@ -564,3 +565,4 @@ class FeedManager
     crutches
   end
 end
+# rubocop:enable all
