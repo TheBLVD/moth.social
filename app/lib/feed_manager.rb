@@ -264,6 +264,19 @@ class FeedManager
 
       trim(:home, account.id)
     end
+
+    TagFollow.where(account_id: account.id).find_each do |target_tag|
+      statuses = taget_tag.statuses.where(visibility: [:public, :unlisted, :private]).limit(limit)
+      crutches = build_crutches(account.id, statuses)
+
+      statuses.each do |status|
+        next if filter_from_home?(status, account.id, crutches)
+
+        add_to_feed(:home, account.id, status)
+      end
+
+      trim(:home, account.id)
+    end
   end
 
   # Completely clear multiple feeds at once
