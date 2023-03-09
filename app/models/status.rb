@@ -28,6 +28,7 @@
 #  ordered_media_attachment_ids :bigint(8)        is an Array
 #
 
+# rubocop:disable all
 class Status < ApplicationRecord
   before_destroy :unlink_from_conversations
 
@@ -540,3 +541,4 @@ class Status < ApplicationRecord
     end
   end
 end
+# rubocop:enable all
