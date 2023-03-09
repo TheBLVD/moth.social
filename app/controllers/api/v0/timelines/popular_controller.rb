@@ -64,5 +64,4 @@ class Api::V0::Timelines::PopularController < Api::BaseController
   def pagination_since_id
     @statuses.first.id
   end
-
 end
