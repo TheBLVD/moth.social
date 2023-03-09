@@ -3,7 +3,13 @@
 require 'rails_helper'
 
 describe Api::V0::Timelines::PopularController do
+  render_views
+
   let(:user) { Fabricate(:user, current_sign_in_at: 1.minute.ago) }
+
+  before do
+    allow(controller).to receive(:doorkeeper_token) { token }
+  end
 
   context 'with a user context' do
     let(:token) { Fabricate(:access_token, resource_owner_id: user.id, scopes: 'read:statuses') }
