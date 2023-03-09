@@ -4,6 +4,8 @@ on: workflow_dispatch
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      BRANCH: ${{github.ref_name}}
     steps:
       - uses: actions/checkout@v3
       - name: Set up Ruby
