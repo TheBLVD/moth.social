@@ -266,7 +266,7 @@ class FeedManager
     end
 
     TagFollow.where(account_id: account.id).find_each do |target_tag|
-      statuses = target_tag.tag.statuses.where(visibility: [:public, :unlisted, :private]).limit(limit)
+      statuses = target_tag.tag.statuses.where(visibility: [:public, :unlisted, :private]).limit(limit).order(created_at: :desc)
       crutches = build_crutches(account.id, statuses)
 
       statuses.each do |status|
