@@ -11,7 +11,7 @@ class Api::V0::Timelines::PopularController < Api::BaseController
     render json: @statuses,
            each_serializer: REST::StatusSerializer,
            relationships: StatusRelationshipsPresenter.new(@statuses, current_user&.account_id),
-           status: account_home_feed.regenerating? ? 206 : 200
+           status: account_popular_feed.regenerating? ? 206 : 200
   end
 
   private
@@ -21,15 +21,15 @@ class Api::V0::Timelines::PopularController < Api::BaseController
   end
 
   def load_statuses
-    cached_home_statuses
+    cached_popular_statuses
   end
 
-  def cached_home_statuses
-    cache_collection home_statuses, Status
+  def cached_popular_statuses
+    cache_collection popular_statuses, Status
   end
 
-  def home_statuses
-    account_home_feed.get(
+  def popular_statuses
+    account_popular_feed.get(
       limit_param(DEFAULT_STATUSES_LIMIT),
       params[:max_id],
       params[:since_id],
@@ -37,7 +37,7 @@ class Api::V0::Timelines::PopularController < Api::BaseController
     )
   end
 
-  def account_home_feed
+  def account_popular_feed
     HomeFeed.new(current_account)
   end
 
@@ -50,11 +50,11 @@ class Api::V0::Timelines::PopularController < Api::BaseController
   end
 
   def next_path
-    api_v1_timelines_home_url pagination_params(max_id: pagination_max_id)
+    api_v0_timelines_popular_url pagination_params(max_id: pagination_max_id)
   end
 
   def prev_path
-    api_v1_timelines_home_url pagination_params(min_id: pagination_since_id)
+    api_v0_timelines_popular_url pagination_params(min_id: pagination_since_id)
   end
 
   def pagination_max_id
