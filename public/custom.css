@@ -88,7 +88,7 @@
   border-bottom: 4px solid var(--dark);
 }
 
-.theme-default .column-link--transparent  {
+.theme-default .column-link--transparent {
   background: var(--medium-dark);
   color: var(--light);
 }
@@ -269,7 +269,8 @@
   color: var(--medium-light);
 }
 
-p, p a {
+p,
+p a {
   color: var(--dark-light) !important;
 }
 
@@ -303,7 +304,6 @@ a.mention {
 .drawer__tab {
   color: var(--light);
 }
-
 
 .display-name__account {
   color: var(--dark-light);
@@ -652,6 +652,21 @@ a.status-card.compact:hover {
 }
 
 /* Admin */
+
+.admin-wrapper .sidebar .logo {
+  opacity: 0;
+}
+
+.admin-wrapper .sidebar > a:first-of-type {
+  display: flex;
+  width: 7rem;
+  height: 7rem;
+  background: none;
+  background-image: url('https://cdn.shopify.com/s/files/1/0614/6565/7577/files/mammoth-logo.svg');
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  margin: 30px auto 0;
+}
 
 .admin-wrapper p a {
   color: var(--light) !important;
