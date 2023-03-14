@@ -1,4 +1,6 @@
-/* Globals */
+/***********************************
+* GLOBALS
+***********************************/
 
 :root {
   --dark: #000;
@@ -12,6 +14,206 @@
   --color-2: #d72fd6;
   --color-3: #f6ca45;
 }
+
+/***********************************
+* DARK THEME (DEFAULT)
+***********************************/
+
+/* Layout */
+
+.theme-default ::-webkit-scrollbar-thumb {
+  background: var(--light-dark);
+}
+
+.theme-default .ui {
+  background: var(--dark);
+}
+
+.theme-default .empty-column-indicator {
+  background: var(--medium-dark);
+}
+
+.theme-default .compose-form {
+  background: var(--medium-dark);
+}
+
+.theme-default .item-list {
+  background: var(--medium-dark);
+}
+
+.theme-default .drawer__header {
+  background: var(--light-dark);
+}
+
+.theme-default .navigation-bar {
+  background: var(--medium-dark);
+}
+
+.theme-default .search__input {
+  background: var(--light-dark);
+  color: var(--medium-dark);
+}
+
+.theme-default .column-header,
+.theme-default .column-header__button {
+  background: var(--light-dark);
+  color: white;
+}
+
+.theme-default .column-header__button.active,
+.theme-default .column-header__button.active:hover,
+.theme-default .column-header__button:hover {
+  background: var(--light-dark);
+  color: var(--light);
+}
+
+.theme-default .dismissable-banner {
+  background: var(--medium-dark);
+  border-bottom: 1px solid var(--light-dark);
+}
+
+.theme-default .column-header__collapsible-inner {
+  background: var(--light-dark);
+}
+
+.theme-default .column-header__collapsible__extra {
+  color: var(--light);
+}
+
+.theme-default .column-settings__section {
+  color: var(--light);
+}
+
+.theme-default .status {
+  border-bottom: 4px solid var(--dark);
+}
+
+.theme-default .column-link--transparent  {
+  background: var(--medium-dark);
+  color: var(--light);
+}
+
+.theme-default .column-link--transparent:hover {
+  color: var(--light);
+}
+
+.theme-default .column-link--transparent:focus,
+.theme-default .column-link--transparent:hover {
+  background: none;
+  color: var(--accent);
+}
+
+.theme-default .column-link--transparent.active {
+  color: var(--light);
+  background: var(--accent);
+}
+
+.theme-default .column-header__back-button {
+  background: var(--light-dark);
+  color: var(--light);
+}
+
+.theme-default .column-inline-form {
+  background: var(--light-dark);
+}
+
+.theme-default .navigation-bar__profile a {
+  color: var(--light);
+}
+
+.theme-default .getting-started__wrapper {
+  background: var(--medium-dark);
+}
+
+.theme-default .account__header__bar .avatar .account__avatar {
+  background: var(--medium-dark);
+  border: 2px solid var(--medium-dark);
+}
+
+.theme-default .reply-indicator {
+  background: var(--light-dark);
+}
+
+.theme-default .reply-indicator__display-name {
+  color: var(--light);
+}
+
+/* Account */
+
+.theme-default .account__section-headline a.active,
+.theme-default .account__section-headline button.active,
+.theme-default .notification__filter-bar a.active,
+.theme-default .notification__filter-bar button.active {
+  background: var(--accent);
+  color: var(--light);
+}
+
+.theme-default .account__section-headline a,
+.theme-default .account__section-headline button,
+.theme-default .notification__filter-bar a,
+.theme-default .notification__filter-bar button {
+  background: var(--light-dark);
+  color: var(--dark-light);
+}
+
+.theme-default .account__section-headline a:hover,
+.theme-default .account__section-headline button:hover,
+.theme-default .notification__filter-bar a:hover,
+.theme-default .notification__filter-bar button:hover {
+  color: var(--light);
+}
+
+.theme-default .account__section-headline a.active::after,
+.theme-default .account__section-headline button.active::after,
+.theme-default .notification__filter-bar a.active::after,
+.theme-default .notification__filter-bar button.active::after {
+  border-color: transparent transparent var(--medium-dark);
+}
+
+.theme-default .account__section-headline a.active::after,
+.theme-default .account__section-headline a.active::before,
+.theme-default .account__section-headline button.active::after,
+.theme-default .account__section-headline button.active::before,
+.theme-default .notification__filter-bar a.active::after,
+.theme-default .notification__filter-bar a.active::before,
+.theme-default .notification__filter-bar button.active::after,
+.theme-default .notification__filter-bar button.active::before {
+  border-color: transparent transparent var(--medium-dark);
+}
+
+/* Posts */
+
+.theme-default .status__prepend {
+  color: var(--light);
+}
+
+.theme-default .status__prepend .status__display-name strong {
+  color: var(--light);
+}
+
+/* Admin */
+.theme-default body.admin {
+  background: var(--dark);
+}
+
+.theme-default .admin-wrapper .sidebar-wrapper__inner {
+  background: var(--medium-dark);
+}
+
+.theme-default .admin-wrapper .content__heading__tabs a.selected,
+.admin-wrapper .content__heading__tabs a.selected:hover {
+  background: var(--accent);
+}
+
+.theme-default .fa-close::before,
+.theme-default .fa-remove::before,
+.theme-default .fa-times::before {
+  color: var(--light);
+}
+
+/***********************************
+* UNIVERSAL
+***********************************/
 
 .button,
 .button.logo-button {
@@ -77,20 +279,8 @@ a.mention {
 
 /* Layout */
 
-::-webkit-scrollbar-thumb {
-  background: var(--light-dark);
-}
-
-.ui {
-  background: var(--dark);
-}
-
 .column > .scrollable {
   background: none;
-}
-
-.empty-column-indicator {
-  background: var(--medium-dark);
 }
 
 .empty-column-indicator span {
@@ -106,14 +296,6 @@ a.mention {
   color: var(--accent);
 }
 
-.item-list {
-  background: var(--medium-dark);
-}
-
-.drawer__header {
-  background: var(--light-dark);
-}
-
 .drawer__header a:hover {
   background: var(--accent);
 }
@@ -122,17 +304,6 @@ a.mention {
   color: var(--light);
 }
 
-.compose-form {
-  background: var(--medium-dark);
-}
-
-.reply-indicator {
-  background: var(--light-dark);
-}
-
-.reply-indicator__display-name {
-  color: var(--light);
-}
 
 .display-name__account {
   color: var(--dark-light);
@@ -146,31 +317,6 @@ a.mention {
 
 .drawer__inner__mastodon img {
   display: none;
-}
-
-.column-header,
-.column-header__button {
-  background: var(--light-dark);
-  color: white;
-}
-
-.column-header__button.active,
-.column-header__button.active:hover,
-.column-header__button:hover {
-  background: var(--light-dark);
-  color: var(--light);
-}
-
-.column-header__collapsible-inner {
-  background: var(--light-dark);
-}
-
-.column-header__collapsible__extra {
-  color: var(--light);
-}
-
-.column-settings__section {
-  color: var(--light);
 }
 
 .column-back-button {
@@ -194,22 +340,6 @@ a.mention {
   border-color: var(--accent);
 }
 
-.dismissable-banner {
-  background: var(--medium-dark);
-  border-bottom: 1px solid var(--light-dark);
-}
-
-.fa-close::before,
-.fa-remove::before,
-.fa-times::before {
-  color: var(--light);
-}
-
-.search__input {
-  background: var(--light-dark);
-  color: var(--medium-dark);
-}
-
 .search__input:focus {
   background: var(--light);
 }
@@ -218,34 +348,8 @@ a.mention {
   color: var(--dark-light);
 }
 
-.navigation-bar {
-  background: var(--medium-dark);
-}
-
 .navigation-bar a {
   color: var(--dark-light);
-}
-
-.status {
-  border-bottom: 4px solid var(--dark);
-}
-
-.column-header__back-button {
-  background: var(--light-dark);
-  color: var(--light);
-}
-
-.column-inline-form {
-  background: var(--light-dark);
-}
-
-.getting-started__wrapper {
-  background: var(--medium-dark);
-}
-
-.account__header__bar .avatar .account__avatar {
-  background: var(--medium-dark);
-  border: 2px solid var(--medium-dark);
 }
 
 .text-btn {
@@ -270,10 +374,6 @@ a.mention {
 }
 
 /* Account */
-
-.navigation-bar__profile a {
-  color: var(--light);
-}
 
 .account__header {
   background: var(--light-dark);
@@ -374,7 +474,7 @@ a.mention {
 }
 
 .navigation-panel__logo {
-  padding: 1rem 1rem 0 1rem;
+  padding: 1rem 1rem 0;
 }
 
 .navigation-panel__logo hr {
@@ -386,7 +486,8 @@ a.mention {
 }
 
 .navigation-panel__logo a,
-.navigation-panel__logo a:hover {
+.navigation-panel__logo a:hover,
+.navigation-panel__logo a:focus {
   margin-bottom: 0.75rem;
   width: 3rem;
   height: 3rem;
@@ -396,31 +497,6 @@ a.mention {
   background-size: 100% auto;
 }
 
-.column-link {
-  background: var(--medium-dark);
-  color: var(--light);
-}
-
-.column-link--transparent {
-  color: var(--medium-light);
-}
-
-.column-link--transparent:hover {
-  color: var(--light);
-}
-
-.column-link:active,
-.column-link:focus,
-.column-link:hover {
-  background: none;
-  color: var(--accent);
-}
-
-.column-link--transparent.active {
-  color: var(--light);
-  background: var(--accent);
-}
-
 .icon-with-badge__badge {
   background: var(--accent);
   border: 2px solid var(--dark);
@@ -428,11 +504,11 @@ a.mention {
 
 .column-header.active .column-header__icon {
   color: var(--accent);
-  text-shadow: 0 0 10px rgb( 244 88 0 / 40%);
+  text-shadow: 0 0 10px rgb(244 88 0 / 40%);
 }
 
 .column-header__wrapper.active {
-  box-shadow: 0 1px 0 rgb( 0 0 0 / 100%);
+  box-shadow: 0 1px 0 rgb(0 0 0 / 100%);
 }
 
 .column-header__wrapper.active::before {
@@ -483,47 +559,6 @@ button.icon-button i.fa-retweet:hover {
   color: var(--light);
 }
 
-.account__section-headline a.active,
-.account__section-headline button.active,
-.notification__filter-bar a.active,
-.notification__filter-bar button.active {
-  background: var(--accent);
-  color: var(--light);
-}
-
-.account__section-headline a.active::after,
-.account__section-headline button.active::after,
-.notification__filter-bar a.active::after,
-.notification__filter-bar button.active::after {
-  border-color: transparent transparent var(--medium-dark);
-}
-
-.account__section-headline a.active::after,
-.account__section-headline a.active::before,
-.account__section-headline button.active::after,
-.account__section-headline button.active::before,
-.notification__filter-bar a.active::after,
-.notification__filter-bar a.active::before,
-.notification__filter-bar button.active::after,
-.notification__filter-bar button.active::before {
-  border-color: transparent transparent var(--medium-dark);
-}
-
-.account__section-headline a,
-.account__section-headline button,
-.notification__filter-bar a,
-.notification__filter-bar button {
-  background: var(--light-dark);
-  color: var(--dark-light);
-}
-
-.account__section-headline a:hover,
-.account__section-headline button:hover,
-.notification__filter-bar a:hover,
-.notification__filter-bar button:hover {
-  color: var(--light);
-}
-
 .account__section-headline,
 .notification__filter-bar {
   border-bottom: none;
@@ -541,14 +576,6 @@ button.icon-button i.fa-retweet:hover {
 .icon-button.star-icon.active,
 .notification__favourite-icon-wrapper .star-icon {
   color: var(--color-3);
-}
-
-.status__prepend {
-  color: var(--light);
-}
-
-.status__prepend .status__display-name strong {
-  color: var(--light);
 }
 
 .notification__message .fa {
@@ -625,19 +652,6 @@ a.status-card.compact:hover {
 }
 
 /* Admin */
-
-body.admin {
-  background: var(--dark);
-}
-
-.admin-wrapper .sidebar-wrapper__inner {
-  background: var(--medium-dark);
-}
-
-.admin-wrapper .content__heading__tabs a.selected,
-.admin-wrapper .content__heading__tabs a.selected:hover {
-  background: var(--accent);
-}
 
 .admin-wrapper p a {
   color: var(--light) !important;
