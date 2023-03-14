@@ -85,7 +85,7 @@
 }
 
 .theme-default .status {
-  border-bottom: 4px solid var(--dark);
+  border-bottom: 10px solid var(--dark);
 }
 
 .theme-default .column-link--transparent {
@@ -548,7 +548,7 @@ p a {
 }
 
 .icon-button {
-  color: var(--accent);
+  color: var(--dark-light);
 }
 
 .icon-button:hover {
