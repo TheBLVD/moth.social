@@ -28,6 +28,7 @@
 #  ordered_media_attachment_ids :bigint(8)        is an Array
 #
 
+# rubocop:disable all
 class Status < ApplicationRecord
   before_destroy :unlink_from_conversations
 
@@ -277,6 +278,10 @@ class Status < ApplicationRecord
 
   def favourites_count
     status_stat&.favourites_count || 0
+  end
+
+  def popularity
+    replies_count + reblogs_count + favourites_count
   end
 
   def increment_count!(key)
@@ -536,3 +541,4 @@ class Status < ApplicationRecord
     end
   end
 end
+# rubocop:enable all
