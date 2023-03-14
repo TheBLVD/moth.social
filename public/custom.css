@@ -138,7 +138,20 @@
   color: var(--light);
 }
 
+.theme-default .load-more {
+  color: var(--light);
+}
+
+.theme-default .load-more:hover {
+  background: var(--medium-dark);
+  color: var(--accent);
+}
+
 /* Account */
+
+.theme-default .account {
+  border-bottom: 4px solid var(--dark);
+}
 
 .theme-default .account__section-headline a.active,
 .theme-default .account__section-headline button.active,
@@ -181,6 +194,18 @@
   border-color: transparent transparent var(--medium-dark);
 }
 
+.theme-default a.mention {
+  color: var(--light) !important;
+}
+
+.theme-default .notification__message {
+  color: var(--light);
+}
+
+.theme-default .notification__message .fa {
+  color: var(--light) !important;
+}
+
 /* Posts */
 
 .theme-default .status__prepend {
@@ -209,6 +234,19 @@
 .theme-default .fa-remove::before,
 .theme-default .fa-times::before {
   color: var(--light);
+}
+
+/***********************************
+* LIGHT THEME
+***********************************/
+
+/* Layout */
+.theme-mastodon-light .column-link--transparent.active {
+  color: var(--accent);
+}
+
+.theme-mastodon-light .notification__message .fa {
+  color: var(--dark) !important;
 }
 
 /***********************************
@@ -274,10 +312,6 @@ p a {
   color: var(--dark-light) !important;
 }
 
-a.mention {
-  color: var(--light) !important;
-}
-
 /* Layout */
 
 .column > .scrollable {
@@ -286,15 +320,6 @@ a.mention {
 
 .empty-column-indicator span {
   color: var(--dark-light);
-}
-
-.load-more {
-  color: var(--light);
-}
-
-.load-more:hover {
-  background: var(--medium-dark);
-  color: var(--accent);
 }
 
 .drawer__header a:hover {
@@ -453,10 +478,6 @@ a.mention {
   border-bottom: none;
 }
 
-.account {
-  border-bottom: 4px solid var(--dark);
-}
-
 .account__header__bio .account__header__fields a {
   color: var(--accent);
 }
@@ -564,10 +585,6 @@ button.icon-button i.fa-retweet:hover {
   border-bottom: none;
 }
 
-.notification__message {
-  color: var(--light);
-}
-
 .notification.unread::before,
 .status__wrapper.unread::before {
   border-left: 2px solid var(--accent);
@@ -576,10 +593,6 @@ button.icon-button i.fa-retweet:hover {
 .icon-button.star-icon.active,
 .notification__favourite-icon-wrapper .star-icon {
   color: var(--color-3);
-}
-
-.notification__message .fa {
-  color: var(--light) !important;
 }
 
 .poll__chart {
