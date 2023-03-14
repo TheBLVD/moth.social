@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: 'letter_opener' if Rails.env.development?
 
   get 'health', to: 'health#show'
+  get 'apple-app-site-association', to: 'home#apple_app_site_association'
 
   authenticate :user, lambda { |u| u.role&.can?(:view_devops) } do
     mount Sidekiq::Web, at: 'sidekiq', as: :sidekiq
@@ -579,10 +580,13 @@ Rails.application.routes.draw do
         resources :familiar_followers, only: :index
       end
 
+      resources :onboarding_follow_recommendations, only: :index, controller: 'onboarding_follow_recommendations'
+
       resources :accounts, only: [:create, :show] do
         resources :statuses, only: :index, controller: 'accounts/statuses'
         resources :followers, only: :index, controller: 'accounts/follower_accounts'
         resources :following, only: :index, controller: 'accounts/following_accounts'
+        resources :follow_recommendations, only: :index, controller: 'accounts/follow_recommendations'
         resources :lists, only: :index, controller: 'accounts/lists'
         resources :identity_proofs, only: :index, controller: 'accounts/identity_proofs'
         resources :featured_tags, only: :index, controller: 'accounts/featured_tags'
@@ -694,6 +698,8 @@ Rails.application.routes.draw do
       namespace :admin do
         resources :accounts, only: [:index]
       end
+
+      resources :onboarding_follow_recommendations, only: :index, controller: 'onboarding_follow_recommendations'
     end
 
     namespace :web do

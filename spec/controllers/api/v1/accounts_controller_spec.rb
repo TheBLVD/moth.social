@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
+# rubocop:disable all
 
 RSpec.describe Api::V1::AccountsController, type: :controller do
   render_views
@@ -70,10 +73,12 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
   describe 'POST #follow' do
     let(:scopes) { 'write:follows' }
     let(:other_account) { Fabricate(:account, username: 'bob', locked: locked) }
+    let!(:params) { { id: other_account.id } }
 
     context do
       before do
-        post :follow, params: { id: other_account.id }
+        allow(RegenerationWorker).to receive(:perform_async)
+        post :follow, params: params
       end
 
       context 'with unlocked account' do
@@ -116,6 +121,15 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
         end
 
         it_behaves_like 'forbidden for wrong scope', 'read:accounts'
+      end
+
+      context 'with rebuild param' do
+        let!(:params) { super().merge(rebuild: true) }
+        let!(:locked) { false }
+
+        it 'rebuilds if necessary' do
+          expect(RegenerationWorker).to have_received(:perform_async)
+        end
       end
     end
 
@@ -162,10 +176,12 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
   describe 'POST #unfollow' do
     let(:scopes) { 'write:follows' }
     let(:other_account) { Fabricate(:account, username: 'bob') }
+    let!(:params) {{ id: other_account.id }}
 
     before do
+      allow(RegenerationWorker).to receive(:perform_async)
       user.account.follow!(other_account)
-      post :unfollow, params: { id: other_account.id }
+      post :unfollow, params: params
     end
 
     it 'returns http success' do
@@ -177,6 +193,14 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
     end
 
     it_behaves_like 'forbidden for wrong scope', 'read:accounts'
+
+    context 'with rebuild param' do
+      let!(:params) { super().merge(rebuild: true) }
+
+      it 'rebuilds if necessary' do
+          expect(RegenerationWorker).to have_received(:perform_async)
+      end
+    end
   end
 
   describe 'POST #remove_from_followers' do
@@ -347,3 +371,5 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
     it_behaves_like 'forbidden for wrong scope', 'read:accounts'
   end
 end
+
+#rubocop:enable all
