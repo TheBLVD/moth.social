@@ -3,14 +3,14 @@
 :root {
   --dark: #000;
   --medium-dark: #111111;
-  --light-dark: #2B2B2B;
-  --light: #FFF;
-  --medium-light: #C5C5C5;
+  --light-dark: #2b2b2b;
+  --light: #fff;
+  --medium-light: #c5c5c5;
   --dark-light: #858585;
   --light-accent: #539af7;
-  --accent: #3F8FF5;
-  --color-2: #D72FD6;
-  --color-3: #F6CA45;
+  --accent: #3f8ff5;
+  --color-2: #d72fd6;
+  --color-3: #f6ca45;
 }
 
 .button,
@@ -18,12 +18,17 @@
   background-color: var(--accent);
 }
 
-.button:active, .button:focus, .button:hover, .button.logo-button:hover {
+.button:active,
+.button:focus,
+.button:hover,
+.button.logo-button:hover {
   background-color: var(--light);
   color: var(--accent);
 }
 
-.button.logo-button.button--destructive:active, .button.logo-button.button--destructive:focus, .button.logo-button.button--destructive:hover {
+.button.logo-button.button--destructive:active,
+.button.logo-button.button--destructive:focus,
+.button.logo-button.button--destructive:hover {
   background: var(--accent);
   color: var(--light);
 }
@@ -56,7 +61,8 @@
   border: 0;
 }
 
-.button.disabled, .button:disabled {
+.button.disabled,
+.button:disabled {
   background-color: var(--dark-light);
   color: var(--medium-light);
 }
@@ -79,7 +85,7 @@ a.mention {
   background: var(--dark);
 }
 
-.column>.scrollable {
+.column > .scrollable {
   background: none;
 }
 
@@ -148,7 +154,9 @@ a.mention {
   color: white;
 }
 
-.column-header__button.active, .column-header__button.active:hover, .column-header__button:hover {
+.column-header__button.active,
+.column-header__button.active:hover,
+.column-header__button:hover {
   background: var(--light-dark);
   color: var(--light);
 }
@@ -191,7 +199,9 @@ a.mention {
   border-bottom: 1px solid var(--light-dark);
 }
 
-.fa-close:before, .fa-remove:before, .fa-times:before {
+.fa-close::before,
+.fa-remove::before,
+.fa-times::before {
   color: var(--light);
 }
 
@@ -296,7 +306,9 @@ a.mention {
   border: 1px solid var(--dark-light);
 }
 
-.icon-button:active, .icon-button:focus, .icon-button:hover {
+.icon-button:active,
+.icon-button:focus,
+.icon-button:hover {
   color: var(--light);
 }
 
@@ -349,7 +361,9 @@ a.mention {
   color: var(--accent);
 }
 
-.account__header__bio .account__header__fields .verified a, .account__header__bio .account__header__fields .verified dd, .account__header__bio .account__header__fields .verified dt {
+.account__header__bio .account__header__fields .verified a,
+.account__header__bio .account__header__fields .verified dd,
+.account__header__bio .account__header__fields .verified dt {
   color: var(--light);
 }
 
@@ -371,7 +385,7 @@ a.mention {
   display: none;
 }
 
-.navigation-panel__logo a, 
+.navigation-panel__logo a,
 .navigation-panel__logo a:hover {
   margin-bottom: 0.75rem;
   width: 3rem;
@@ -395,7 +409,9 @@ a.mention {
   color: var(--light);
 }
 
-.column-link:active, .column-link:focus, .column-link:hover {
+.column-link:active,
+.column-link:focus,
+.column-link:hover {
   background: none;
   color: var(--accent);
 }
@@ -419,7 +435,7 @@ a.mention {
   box-shadow: 0 1px 0 rgb( 0 0 0 / 100%);
 }
 
-.column-header__wrapper.active:before {
+.column-header__wrapper.active::before {
   background: none;
 }
 
@@ -460,34 +476,56 @@ button.icon-button i.fa-retweet:hover {
   background: none;
 }
 
-.muted .status__content, .muted .status__content a, .muted .status__content p, .muted .status__display-name strong {
+.muted .status__content,
+.muted .status__content a,
+.muted .status__content p,
+.muted .status__display-name strong {
   color: var(--light);
 }
 
-.account__section-headline a.active, .account__section-headline button.active, .notification__filter-bar a.active, .notification__filter-bar button.active {
+.account__section-headline a.active,
+.account__section-headline button.active,
+.notification__filter-bar a.active,
+.notification__filter-bar button.active {
   background: var(--accent);
   color: var(--light);
 }
 
-
-.account__section-headline a.active:after, .account__section-headline button.active:after, .notification__filter-bar a.active:after, .notification__filter-bar button.active:after {
+.account__section-headline a.active::after,
+.account__section-headline button.active::after,
+.notification__filter-bar a.active::after,
+.notification__filter-bar button.active::after {
   border-color: transparent transparent var(--medium-dark);
 }
 
-.account__section-headline a.active:after, .account__section-headline a.active:before, .account__section-headline button.active:after, .account__section-headline button.active:before, .notification__filter-bar a.active:after, .notification__filter-bar a.active:before, .notification__filter-bar button.active:after, .notification__filter-bar button.active:before {
+.account__section-headline a.active::after,
+.account__section-headline a.active::before,
+.account__section-headline button.active::after,
+.account__section-headline button.active::before,
+.notification__filter-bar a.active::after,
+.notification__filter-bar a.active::before,
+.notification__filter-bar button.active::after,
+.notification__filter-bar button.active::before {
   border-color: transparent transparent var(--medium-dark);
 }
 
-.account__section-headline a, .account__section-headline button, .notification__filter-bar a, .notification__filter-bar button {
+.account__section-headline a,
+.account__section-headline button,
+.notification__filter-bar a,
+.notification__filter-bar button {
   background: var(--light-dark);
   color: var(--dark-light);
 }
 
-.account__section-headline a:hover, .account__section-headline button:hover, .notification__filter-bar a:hover, .notification__filter-bar button:hover {
+.account__section-headline a:hover,
+.account__section-headline button:hover,
+.notification__filter-bar a:hover,
+.notification__filter-bar button:hover {
   color: var(--light);
 }
 
-.account__section-headline, .notification__filter-bar {
+.account__section-headline,
+.notification__filter-bar {
   border-bottom: none;
 }
 
@@ -495,11 +533,13 @@ button.icon-button i.fa-retweet:hover {
   color: var(--light);
 }
 
-.notification.unread:before, .status__wrapper.unread:before {
+.notification.unread::before,
+.status__wrapper.unread::before {
   border-left: 2px solid var(--accent);
 }
 
-.icon-button.star-icon.active, .notification__favourite-icon-wrapper .star-icon {
+.icon-button.star-icon.active,
+.notification__favourite-icon-wrapper .star-icon {
   color: var(--color-3);
 }
 
@@ -540,11 +580,13 @@ button.icon-button i.fa-retweet:hover {
   background: var(--accent);
 }
 
-.poll__input:active, .poll__input:focus, .poll__input:hover {
+.poll__input:active,
+.poll__input:focus,
+.poll__input:hover {
   border-color: var(--accent);
 }
 
-.poll__option input[type=text]:focus {
+.poll__option input[type="text"]:focus {
   border-color: var(--accent);
 }
 
@@ -570,7 +612,8 @@ a.status-card.compact:hover {
   background-color: var(--light-dark);
 }
 
-.reply-indicator__content .status__content__spoiler-link, .status__content .status__content__spoiler-link {
+.reply-indicator__content .status__content__spoiler-link,
+.status__content .status__content__spoiler-link {
   background: var(--light);
   color: var(--medium-dark);
 }
@@ -626,10 +669,10 @@ body.admin {
   color: var(--light);
 }
 
-.simple_form input[type=text]:active,
-.simple_form input[type=text]:focus,
-.simple_form input[type=password]:active,
-.simple_form input[type=password]:focus,
+.simple_form input[type="text"]:active,
+.simple_form input[type="text"]:focus,
+.simple_form input[type="password"]:active,
+.simple_form input[type="password"]:focus,
 .simple_form textarea:active,
 .simple_form textarea:focus {
   border-color: var(--accent);
@@ -657,7 +700,6 @@ body.admin {
   background-color: var(--light);
   color: var(--accent);
 }
-
 
 .privacy-dropdown.active .privacy-dropdown__value.active {
   background: var(--accent);
