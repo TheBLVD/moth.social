@@ -2,6 +2,7 @@
 
 class Api::BaseController < ApplicationController
   DEFAULT_STATUSES_LIMIT = 20
+  MAX_LIMIT = 500
   DEFAULT_ACCOUNTS_LIMIT = 40
 
   include RateLimitHeaders
@@ -101,7 +102,7 @@ class Api::BaseController < ApplicationController
   def limit_param(default_limit)
     return default_limit unless params[:limit]
 
-    [params[:limit].to_i.abs, default_limit * 2].min
+    [params[:limit].to_i.abs, MAX_LIMIT].min
   end
 
   def params_slice(*keys)
@@ -154,6 +155,11 @@ class Api::BaseController < ApplicationController
 
   def disallow_unauthenticated_api_access?
     ENV['DISALLOW_UNAUTHENTICATED_API_ACCESS'] == 'true' || Rails.configuration.x.whitelist_mode
+  end
+
+  def username_and_domain(handle)
+    username, domain = handle.strip.gsub(/\A@/, '').split('@')
+    [username, domain]
   end
 
   private

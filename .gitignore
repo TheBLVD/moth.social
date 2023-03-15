@@ -31,8 +31,6 @@
 # Ignore Vagrant files
 .vagrant/
 
-# Ignore Capistrano customizations
-/config/deploy/*
 
 # Ignore IDE files
 .vscode/
@@ -63,3 +61,4 @@ yarn-debug.log
 
 # Ignore Docker option files
 docker-compose.override.yml
+/backups/

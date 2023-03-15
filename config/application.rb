@@ -12,6 +12,7 @@ require 'active_job/railtie'
 #require 'action_mailbox/engine'
 #require 'action_text/engine'
 #require 'rails/test_unit/railtie'
+require 'datadog/profiling/preload'
 require 'sprockets/railtie'
 
 # Used to be implicitly required in action_mailbox/engine
@@ -45,7 +46,11 @@ require_relative '../lib/active_record/database_tasks_extensions'
 require_relative '../lib/active_record/batches'
 require_relative '../lib/simple_navigation/item_extensions'
 
-Dotenv::Railtie.load
+if 'test' == ENV['RAILS_ENV']
+  Dotenv::Railtie.overload
+else
+  Dotenv::Railtie.load
+end
 
 Bundler.require(:pam_authentication) if ENV['PAM_ENABLED'] == 'true'
 

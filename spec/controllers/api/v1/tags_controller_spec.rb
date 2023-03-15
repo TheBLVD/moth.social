@@ -1,5 +1,7 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
+require 'rails_helper'
+# rubocop:disable all
 RSpec.describe Api::V1::TagsController, type: :controller do
   render_views
 
@@ -34,11 +36,13 @@ RSpec.describe Api::V1::TagsController, type: :controller do
 
   describe 'POST #follow' do
     let!(:unrelated_tag) { Fabricate(:tag) }
+    let!(:params) { {id: name} }
 
     before do
+      allow(RegenerationWorker).to receive(:perform_async)
       TagFollow.create!(account: user.account, tag: unrelated_tag)
 
-      post :follow, params: { id: name }
+      post :follow, params: params
     end
 
     context 'with existing tag' do
@@ -51,6 +55,17 @@ RSpec.describe Api::V1::TagsController, type: :controller do
 
       it 'creates follow' do
         expect(TagFollow.where(tag: tag, account: user.account).exists?).to be true
+      end
+
+    end
+
+    context 'with a rebuild param' do
+      let!(:params) { super().merge(rebuild: true) }
+      let!(:tag) { Fabricate(:tag) }
+      let(:name) { tag.name }
+
+      it 'rebuilds if necessary' do
+        expect(RegenerationWorker).to have_received(:perform_async)
       end
     end
 
@@ -70,9 +85,11 @@ RSpec.describe Api::V1::TagsController, type: :controller do
   describe 'POST #unfollow' do
     let!(:tag) { Fabricate(:tag, name: 'foo') }
     let!(:tag_follow) { Fabricate(:tag_follow, account: user.account, tag: tag) }
+    let!(:params) { { id: tag.name } }
 
     before do
-      post :unfollow, params: { id: tag.name }
+      allow(RegenerationWorker).to receive(:perform_async)
+      post :unfollow, params: params
     end
 
     it 'returns http success' do
@@ -82,5 +99,16 @@ RSpec.describe Api::V1::TagsController, type: :controller do
     it 'removes the follow' do
       expect(TagFollow.where(tag: tag, account: user.account).exists?).to be false
     end
+
+    context 'with a rebuild param' do
+      let!(:params) { super().merge(rebuild: true) }
+
+      it 'rebuilds if necessary' do
+        expect(RegenerationWorker).to have_received(:perform_async)
+      end
+    end
+
   end
 end
+
+# rubocop:enable all

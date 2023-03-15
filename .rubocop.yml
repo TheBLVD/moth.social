@@ -32,6 +32,24 @@ Layout/AccessModifierIndentation:
 Layout/EmptyLineAfterMagicComment:
   Enabled: false
 
+RSpec/MessageSpies:
+  Enabled: false
+
+RSpec/DescribedClass:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/AnyInstance:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
 Layout/EmptyLineAfterGuardClause:
   Enabled: false
 
@@ -476,4 +494,22 @@ RSpec/NamedSubject:
 RSpec/DescribeClass:
   Enabled: false
 RSpec/LetSetup:
+  Enabled: false
+RSpec/Rails/HttpStatus:
+  Enabled: false
+RSpec/StubbedMock:
+  Enabled: false
+RSpec/LeakyConstantDeclaration:
+  Enabled: false
+Lint/ConstantDefinitionInBlock:
+  Enabled: false
+Lint/EmptyClass:
+  Enabled: false
+RSpec/NotToNot:
+  Enabled: false
+Performance/TimesMap:
+  Enabled: false
+Lint/UnusedBlockArgument:
+  Enabled: false
+RSpec:
   Enabled: false

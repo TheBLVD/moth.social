@@ -2,7 +2,7 @@
 
 lock '3.17.1'
 
-set :repo_url, ENV.fetch('REPO', 'https://github.com/mastodon/mastodon.git')
+set :repo_url, ENV.fetch('REPO', 'git@github.com:TheBLVD/moth.social.git')
 set :branch, ENV.fetch('BRANCH', 'main')
 
 set :application, 'mastodon'
@@ -10,23 +10,23 @@ set :rbenv_type, :user
 set :rbenv_ruby, File.read('.ruby-version').strip
 set :migration_role, :app
 
-append :linked_files, '.env.production', 'public/robots.txt'
-append :linked_dirs, 'vendor/bundle', 'node_modules', 'public/system'
+append :linked_dirs, 'vendor/bundle', 'public/system'
 
 namespace :systemd do
   %i[sidekiq streaming web].each do |service|
     %i[reload restart status].each do |action|
       desc "Perform a #{action} on #{service} service"
       task "#{service}:#{action}".to_sym do
-        on roles(:app) do
+        on roles(:web) do
           # runs e.g. "sudo restart mastodon-sidekiq.service"
-          sudo :systemctl, action, "#{fetch(:application)}-#{service}.service"
+          sudo :systemctl, action, "#{fetch(:application)}-#{service}*"
         end
       end
     end
   end
 end
 
-after 'deploy:publishing', 'systemd:web:reload'
-after 'deploy:publishing', 'systemd:sidekiq:restart'
-after 'deploy:publishing', 'systemd:streaming:restart'
+# Restart services one at a time
+after 'deploy', 'systemd:web:restart'
+after 'systemd:web:restart', 'systemd:sidekiq:restart'
+after 'systemd:sidekiq:restart', 'systemd:streaming:restart'

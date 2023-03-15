@@ -106,6 +106,7 @@ GEM
     aws-sigv4 (1.5.2)
       aws-eventstream (~> 1, >= 1.0.2)
     bcrypt (3.1.17)
+    bcrypt_pbkdf (1.1.0)
     better_errors (2.9.1)
       coderay (>= 1.0.0)
       erubi (>= 1.0.0)
@@ -184,7 +185,12 @@ GEM
     crass (1.0.6)
     css_parser (1.12.0)
       addressable
-    date (3.3.3)
+    ddtrace (1.8.0)
+      debase-ruby_core_source (>= 0.10.16, <= 0.10.18)
+      libdatadog (~> 0.9.0.1.0)
+      libddwaf (~> 1.5.1.0.0)
+      msgpack
+    debase-ruby_core_source (0.10.18)
     debug_inspector (1.0.0)
     devise (4.8.1)
       bcrypt (~> 3.0)
@@ -285,6 +291,7 @@ GEM
       openid_connect (~> 1.2)
     globalid (1.1.0)
       activesupport (>= 5.0)
+    google-protobuf (3.21.12)
     hamlit (2.13.0)
       temple (>= 0.8.2)
       thor
@@ -377,6 +384,9 @@ GEM
       letter_opener (~> 1.7)
       railties (>= 5.2)
       rexml
+    libdatadog (0.9.0.1.0)
+    libddwaf (1.5.1.0.0)
+      ffi (~> 1.0)
     link_header (0.0.8)
     llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
@@ -764,7 +774,12 @@ DEPENDENCIES
   active_record_query_trace (~> 1.8)
   addressable (~> 2.8)
   annotate (~> 3.2)
+<<<<<<< HEAD
   aws-sdk-s3 (~> 1.119)
+=======
+  aws-sdk-s3 (~> 1.117)
+  bcrypt_pbkdf (>= 1.0, < 2.0)
+>>>>>>> main
   better_errors (~> 2.9)
   binding_of_caller (~> 1.0)
   blurhash (~> 0.1)
@@ -785,13 +800,14 @@ DEPENDENCIES
   color_diff (~> 0.1)
   concurrent-ruby
   connection_pool
+  ddtrace
   devise (~> 4.8)
   devise-two-factor (~> 4.0)
   devise_pam_authenticatable2 (~> 9.2)
   discard (~> 1.2)
   doorkeeper (~> 5.6)
   dotenv-rails (~> 2.8)
-  ed25519 (~> 1.3)
+  ed25519 (>= 1.3, < 2.0)
   fabrication (~> 2.30)
   faker (~> 3.1)
   fast_blank (~> 1.0)
@@ -799,7 +815,12 @@ DEPENDENCIES
   fog-core (<= 2.4.0)
   fog-openstack (~> 0.3)
   fuubar (~> 2.5)
+<<<<<<< HEAD
   gitlab-omniauth-openid-connect (~> 0.10.1)
+=======
+  gitlab-omniauth-openid-connect (~> 0.10.0)
+  google-protobuf (~> 3.0)
+>>>>>>> main
   hamlit-rails (~> 0.2)
   hiredis (~> 0.6)
   htmlentities (~> 4.3)

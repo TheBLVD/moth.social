@@ -47,7 +47,6 @@ gem 'omniauth-rails_csrf_protection', '~> 0.1'
 gem 'color_diff', '~> 0.1'
 gem 'discard', '~> 1.2'
 gem 'doorkeeper', '~> 5.6'
-gem 'ed25519', '~> 1.3'
 gem 'fast_blank', '~> 1.0'
 gem 'fastimage'
 gem 'hiredis', '~> 0.6'
@@ -113,7 +112,7 @@ group :development, :test do
   gem 'rubocop', require: false
 end
 
-group :production, :test do
+group :production, :staging, :test do
   gem 'private_address_check', '~> 0.5'
 end
 
@@ -122,7 +121,8 @@ group :test do
   gem 'climate_control', '~> 0.2'
   gem 'faker', '~> 3.1'
   gem 'json-schema', '~> 3.0'
-  gem 'rack-test', '~> 2.0'  
+  gem 'microformats', '~> 4.4'
+  gem 'rack-test', '~> 2.0'
   gem 'rails-controller-testing', '~> 1.0'
   gem 'rspec_junit_formatter', '~> 0.6'
   gem 'rspec-sidekiq', '~> 3.1'
@@ -150,11 +150,16 @@ group :development do
   gem 'stackprof'
 end
 
-group :production do
+group :production, :staging do
   gem 'lograge', '~> 0.12'
+  gem 'ddtrace', require: 'ddtrace/auto_instrument'
+  gem 'google-protobuf', '~> 3.0'
 end
 
 gem 'concurrent-ruby', require: false
 gem 'connection_pool', require: false
 gem 'xorcist', '~> 1.1'
 gem 'cocoon', '~> 1.2'
+# https://github.com/net-ssh/net-ssh/issues/565#issuecomment-491321965
+gem 'ed25519', '>= 1.3', '< 2.0'
+gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
