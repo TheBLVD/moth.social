@@ -555,4 +555,28 @@ RSpec.describe FeedManager do
       expect(redis.zrange("feed:home:#{account.id}", 0, -1)).to eq [status_from_followed_account_first.id.to_s, status_from_followed_account_next.id.to_s]
     end
   end
+
+  describe '#populate_home' do
+    let!(:account)          { Fabricate(:account) }
+    let!(:followed_account) { Fabricate(:account) }
+    let!(:status_1)         { Fabricate(:status, account: followed_account) }
+    let!(:status_2)         { Fabricate(:status, account: followed_account) }
+    let!(:status_3)         { Fabricate(:status, account: followed_account) }
+
+    let!(:tag) { Fabricate(:tag) }
+    let!(:status_4) { Fabricate(:status, account: Fabricate(:account), tags: [tag]) }
+
+    it 'adds statuses from followed accounts' do
+      account.follow!(followed_account)
+      FeedManager.instance.populate_home(account)
+      expect(HomeFeed.new(account).get(FeedManager::MAX_ITEMS).to_a.count).to eq 3
+    end
+
+    it 'adds statuses from followed tags' do
+      Fabricate(:tag_follow, account: account, tag: tag)
+      FeedManager.instance.populate_home(account)
+      expect(HomeFeed.new(account).get(FeedManager::MAX_ITEMS).to_a.count).to eq 1
+    end
+  end
 end
+# rubocop:enable all

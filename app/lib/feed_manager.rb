@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable all
 require 'singleton'
 
 class FeedManager
@@ -272,14 +273,25 @@ class FeedManager
         # because none of its statuses would stay on the feed anyway
         next if last_status_score < oldest_home_score
       end
-
       statuses = target_account.statuses.where(visibility: [:public, :unlisted, :private]).includes(:preloadable_poll, :media_attachments, :account, reblog: :account).limit(limit)
+
       crutches = build_crutches(account.id, statuses)
 
       statuses.each do |status|
         next if filter_from_home?(status, account.id, crutches)
-
         add_to_feed(:home, account.id, status, aggregate_reblogs: aggregate)
+      end
+
+      trim(:home, account.id)
+    end
+
+    TagFollow.where(account_id: account.id).find_each do |target_tag|
+      statuses = target_tag.tag.statuses.where(visibility: [:public, :unlisted, :private]).limit(limit).order(created_at: :desc)
+      crutches = build_crutches(account.id, statuses)
+
+      statuses.each do |status|
+        next if filter_from_home?(status, account.id, crutches)
+        add_to_feed(:home, account.id, status)
       end
 
       trim(:home, account.id)
@@ -578,3 +590,4 @@ class FeedManager
     crutches
   end
 end
+# rubocop:enable all
