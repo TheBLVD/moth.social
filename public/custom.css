@@ -33,6 +33,15 @@
   background: var(--medium-dark);
 }
 
+.theme-default .empty-column-indicator a,
+.theme-default .follow_requests-unlocked_explanation a {
+  color: var(--accent);
+}
+
+.theme-default .drawer__inner__mastodon {
+  background-color: var(--medium-dark);
+}
+
 .theme-default .compose-form {
   background: var(--medium-dark);
 }
@@ -43,6 +52,10 @@
 
 .theme-default .drawer__header {
   background: var(--light-dark);
+}
+
+.theme-default .drawer__tab {
+  color: var(--light);
 }
 
 .theme-default .navigation-bar {
@@ -67,6 +80,11 @@
   color: var(--light);
 }
 
+.theme-default .column-back-button {
+  background: var(--light-dark);
+  color: var(--light);
+}
+
 .theme-default .dismissable-banner {
   background: var(--medium-dark);
   border-bottom: 1px solid var(--light-dark);
@@ -86,6 +104,15 @@
 
 .theme-default .status {
   border-bottom: 10px solid var(--dark);
+}
+
+
+.theme-default .unhandled-link {
+  color: var(--light) !important;
+}
+
+.theme-default .status-card__title {
+  color: var(--light);
 }
 
 .theme-default .column-link--transparent {
@@ -130,6 +157,29 @@
   border: 2px solid var(--medium-dark);
 }
 
+.theme-default .account__header__bio .account__header__fields {
+  background: var(--medium-dark);
+}
+
+.theme-default .account__header__account-note textarea,
+.account__header__account-note textarea::placeholder {
+  color: var(--dark-light);
+}
+
+.theme-default .account__header__account-note textarea:focus {
+  background: var(--medium-dark);
+  color: var(--light);
+}
+
+.theme-default .account__header__image {
+  background: var(--light-dark);
+}
+
+.theme-default .column-subheading {
+  color: var(--dark-light);
+  background: var(--light-dark);
+}
+
 .theme-default .reply-indicator {
   background: var(--light-dark);
 }
@@ -145,6 +195,20 @@
 .theme-default .load-more:hover {
   background: var(--medium-dark);
   color: var(--accent);
+}
+
+.theme-default .getting-started__wrapper .column-link {
+  background: var(--medium-dark);
+}
+
+.theme-default .icon-button:active,
+.theme-default .icon-button:focus,
+.theme-default .icon-button:hover {
+  color: var(--light);
+}
+
+.theme-default .text-btn {
+  color: var(--light);
 }
 
 /* Account */
@@ -194,6 +258,14 @@
   border-color: transparent transparent var(--medium-dark);
 }
 
+.theme-default .account__header {
+  background: var(--light-dark);
+}
+
+.theme-default .account__header__account-note label {
+  color: var(--light);
+}
+
 .theme-default a.mention {
   color: var(--light) !important;
 }
@@ -206,6 +278,24 @@
   color: var(--light) !important;
 }
 
+.theme-default .follow_requests-unlocked_explanation {
+  background: var(--medium-dark);
+  border-bottom: 1px solid var(--light-dark);
+  color: var(--dark-light);
+}
+
+.theme-default .conversation--unread {
+  background-color: var(--light-dark);
+}
+
+.theme-default .detailed-status {
+  background-color: var(--medium-dark);
+}
+
+.theme-default .detailed-status__action-bar {
+  background-color: var(--medium-dark);
+}
+
 /* Posts */
 
 .theme-default .status__prepend {
@@ -213,6 +303,32 @@
 }
 
 .theme-default .status__prepend .status__display-name strong {
+  color: var(--light);
+}
+
+.theme-default .status-card,
+.theme-default .status-card.compact {
+  border-color: var(--light-dark);
+  color: var(--dark-light);
+}
+
+.theme-default a.status-card.compact:hover {
+  background-color: var(--light-dark);
+}
+
+.theme-default .status-card__image {
+  background: var(--medium-dark);
+}
+
+.theme-default p,
+.theme-default p a {
+  color: var(--dark-light) !important;
+}
+
+.theme-default .muted .status__content,
+.theme-default .muted .status__content a,
+.theme-default .muted .status__content p,
+.theme-default .muted .status__display-name strong {
   color: var(--light);
 }
 
@@ -307,11 +423,6 @@
   color: var(--medium-light);
 }
 
-p,
-p a {
-  color: var(--dark-light) !important;
-}
-
 /* Layout */
 
 .column > .scrollable {
@@ -324,9 +435,6 @@ p a {
 
 .drawer__header a:hover {
   background: var(--accent);
-}
-
-.drawer__tab {
   color: var(--light);
 }
 
@@ -337,7 +445,6 @@ p a {
 .drawer__inner__mastodon {
   background: none;
   background-image: none;
-  background-color: var(--medium-dark);
 }
 
 .drawer__inner__mastodon img {
@@ -345,8 +452,7 @@ p a {
 }
 
 .column-back-button {
-  background: var(--light-dark);
-  color: var(--light);
+  color: var(--accent);
 }
 
 .setting-toggle__label {
@@ -377,10 +483,6 @@ p a {
   color: var(--dark-light);
 }
 
-.text-btn {
-  color: var(--light);
-}
-
 .getting-started__trends h4 {
   color: var(--light);
   border-bottom: var(--light-dark);
@@ -399,42 +501,8 @@ p a {
 }
 
 /* Account */
-
-.account__header {
-  background: var(--light-dark);
-}
-
-.account__header__account-note label {
-  color: var(--light);
-}
-
-.account__header__account-note textarea,
-.account__header__account-note textarea::placeholder {
-  color: var(--dark-light);
-}
-
-.account__header__account-note textarea:focus {
-  background: var(--medium-dark);
-  color: var(--light);
-}
-
-.account__header__image {
-  background: var(--light-dark);
-}
-
-.column-subheading {
-  color: var(--dark-light);
-  background: var(--light-dark);
-}
-
 .account__header__tabs__buttons .icon-button {
   border: 1px solid var(--dark-light);
-}
-
-.icon-button:active,
-.icon-button:focus,
-.icon-button:hover {
-  color: var(--light);
 }
 
 .icon-button.active {
@@ -447,10 +515,6 @@ p a {
 
 .text-icon-button.active {
   color: var(--accent);
-}
-
-.account__header__bio .account__header__fields {
-  background: var(--medium-dark);
 }
 
 .account__header__bio .account__header__fields dt,
@@ -551,10 +615,6 @@ p a {
   color: var(--dark-light);
 }
 
-.icon-button:hover {
-  color: var(--light);
-}
-
 button.icon-button.inverted.active {
   color: var(--accent);
 }
@@ -571,13 +631,6 @@ button.icon-button i.fa-retweet:hover {
 
 .focusable:focus {
   background: none;
-}
-
-.muted .status__content,
-.muted .status__content a,
-.muted .status__content p,
-.muted .status__display-name strong {
-  color: var(--light);
 }
 
 .account__section-headline,
@@ -631,31 +684,28 @@ button.icon-button i.fa-retweet:hover {
 }
 
 .unhandled-link {
-  color: var(--light) !important;
+  color: var(--accent)!important;
 }
 
-.status-card,
-.status-card.compact {
-  border-color: var(--light-dark);
-  color: var(--dark-light);
-}
-
-.status-card__image {
-  background: var(--medium-dark);
-}
-
-.status-card__title {
-  color: var(--light);
-}
-
-a.status-card.compact:hover {
-  background-color: var(--light-dark);
+.reply-indicator__content a,
+.status__content a {
+  color: var(--accent);
 }
 
 .reply-indicator__content .status__content__spoiler-link,
 .status__content .status__content__spoiler-link {
   background: var(--light);
   color: var(--medium-dark);
+}
+
+.compose-form .compose-form__warning,
+.simple_form .recommended {
+  border-color: var(--accent);
+  background-color: rgb(63 143 245 / 20%);
+}
+
+.compose-form .compose-form__warning, .compose-form .compose-form__warning a {
+  color: var(--accent);
 }
 
 /* About */
