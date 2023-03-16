@@ -106,7 +106,6 @@
   border-bottom: 10px solid var(--dark);
 }
 
-
 .theme-default .unhandled-link {
   color: var(--light) !important;
 }
@@ -451,6 +450,7 @@
   display: none;
 }
 
+.column-header__back-button,
 .column-back-button {
   color: var(--accent);
 }
@@ -566,22 +566,6 @@
   margin-top: 1.5rem;
 }
 
-.navigation-panel__logo a svg {
-  display: none;
-}
-
-.navigation-panel__logo a,
-.navigation-panel__logo a:hover,
-.navigation-panel__logo a:focus {
-  margin-bottom: 0.75rem;
-  width: 3rem;
-  height: 3rem;
-  background: none;
-  background-image: url('https://cdn.shopify.com/s/files/1/0614/6565/7577/files/mammoth-logo.svg');
-  background-repeat: no-repeat;
-  background-size: 100% auto;
-}
-
 .icon-with-badge__badge {
   background: var(--accent);
   border: 2px solid var(--dark);
@@ -684,7 +668,7 @@ button.icon-button i.fa-retweet:hover {
 }
 
 .unhandled-link {
-  color: var(--accent)!important;
+  color: var(--accent) !important;
 }
 
 .reply-indicator__content a,
@@ -704,7 +688,8 @@ button.icon-button i.fa-retweet:hover {
   background-color: rgb(63 143 245 / 20%);
 }
 
-.compose-form .compose-form__warning, .compose-form .compose-form__warning a {
+.compose-form .compose-form__warning,
+.compose-form .compose-form__warning a {
   color: var(--accent);
 }
 
@@ -718,17 +703,6 @@ button.icon-button i.fa-retweet:hover {
 
 .admin-wrapper .sidebar .logo {
   opacity: 0;
-}
-
-.admin-wrapper .sidebar > a:first-of-type {
-  display: flex;
-  width: 7rem;
-  height: 7rem;
-  background: none;
-  background-image: url('https://cdn.shopify.com/s/files/1/0614/6565/7577/files/mammoth-logo.svg');
-  background-repeat: no-repeat;
-  background-size: 100% auto;
-  margin: 30px auto 0;
 }
 
 .admin-wrapper p a {
@@ -803,4 +777,55 @@ button.icon-button i.fa-retweet:hover {
 .privacy-dropdown__option.active,
 .privacy-dropdown__option:hover {
   background: var(--accent);
+}
+
+
+/***********************************
+* REPLACE MASTODON DEFAULT LOGO
+***********************************/
+
+.navigation-panel__logo a svg {
+  display: none;
+}
+
+.navigation-panel__logo a,
+.navigation-panel__logo a:hover,
+.navigation-panel__logo a:focus {
+  margin-bottom: 0.75rem;
+  width: 3rem;
+  height: 3rem;
+  background: none;
+  background-image: url('https://cdn.shopify.com/s/files/1/0614/6565/7577/files/mammoth-logo.svg');
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+}
+
+
+@media screen and (max-width: 1174px) {
+  .layout-single-column .ui__header__logo svg {
+    display: none;
+  }
+
+  .layout-single-column .ui__header__logo {
+    margin-left: 0.7rem;
+    width: 1rem;
+    height: 0.8rem;
+    background: none;
+    background-image: url('https://cdn.shopify.com/s/files/1/0614/6565/7577/files/mammoth-logo.svg');
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+  }
+}
+
+/* Admin */
+
+.admin-wrapper .sidebar > a:first-of-type {
+  display: flex;
+  width: 7rem;
+  height: 7rem;
+  background: none;
+  background-image: url('https://cdn.shopify.com/s/files/1/0614/6565/7577/files/mammoth-logo.svg');
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  margin: 30px auto 0;
 }
