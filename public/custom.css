@@ -174,6 +174,10 @@
   background: var(--light-dark);
 }
 
+.theme-default .account__header__extra__links a {
+  color: var(--light);
+}
+
 .theme-default .column-subheading {
   color: var(--dark-light);
   background: var(--light-dark);
@@ -340,15 +344,14 @@
   background: var(--medium-dark);
 }
 
-.theme-default .admin-wrapper .content__heading__tabs a.selected,
-.admin-wrapper .content__heading__tabs a.selected:hover {
-  background: var(--accent);
-}
-
 .theme-default .fa-close::before,
 .theme-default .fa-remove::before,
 .theme-default .fa-times::before {
   color: var(--light);
+}
+
+.theme-default .admin-wrapper p a {
+  color: var(--medium-light) !important;
 }
 
 /***********************************
@@ -376,6 +379,7 @@
 .button:active,
 .button:focus,
 .button:hover,
+.button.logo-button:focus,
 .button.logo-button:hover {
   background-color: var(--light);
   color: var(--accent);
@@ -534,10 +538,6 @@
   color: var(--dark-light);
 }
 
-.account__header__extra__links a {
-  color: var(--light);
-}
-
 .account__header__bar {
   border-bottom: none;
 }
@@ -684,6 +684,7 @@ button.icon-button i.fa-retweet:hover {
 
 .compose-form .compose-form__warning,
 .simple_form .recommended {
+  color: var(--accent);
   border-color: var(--accent);
   background-color: rgb(63 143 245 / 20%);
 }
@@ -705,8 +706,13 @@ button.icon-button i.fa-retweet:hover {
   opacity: 0;
 }
 
-.admin-wrapper p a {
-  color: var(--light) !important;
+.admin-wrapper .content__heading__tabs a.selected,
+.admin-wrapper .content__heading__tabs a.selected:hover {
+  background: var(--accent);
+}
+
+ .admin-wrapper p a {
+  color: var(--dark) !important;
 }
 
 .admin-wrapper p a:hover {
@@ -764,6 +770,10 @@ button.icon-button i.fa-retweet:hover {
 .simple_form button:active,
 .simple_form button:focus {
   background-color: var(--light);
+  color: var(--accent);
+}
+
+.simple_form .hint a {
   color: var(--accent);
 }
 
