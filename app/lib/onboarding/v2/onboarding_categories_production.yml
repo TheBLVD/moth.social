@@ -25,9 +25,6 @@
     - account: '@neilhimself@mastodon.social'
       type: account
       summary: English author of fiction, novels.
-    - account: '@kathygriffin@mstdn.social'
-      type: account
-      summary: Comedian, actress, Emmy Award winner.
     - account: '@alexwinter@mastodon.social'
       type: account
       summary: Actor and filmmaker.
@@ -76,9 +73,6 @@
       type: hashtag
       bio: Discussion and news regarding mainstream and alternative media.
       summary: Media-related discussion.
-    - account: '@taylorlorenz@mastodon.social'
-      type: account
-      summary: WaPo Technology Columnist.
     - account: '@damemagazine@newsie.social'
       type: account
       summary: Women-led, independent magazine.
@@ -156,7 +150,7 @@
     - account: '@drcaberry@blacktwitter.io'
       type: account
       summary: Elec. Engineering, Robotics professor.
-    - account: '@brooklynmarie@mastodon.lol'
+    - account: '@brooklynmarie@mastodon.social'
       type: account
       summary: Your friendly neighborhood debunker.
     - hashtag: '#academia'
@@ -215,6 +209,20 @@
     - account: '@BigAngBlack@fosstodon.org'
       type: account
       summary: Black culture student.
+- name: Humor
+  items:
+    - account: '@feral_hattie@mastodon.social'
+      type: account
+      summary: Humorous posts with progressive themes.
+    - account: '@professorkiosk@beige.party'
+      type: account
+      summary: Comedic posts from an academic.
+    - account: '@Alice@beige.party'
+      type: account
+      summary: Witty one-liners.
+    - account: '@princesaballena@beige.party'
+      type: account
+      summary: Silly jokes and puns.
 - name: Art & Photographers
   items:
     - account: '@Curator@mastodon.art'
