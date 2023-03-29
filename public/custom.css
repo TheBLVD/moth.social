@@ -64,7 +64,29 @@
 
 .theme-default .search__input {
   background: var(--light-dark);
-  color: var(--medium-dark);
+  color: var(--light);
+}
+
+.theme-default .search-results__info {
+  color: var(--dark-light);
+}
+
+.theme-default .search-results__header {
+  background: var(--light-dark);
+  color: var(--light);
+}
+
+.theme-default .search-results__section h5 {
+  background: var(--medium-dark);
+  color: var(--medium-light);
+}
+
+.theme-default .drawer__inner {
+  background: var(--medium-dark);
+}
+
+.theme-default .drawer__inner.darker {
+  background: var(--light-dark);
 }
 
 .theme-default .column-header,
@@ -143,8 +165,20 @@
   background: var(--light-dark);
 }
 
+.theme-default .columns-area {
+  background: var(--medium-dark);
+}
+
 .theme-default .navigation-bar__profile a {
   color: var(--light);
+}
+
+.theme-default .trends__item__name a {
+  color: var(--light);
+}
+
+.theme-default .trends__item__name {
+  color: var(--dark-light);
 }
 
 .theme-default .getting-started__wrapper {
@@ -297,6 +331,10 @@
 
 .theme-default .detailed-status__action-bar {
   background-color: var(--medium-dark);
+}
+
+.theme-default .status__relative-time {
+  color: var(--medium-light);
 }
 
 /* Posts */
@@ -475,10 +513,6 @@
   border-color: var(--accent);
 }
 
-.search__input:focus {
-  background: var(--light);
-}
-
 .search__input::placeholder {
   color: var(--dark-light);
 }
@@ -490,14 +524,6 @@
 .getting-started__trends h4 {
   color: var(--light);
   border-bottom: var(--light-dark);
-}
-
-.trends__item__name a {
-  color: var(--light);
-}
-
-.trends__item__name {
-  color: var(--dark-light);
 }
 
 .getting-started__trends .trends__item__current {
@@ -589,10 +615,6 @@
 .status__display-name,
 .display-name__account {
   color: var(--dark-light);
-}
-
-.status__relative-time {
-  color: var(--medium-light);
 }
 
 .icon-button {
