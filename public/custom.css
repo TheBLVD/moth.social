@@ -165,6 +165,10 @@
   background: var(--light-dark);
 }
 
+.theme-default .columns-area {
+  background: var(--medium-dark);
+}
+
 .theme-default .navigation-bar__profile a {
   color: var(--light);
 }
@@ -180,8 +184,6 @@
 .theme-default .getting-started__wrapper {
   background: var(--medium-dark);
 }
-
-
 
 .theme-default .account__header__bar .avatar .account__avatar {
   background: var(--medium-dark);
