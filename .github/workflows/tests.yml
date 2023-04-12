@@ -61,7 +61,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.0.6
+          # ruby-version: 3.0.6 not needed with a .ruby-version file
           bundler-cache: true
       - name: Run Rails tests
         run: |
@@ -76,7 +76,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.0.6
+          # ruby-version: 3.0.6 not needed with a .ruby-version file
           bundler-cache: true
       - name: Deploy to Production
         uses: miloserdow/capistrano-deploy@master
