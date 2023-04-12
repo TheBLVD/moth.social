@@ -62,7 +62,9 @@ class EmojiFormatter
   private
 
   def emoji_map
-    @emoji_map ||= custom_emojis.each_with_object({}) { |e, h| h[e.shortcode] = [full_asset_url(e.image.url), full_asset_url(e.image.url(:static))] }
+    @emoji_map ||= custom_emojis.each_with_object({}) do |e, h|
+      h[e.shortcode] = [full_asset_url(e.image.url), full_asset_url(e.image.url(:static))]
+    end
   end
 
   def count_tag_nesting(tag)

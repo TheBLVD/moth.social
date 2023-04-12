@@ -6,7 +6,8 @@ class Api::V1::Timelines::TagController < Api::BaseController
 
   def show
     @statuses = load_statuses
-    render json: @statuses, each_serializer: REST::StatusSerializer, relationships: StatusRelationshipsPresenter.new(@statuses, current_user&.account_id)
+    render json: @statuses, each_serializer: REST::StatusSerializer,
+           relationships: StatusRelationshipsPresenter.new(@statuses, current_user&.account_id)
   end
 
   private

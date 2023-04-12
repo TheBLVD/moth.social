@@ -28,13 +28,16 @@ class Importer::BaseImporter
 
   # Restore original index settings
   def optimize_for_search!
-    Chewy.client.indices.put_settings index: index.index_name, body: { index: { refresh_interval: index.settings_hash[:settings][:index][:refresh_interval] } }
+    Chewy.client.indices.put_settings index: index.index_name,
+                                      body: { index: { refresh_interval: index.settings_hash[:settings][:index][:refresh_interval] } }
   end
 
   # Estimate the amount of documents that would be indexed. Not exact!
   # @returns [Integer]
   def estimate!
-    ActiveRecord::Base.connection_pool.with_connection { |connection| connection.select_one("SELECT reltuples AS estimate FROM pg_class WHERE relname = '#{index.adapter.target.table_name}'")['estimate'].to_i }
+    ActiveRecord::Base.connection_pool.with_connection do |connection|
+      connection.select_one("SELECT reltuples AS estimate FROM pg_class WHERE relname = '#{index.adapter.target.table_name}'")['estimate'].to_i
+    end
   end
 
   # Import data from the database into the index
@@ -45,7 +48,7 @@ class Importer::BaseImporter
   # Remove documents from the index that no longer exist in the database
   def clean_up!
     index.scroll_batches do |documents|
-      ids           = documents.map { |doc| doc['_id'] }
+      ids           = documents.pluck('_id')
       existence_map = index.adapter.target.where(id: ids).pluck(:id).each_with_object({}) { |id, map| map[id.to_s] = true }
       tmp           = ids.reject { |id| existence_map[id] }
 

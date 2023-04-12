@@ -35,7 +35,10 @@ class ActivityPub::Activity::Announce < ActivityPub::Activity
 
   def distribute
     # Notify the author of the original status if that status is local
-    LocalNotificationWorker.perform_async(@status.reblog.account_id, @status.id, 'Status', 'reblog') if reblog_of_local_account?(@status) && !reblog_by_following_group_account?(@status)
+    if reblog_of_local_account?(@status) && !reblog_by_following_group_account?(@status)
+      LocalNotificationWorker.perform_async(@status.reblog.account_id, @status.id, 'Status',
+                                            'reblog')
+    end
 
     # Distribute into home and list feeds
     ::DistributionWorker.perform_async(@status.id) if @options[:override_timestamps] || @status.within_realtime_window?

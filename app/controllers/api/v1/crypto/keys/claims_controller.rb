@@ -12,7 +12,9 @@ class Api::V1::Crypto::Keys::ClaimsController < Api::BaseController
   private
 
   def set_claim_results
-    @claim_results = devices.filter_map { |device_params| ::Keys::ClaimService.new.call(current_account, device_params[:account_id], device_params[:device_id]) }
+    @claim_results = devices.filter_map do |device_params|
+      ::Keys::ClaimService.new.call(current_account, device_params[:account_id], device_params[:device_id])
+    end
   end
 
   def resource_params

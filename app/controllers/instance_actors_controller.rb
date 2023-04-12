@@ -8,7 +8,8 @@ class InstanceActorsController < ApplicationController
 
   def show
     expires_in 10.minutes, public: true
-    render json: @account, content_type: 'application/activity+json', serializer: ActivityPub::ActorSerializer, adapter: ActivityPub::Adapter, fields: restrict_fields_to
+    render json: @account, content_type: 'application/activity+json', serializer: ActivityPub::ActorSerializer,
+           adapter: ActivityPub::Adapter, fields: restrict_fields_to
   end
 
   private

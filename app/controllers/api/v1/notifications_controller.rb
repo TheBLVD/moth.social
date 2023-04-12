@@ -10,7 +10,8 @@ class Api::V1::NotificationsController < Api::BaseController
 
   def index
     @notifications = load_notifications
-    render json: @notifications, each_serializer: REST::NotificationSerializer, relationships: StatusRelationshipsPresenter.new(target_statuses_from_notifications, current_user&.account_id)
+    render json: @notifications, each_serializer: REST::NotificationSerializer,
+           relationships: StatusRelationshipsPresenter.new(target_statuses_from_notifications, current_user&.account_id)
   end
 
   def show
@@ -24,7 +25,7 @@ class Api::V1::NotificationsController < Api::BaseController
   end
 
   def dismiss
-    current_account.notifications.find_by!(id: params[:id]).destroy!
+    current_account.notifications.find(params[:id]).destroy!
     render_empty
   end
 

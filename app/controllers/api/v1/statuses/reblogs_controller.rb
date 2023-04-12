@@ -28,7 +28,8 @@ class Api::V1::Statuses::ReblogsController < Api::BaseController
       authorize @reblog, :show?
     end
 
-    render json: @reblog, serializer: REST::StatusSerializer, relationships: StatusRelationshipsPresenter.new([@status], current_account.id, reblogs_map: { @reblog.id => false })
+    render json: @reblog, serializer: REST::StatusSerializer,
+           relationships: StatusRelationshipsPresenter.new([@status], current_account.id, reblogs_map: { @reblog.id => false })
   rescue Mastodon::NotPermittedError
     not_found
   end

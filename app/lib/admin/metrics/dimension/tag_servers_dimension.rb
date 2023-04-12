@@ -24,9 +24,13 @@ class Admin::Metrics::Dimension::TagServersDimension < Admin::Metrics::Dimension
       LIMIT $4
     SQL
 
-    rows = ActiveRecord::Base.connection.select_all(sql, nil, [[nil, params[:id]], [nil, Mastodon::Snowflake.id_at(@start_at, with_random: false)], [nil, Mastodon::Snowflake.id_at(@end_at, with_random: false)], [nil, @limit]])
+    rows = ActiveRecord::Base.connection.select_all(sql, nil,
+                                                    [[nil, params[:id]], [nil, Mastodon::Snowflake.id_at(@start_at, with_random: false)], [nil, Mastodon::Snowflake.id_at(@end_at, with_random: false)], [nil, @limit]])
 
-    rows.map { |row| { key: row['domain'] || Rails.configuration.x.local_domain, human_key: row['domain'] || Rails.configuration.x.local_domain, value: row['value'].to_s } }
+    rows.map do |row|
+      { key: row['domain'] || Rails.configuration.x.local_domain, human_key: row['domain'] || Rails.configuration.x.local_domain,
+     value: row['value'].to_s }
+    end
   end
 
   def params

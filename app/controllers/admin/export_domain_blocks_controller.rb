@@ -23,7 +23,8 @@ module Admin
       @import = Admin::Import.new(import_params)
       return render :new unless @import.validate
 
-      @global_private_comment = I18n.t('admin.export_domain_blocks.import.private_comment_template', source: @import.data_file_name, date: I18n.l(Time.now.utc))
+      @global_private_comment = I18n.t('admin.export_domain_blocks.import.private_comment_template', source: @import.data_file_name,
+date: I18n.l(Time.now.utc))
 
       @form = Form::DomainBlockBatch.new
       @domain_blocks = @import.csv_rows.filter_map do |row|
@@ -69,7 +70,8 @@ module Admin
     def export_data
       CSV.generate(headers: export_headers, write_headers: true) do |content|
         DomainBlock.with_limitations.each do |instance|
-          content << [instance.domain, instance.severity, instance.reject_media, instance.reject_reports, instance.public_comment, instance.obfuscate]
+          content << [instance.domain, instance.severity, instance.reject_media, instance.reject_reports, instance.public_comment,
+                      instance.obfuscate]
         end
       end
     end

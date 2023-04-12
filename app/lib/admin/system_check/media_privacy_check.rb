@@ -40,7 +40,7 @@ class Admin::SystemCheck::MediaPrivacyCheck < Admin::SystemCheck::BaseCheck
         @failure_action = 'https://docs.joinmastodon.org/admin/optional/object-storage/#FS'
       end
     end
-  rescue
+  rescue StandardError
     nil
   end
 
@@ -58,7 +58,7 @@ class Admin::SystemCheck::MediaPrivacyCheck < Admin::SystemCheck::BaseCheck
       check_s3_listing!(full_url)
       break if @failure_message.present?
     end
-  rescue
+  rescue StandardError
     nil
   end
 
@@ -78,7 +78,7 @@ class Admin::SystemCheck::MediaPrivacyCheck < Admin::SystemCheck::BaseCheck
     @media_attachment ||= begin
       attachment = Account.representative.media_attachments.first
       if attachment.present?
-        attachment.touch # rubocop:disable Rails/SkipsModelValidations
+        attachment.touch
         attachment
       else
         create_test_attachment!

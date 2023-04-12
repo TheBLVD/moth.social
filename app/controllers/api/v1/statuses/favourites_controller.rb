@@ -23,7 +23,8 @@ class Api::V1::Statuses::FavouritesController < Api::BaseController
       authorize @status, :show?
     end
 
-    render json: @status, serializer: REST::StatusSerializer, relationships: StatusRelationshipsPresenter.new([@status], current_account.id, favourites_map: { @status.id => false })
+    render json: @status, serializer: REST::StatusSerializer,
+           relationships: StatusRelationshipsPresenter.new([@status], current_account.id, favourites_map: { @status.id => false })
   rescue Mastodon::NotPermittedError
     not_found
   end

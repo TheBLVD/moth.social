@@ -34,12 +34,14 @@ class ActivityPub::Activity::Follow < ActivityPub::Activity
       LocalNotificationWorker.perform_async(target_account.id, follow_request.id, 'FollowRequest', 'follow_request')
     else
       AuthorizeFollowService.new.call(@account, target_account)
-      LocalNotificationWorker.perform_async(target_account.id, ::Follow.find_by(account: @account, target_account: target_account).id, 'Follow', 'follow')
+      LocalNotificationWorker.perform_async(target_account.id, ::Follow.find_by(account: @account, target_account: target_account).id,
+                                            'Follow', 'follow')
     end
   end
 
   def reject_follow_request!(target_account)
-    json = Oj.dump(serialize_payload(FollowRequest.new(account: @account, target_account: target_account, uri: @json['id']), ActivityPub::RejectFollowSerializer))
+    json = Oj.dump(serialize_payload(FollowRequest.new(account: @account, target_account: target_account, uri: @json['id']),
+                                     ActivityPub::RejectFollowSerializer))
     ActivityPub::DeliveryWorker.perform_async(json, target_account.id, @account.inbox_url)
   end
 end

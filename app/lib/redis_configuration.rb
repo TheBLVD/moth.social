@@ -39,7 +39,7 @@ class RedisConfiguration
   end
 
   def url
-    ENV['REDIS_URL']
+    ENV.fetch('REDIS_URL', nil)
   end
 
   private

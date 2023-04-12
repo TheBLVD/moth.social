@@ -90,10 +90,11 @@ class ActivityPub::TagManager
           result << uri_for(account)
           result << followers_uri_for(account) if account.group?
         end
-        to.concat(FollowRequest.where(target_account_id: status.account_id, account_id: account_ids).each_with_object([]) do |request, result|
-          result << uri_for(request.account)
-          result << followers_uri_for(request.account) if request.account.group?
-        end).compact
+        to.concat(FollowRequest.where(target_account_id: status.account_id,
+                                      account_id: account_ids).each_with_object([]) do |request, result|
+                    result << uri_for(request.account)
+                    result << followers_uri_for(request.account) if request.account.group?
+                  end).compact
       else
         status.active_mentions.each_with_object([]) do |mention, result|
           result << uri_for(mention.account)
@@ -128,10 +129,11 @@ class ActivityPub::TagManager
           result << uri_for(account)
           result << followers_uri_for(account) if account.group?
         end.compact)
-        cc.concat(FollowRequest.where(target_account_id: status.account_id, account_id: account_ids).each_with_object([]) do |request, result|
-          result << uri_for(request.account)
-          result << followers_uri_for(request.account) if request.account.group?
-        end.compact)
+        cc.concat(FollowRequest.where(target_account_id: status.account_id,
+                                      account_id: account_ids).each_with_object([]) do |request, result|
+                    result << uri_for(request.account)
+                    result << followers_uri_for(request.account) if request.account.group?
+                  end.compact)
       else
         cc.concat(status.active_mentions.each_with_object([]) do |mention, result|
           result << uri_for(mention.account)

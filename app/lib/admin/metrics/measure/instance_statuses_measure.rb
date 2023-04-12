@@ -41,7 +41,8 @@ class Admin::Metrics::Measure::InstanceStatusesMeasure < Admin::Metrics::Measure
       ) AS axis
     SQL
 
-    rows = ActiveRecord::Base.connection.select_all(sql, nil, [[nil, @start_at], [nil, @end_at], [nil, Mastodon::Snowflake.id_at(@start_at, with_random: false)], [nil, Mastodon::Snowflake.id_at(@end_at, with_random: false)], [nil, params[:domain]]])
+    rows = ActiveRecord::Base.connection.select_all(sql, nil,
+                                                    [[nil, @start_at], [nil, @end_at], [nil, Mastodon::Snowflake.id_at(@start_at, with_random: false)], [nil, Mastodon::Snowflake.id_at(@end_at, with_random: false)], [nil, params[:domain]]])
 
     rows.map { |row| { date: row['period'], value: row['value'].to_s } }
   end

@@ -47,7 +47,8 @@ class Api::V1::StatusesController < Api::BaseController
     @context = Context.new(ancestors: loaded_ancestors, descendants: loaded_descendants)
     statuses = [@status] + @context.ancestors + @context.descendants
 
-    render json: @context, serializer: REST::ContextSerializer, relationships: StatusRelationshipsPresenter.new(statuses, current_user&.account_id)
+    render json: @context, serializer: REST::ContextSerializer,
+           relationships: StatusRelationshipsPresenter.new(statuses, current_user&.account_id)
   end
 
   def create
