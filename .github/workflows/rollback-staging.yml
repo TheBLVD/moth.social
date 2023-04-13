@@ -1,9 +1,9 @@
-name: Rollback :alert:
+name: Rollback
 on:
   workflow_dispatch:
     inputs:
       environment:
-        description: "The environment to rollback staging | production"
+        description: 'The environment to rollback staging | production'
         required: true
 
 jobs:
