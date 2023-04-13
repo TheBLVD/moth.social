@@ -18,8 +18,12 @@ class Admin::Metrics::Dimension::ServersDimension < Admin::Metrics::Dimension::B
       LIMIT $3
     SQL
 
-    rows = ActiveRecord::Base.connection.select_all(sql, nil, [[nil, Mastodon::Snowflake.id_at(@start_at)], [nil, Mastodon::Snowflake.id_at(@end_at)], [nil, @limit]])
+    rows = ActiveRecord::Base.connection.select_all(sql, nil,
+                                                    [[nil, Mastodon::Snowflake.id_at(@start_at)], [nil, Mastodon::Snowflake.id_at(@end_at)], [nil, @limit]])
 
-    rows.map { |row| { key: row['domain'] || Rails.configuration.x.local_domain, human_key: row['domain'] || Rails.configuration.x.local_domain, value: row['value'].to_s } }
+    rows.map do |row|
+      { key: row['domain'] || Rails.configuration.x.local_domain, human_key: row['domain'] || Rails.configuration.x.local_domain,
+     value: row['value'].to_s }
+    end
   end
 end

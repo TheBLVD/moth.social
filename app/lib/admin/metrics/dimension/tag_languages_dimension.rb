@@ -25,7 +25,8 @@ class Admin::Metrics::Dimension::TagLanguagesDimension < Admin::Metrics::Dimensi
       LIMIT $4
     SQL
 
-    rows = ActiveRecord::Base.connection.select_all(sql, nil, [[nil, params[:id]], [nil, Mastodon::Snowflake.id_at(@start_at, with_random: false)], [nil, Mastodon::Snowflake.id_at(@end_at, with_random: false)], [nil, @limit]])
+    rows = ActiveRecord::Base.connection.select_all(sql, nil,
+                                                    [[nil, params[:id]], [nil, Mastodon::Snowflake.id_at(@start_at, with_random: false)], [nil, Mastodon::Snowflake.id_at(@end_at, with_random: false)], [nil, @limit]])
 
     rows.map { |row| { key: row['language'], human_key: standard_locale_name(row['language']), value: row['value'].to_s } }
   end

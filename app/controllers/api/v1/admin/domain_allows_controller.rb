@@ -16,6 +16,16 @@ class Api::V1::Admin::DomainAllowsController < Api::BaseController
 
   PAGINATION_PARAMS = %i(limit).freeze
 
+  def index
+    authorize :domain_allow, :index?
+    render json: @domain_allows, each_serializer: REST::Admin::DomainAllowSerializer
+  end
+
+  def show
+    authorize @domain_allow, :show?
+    render json: @domain_allow, serializer: REST::Admin::DomainAllowSerializer
+  end
+
   def create
     authorize :domain_allow, :create?
 
@@ -29,16 +39,6 @@ class Api::V1::Admin::DomainAllowsController < Api::BaseController
     render json: @domain_allow, serializer: REST::Admin::DomainAllowSerializer
   end
 
-  def index
-    authorize :domain_allow, :index?
-    render json: @domain_allows, each_serializer: REST::Admin::DomainAllowSerializer
-  end
-
-  def show
-    authorize @domain_allow, :show?
-    render json: @domain_allow, serializer: REST::Admin::DomainAllowSerializer
-  end
-
   def destroy
     authorize @domain_allow, :destroy?
     UnallowDomainService.new.call(@domain_allow)
@@ -49,7 +49,8 @@ class Api::V1::Admin::DomainAllowsController < Api::BaseController
   private
 
   def set_domain_allows
-    @domain_allows = filtered_domain_allows.order(id: :desc).to_a_paginated_by_id(limit_param(LIMIT), params_slice(:max_id, :since_id, :min_id))
+    @domain_allows = filtered_domain_allows.order(id: :desc).to_a_paginated_by_id(limit_param(LIMIT),
+                                                                                  params_slice(:max_id, :since_id, :min_id))
   end
 
   def set_domain_allow

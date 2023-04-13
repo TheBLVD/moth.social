@@ -11,6 +11,10 @@ class Api::V1::FiltersController < Api::BaseController
     render json: @filters, each_serializer: REST::V1::FilterSerializer
   end
 
+  def show
+    render json: @filter, serializer: REST::V1::FilterSerializer
+  end
+
   def create
     ApplicationRecord.transaction do
       filter_category = current_account.custom_filters.create!(filter_params)
@@ -20,15 +24,14 @@ class Api::V1::FiltersController < Api::BaseController
     render json: @filter, serializer: REST::V1::FilterSerializer
   end
 
-  def show
-    render json: @filter, serializer: REST::V1::FilterSerializer
-  end
-
   def update
     ApplicationRecord.transaction do
       @filter.update!(keyword_params)
       @filter.custom_filter.assign_attributes(filter_params)
-      raise Mastodon::ValidationError, I18n.t('filters.errors.deprecated_api_multiple_keywords') if @filter.custom_filter.changed? && @filter.custom_filter.keywords.count > 1
+      if @filter.custom_filter.changed? && @filter.custom_filter.keywords.count > 1
+        raise Mastodon::ValidationError,
+              I18n.t('filters.errors.deprecated_api_multiple_keywords')
+      end
 
       @filter.custom_filter.save!
     end

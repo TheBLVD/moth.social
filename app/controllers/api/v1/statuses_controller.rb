@@ -47,7 +47,8 @@ class Api::V1::StatusesController < Api::BaseController
     @context = Context.new(ancestors: loaded_ancestors, descendants: loaded_descendants)
     statuses = [@status] + @context.ancestors + @context.descendants
 
-    render json: @context, serializer: REST::ContextSerializer, relationships: StatusRelationshipsPresenter.new(statuses, current_user&.account_id)
+    render json: @context, serializer: REST::ContextSerializer,
+           relationships: StatusRelationshipsPresenter.new(statuses, current_user&.account_id)
   end
 
   def create
@@ -79,6 +80,7 @@ class Api::V1::StatusesController < Api::BaseController
       current_account.id,
       text: status_params[:status],
       media_ids: status_params[:media_ids],
+      media_attributes: status_params[:media_attributes],
       sensitive: status_params[:sensitive],
       language: status_params[:language],
       spoiler_text: status_params[:spoiler_text],
@@ -128,6 +130,12 @@ class Api::V1::StatusesController < Api::BaseController
       :language,
       :scheduled_at,
       media_ids: [],
+      media_attributes: [
+        :id,
+        :thumbnail,
+        :description,
+        :focus,
+      ],
       poll: [
         :multiple,
         :hide_totals,

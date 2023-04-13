@@ -67,7 +67,7 @@ module ApplicationHelper
   def link_to_login(name = nil, html_options = nil, &block)
     target = new_user_session_path
 
-    html_options = name if block_given?
+    html_options = name if block
 
     if omniauth_only? && Devise.mappings[:user].omniauthable? && User.omniauth_providers.size == 1
       target = omniauth_authorize_path(:user, User.omniauth_providers[0])
@@ -75,7 +75,7 @@ module ApplicationHelper
       html_options[:method] = :post
     end
 
-    if block_given?
+    if block
       link_to(target, html_options, &block)
     else
       link_to(name, target, html_options)
@@ -83,7 +83,8 @@ module ApplicationHelper
   end
 
   def provider_sign_in_link(provider)
-    label = Devise.omniauth_configs[provider]&.strategy&.display_name.presence || I18n.t("auth.providers.#{provider}", default: provider.to_s.chomp('_oauth2').capitalize)
+    label = Devise.omniauth_configs[provider]&.strategy&.display_name.presence || I18n.t("auth.providers.#{provider}",
+                                                                                         default: provider.to_s.chomp('_oauth2').capitalize)
     link_to label, omniauth_authorize_path(:user, provider), class: "button button-#{provider}", method: :post
   end
 
@@ -142,7 +143,8 @@ module ApplicationHelper
     if prefers_autoplay?
       image_tag(custom_emoji.image.url, class: 'emojione', alt: ":#{custom_emoji.shortcode}:")
     else
-      image_tag(custom_emoji.image.url(:static), class: 'emojione custom-emoji', alt: ":#{custom_emoji.shortcode}", 'data-original' => full_asset_url(custom_emoji.image.url), 'data-static' => full_asset_url(custom_emoji.image.url(:static)))
+      image_tag(custom_emoji.image.url(:static), :class => 'emojione custom-emoji', :alt => ":#{custom_emoji.shortcode}",
+'data-original' => full_asset_url(custom_emoji.image.url), 'data-static' => full_asset_url(custom_emoji.image.url(:static)))
     end
   end
 
@@ -180,7 +182,7 @@ module ApplicationHelper
   end
 
   def storage_host
-    "https://#{ENV['S3_ALIAS_HOST'].presence || ENV['S3_CLOUDFRONT_HOST']}"
+    "https://#{ENV['S3_ALIAS_HOST'].presence || ENV.fetch('S3_CLOUDFRONT_HOST', nil)}"
   end
 
   def storage_host?
@@ -220,7 +222,8 @@ module ApplicationHelper
       state_params[:owner] = Account.local.without_suspended.where('id > 0').first
     end
 
-    json = ActiveModelSerializers::SerializableResource.new(InitialStatePresenter.new(state_params), serializer: InitialStateSerializer).to_json
+    json = ActiveModelSerializers::SerializableResource.new(InitialStatePresenter.new(state_params),
+                                                            serializer: InitialStateSerializer).to_json
     # rubocop:disable Rails/OutputSafety
     content_tag(:script, json_escape(json).html_safe, id: 'initial-state', type: 'application/json')
     # rubocop:enable Rails/OutputSafety

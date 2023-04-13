@@ -143,7 +143,7 @@ module JsonLdHelper
   def safe_for_forwarding?(original, compacted)
     original.without('@context', 'signature').all? do |key, value|
       compacted_value = compacted[key]
-      return false unless value.class == compacted_value.class
+      return false unless value.instance_of?(compacted_value.class)
 
       if value.is_a?(Hash)
         safe_for_forwarding?(value, compacted_value)
@@ -174,7 +174,10 @@ module JsonLdHelper
     on_behalf_of ||= Account.representative
 
     build_request(uri, on_behalf_of).perform do |response|
-      raise Mastodon::UnexpectedResponseError, response unless response_successful?(response) || response_error_unsalvageable?(response) || !raise_on_temporary_error
+      unless response_successful?(response) || response_error_unsalvageable?(response) || !raise_on_temporary_error
+        raise Mastodon::UnexpectedResponseError,
+              response
+      end
 
       body_to_json(response.body_with_limit) if response.code == 200
     end
@@ -213,7 +216,7 @@ module JsonLdHelper
     end
   end
 
-  def load_jsonld_context(url, _options = {}, &_block)
+  def load_jsonld_context(url, _options = {}, &block)
     json = Rails.cache.fetch("jsonld:context:#{url}", expires_in: 30.days, raw: true) do
       request = Request.new(:get, url)
       request.add_headers('Accept' => 'application/ld+json')
@@ -226,6 +229,6 @@ module JsonLdHelper
 
     doc = JSON::LD::API::RemoteDocument.new(json, documentUrl: url)
 
-    block_given? ? yield(doc) : doc
+    block ? yield(doc) : doc
   end
 end

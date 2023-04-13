@@ -18,15 +18,6 @@ class Api::V1::Admin::EmailDomainBlocksController < Api::BaseController
     limit
   ).freeze
 
-  def create
-    authorize :email_domain_block, :create?
-
-    @email_domain_block = EmailDomainBlock.create!(resource_params)
-    log_action :create, @email_domain_block
-
-    render json: @email_domain_block, serializer: REST::Admin::EmailDomainBlockSerializer
-  end
-
   def index
     authorize :email_domain_block, :index?
     render json: @email_domain_blocks, each_serializer: REST::Admin::EmailDomainBlockSerializer
@@ -34,6 +25,15 @@ class Api::V1::Admin::EmailDomainBlocksController < Api::BaseController
 
   def show
     authorize @email_domain_block, :show?
+    render json: @email_domain_block, serializer: REST::Admin::EmailDomainBlockSerializer
+  end
+
+  def create
+    authorize :email_domain_block, :create?
+
+    @email_domain_block = EmailDomainBlock.create!(resource_params)
+    log_action :create, @email_domain_block
+
     render json: @email_domain_block, serializer: REST::Admin::EmailDomainBlockSerializer
   end
 
@@ -47,7 +47,8 @@ class Api::V1::Admin::EmailDomainBlocksController < Api::BaseController
   private
 
   def set_email_domain_blocks
-    @email_domain_blocks = EmailDomainBlock.order(id: :desc).to_a_paginated_by_id(limit_param(LIMIT), params_slice(:max_id, :since_id, :min_id))
+    @email_domain_blocks = EmailDomainBlock.order(id: :desc).to_a_paginated_by_id(limit_param(LIMIT),
+                                                                                  params_slice(:max_id, :since_id, :min_id))
   end
 
   def set_email_domain_block

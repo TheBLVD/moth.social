@@ -31,7 +31,9 @@ module StatusesHelper
       end
     end
 
-    text = attachments.to_a.reject { |_, value| value.zero? }.map { |key, value| I18n.t("statuses.attached.#{key}", count: value) }.join(' · ')
+    text = attachments.to_a.reject do |_, value|
+             value.zero?
+           end.map { |key, value| I18n.t("statuses.attached.#{key}", count: value) }.join(' · ')
 
     return if text.blank?
 
@@ -164,7 +166,9 @@ module StatusesHelper
     component_params = {
       sensitive: sensitized?(status, current_account),
       autoplay: prefers_autoplay?,
-      media: status.ordered_media_attachments.map { |a| ActiveModelSerializers::SerializableResource.new(a, serializer: REST::MediaAttachmentSerializer).as_json },
+      media: status.ordered_media_attachments.map do |a|
+               ActiveModelSerializers::SerializableResource.new(a, serializer: REST::MediaAttachmentSerializer).as_json
+             end,
     }.merge(**options)
 
     react_component :media_gallery, component_params do
@@ -185,7 +189,8 @@ module StatusesHelper
   def render_poll_component(status, **options)
     component_params = {
       disabled: true,
-      poll: ActiveModelSerializers::SerializableResource.new(status.preloadable_poll, serializer: REST::PollSerializer, scope: current_user, scope_name: :current_user).as_json,
+      poll: ActiveModelSerializers::SerializableResource.new(status.preloadable_poll, serializer: REST::PollSerializer,
+scope: current_user, scope_name: :current_user).as_json,
     }.merge(**options)
 
     react_component :poll, component_params do

@@ -96,7 +96,10 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
     LinkCrawlWorker.perform_in(rand(1..59).seconds, @status.id)
 
     # Distribute into home and list feeds and notify mentioned accounts
-    ::DistributionWorker.perform_async(@status.id, { 'silenced_account_ids' => @silenced_account_ids }) if @options[:override_timestamps] || @status.within_realtime_window?
+    if @options[:override_timestamps] || @status.within_realtime_window?
+      ::DistributionWorker.perform_async(@status.id,
+                                         { 'silenced_account_ids' => @silenced_account_ids })
+    end
   end
 
   def find_existing_status
@@ -285,7 +288,7 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
 
     media_attachments
   rescue Addressable::URI::InvalidURIError => e
-    Rails.logger.debug "Invalid URL in attachment: #{e}"
+    Rails.logger.debug { "Invalid URL in attachment: #{e}" }
     media_attachments
   end
 
@@ -321,29 +324,36 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
     end
 
     increment_voters_count! unless already_voted
-    ActivityPub::DistributePollUpdateWorker.perform_in(3.minutes, replied_to_status.id) unless replied_to_status.preloadable_poll.hide_totals?
+    unless replied_to_status.preloadable_poll.hide_totals?
+      ActivityPub::DistributePollUpdateWorker.perform_in(3.minutes,
+                                                         replied_to_status.id)
+    end
   end
 
   def resolve_thread(status)
     return unless status.reply? && status.thread.nil? && Request.valid_url?(in_reply_to_uri)
 
-    ThreadResolveWorker.perform_async(status.id, in_reply_to_uri)
+    ThreadResolveWorker.perform_async(status.id, in_reply_to_uri, { 'request_id' => @options[:request_id] })
   end
 
   def fetch_replies(status)
     collection = @object['replies']
     return if collection.nil?
 
-    replies = ActivityPub::FetchRepliesService.new.call(status, collection, false)
+    replies = ActivityPub::FetchRepliesService.new.call(status, collection, allow_synchronous_requests: false,
+request_id: @options[:request_id])
     return unless replies.nil?
 
     uri = value_or_id(collection)
-    ActivityPub::FetchRepliesWorker.perform_async(status.id, uri) unless uri.nil?
+    ActivityPub::FetchRepliesWorker.perform_async(status.id, uri, { 'request_id' => @options[:request_id] }) unless uri.nil?
   end
 
   def conversation_from_uri(uri)
     return nil if uri.nil?
-    return Conversation.find_by(id: OStatus::TagManager.instance.unique_tag_to_local_id(uri, 'Conversation')) if OStatus::TagManager.instance.local_id?(uri)
+    if OStatus::TagManager.instance.local_id?(uri)
+      return Conversation.find_by(id: OStatus::TagManager.instance.unique_tag_to_local_id(uri,
+                                                                                          'Conversation'))
+    end
 
     begin
       Conversation.find_or_create_by!(uri: uri)
@@ -369,7 +379,8 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
   end
 
   def converted_text
-    linkify([@status_parser.title.presence, @status_parser.spoiler_text.presence, @status_parser.url || @status_parser.uri].compact.join("\n\n"))
+    linkify([@status_parser.title.presence, @status_parser.spoiler_text.presence,
+             @status_parser.url || @status_parser.uri].compact.join("\n\n"))
   end
 
   def unsupported_media_type?(mime_type)
@@ -398,7 +409,9 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
   def addresses_local_accounts?
     return true if @options[:delivered_to_account_id]
 
-    local_usernames = (audience_to + audience_cc).uniq.select { |uri| ActivityPub::TagManager.instance.local_uri?(uri) }.map { |uri| ActivityPub::TagManager.instance.uri_to_local_id(uri, :username) }
+    local_usernames = (audience_to + audience_cc).uniq.select do |uri|
+                        ActivityPub::TagManager.instance.local_uri?(uri)
+                      end.map { |uri| ActivityPub::TagManager.instance.uri_to_local_id(uri, :username) }
 
     return false if local_usernames.empty?
 

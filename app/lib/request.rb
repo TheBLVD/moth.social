@@ -58,7 +58,7 @@ class Request
   def perform
     begin
       response = http_client.public_send(@verb, @url.to_s, @options.merge(headers: headers))
-    rescue => e
+    rescue StandardError => e
       raise e.class, "#{e.message} on #{@url}", e.backtrace[0]
     end
 
@@ -154,9 +154,7 @@ class Request
   end
 
   module ClientLimit
-    def body_with_limit(limit = 1.megabyte)
-      raise Mastodon::LengthValidationError if content_length.present? && content_length > limit
-
+    def truncated_body(limit = 1.megabyte)
       if charset.nil?
         encoding = Encoding::BINARY
       else
@@ -173,9 +171,17 @@ class Request
         contents << chunk
         chunk.clear
 
-        raise Mastodon::LengthValidationError if contents.bytesize > limit
+        break if contents.bytesize > limit
       end
 
+      contents
+    end
+
+    def body_with_limit(limit = 1.megabyte)
+      raise Mastodon::LengthValidationError if content_length.present? && content_length > limit
+
+      contents = truncated_body(limit)
+      raise Mastodon::LengthValidationError if contents.bytesize > limit
       contents
     end
   end
@@ -201,7 +207,9 @@ class Request
           Resolv::DNS.open do |dns|
             dns.timeouts = 5
             addresses = dns.getaddresses(host)
-            addresses = addresses.filter { |addr| addr.is_a?(Resolv::IPv6) }.take(2) + addresses.filter { |addr| !addr.is_a?(Resolv::IPv6) }.take(2)
+            addresses = addresses.filter { |addr| addr.is_a?(Resolv::IPv6) }.take(2) + addresses.filter do |addr|
+                                                                                         !addr.is_a?(Resolv::IPv6)
+                                                                                       end.take(2)
           end
         end
 
@@ -226,7 +234,7 @@ class Request
           rescue IO::WaitWritable
             socks << sock
             addr_by_socket[sock] = sockaddr
-          rescue => e
+          rescue StandardError => e
             outer_e = e
           end
         end
@@ -246,7 +254,7 @@ class Request
               sock.connect_nonblock(addr_by_socket[sock])
             rescue Errno::EISCONN
               # Do nothing
-            rescue => e
+            rescue StandardError => e
               sock.close
               outer_e = e
               next

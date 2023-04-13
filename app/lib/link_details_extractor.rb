@@ -140,7 +140,10 @@ class LinkDetailsExtractor
   end
 
   def html
-    player_url.present? ? content_tag(:iframe, nil, src: player_url, width: width, height: height, allowtransparency: 'true', scrolling: 'no', frameborder: '0') : nil
+    if player_url.present?
+      content_tag(:iframe, nil, src: player_url, width: width, height: height, allowtransparency: 'true',
+    scrolling: 'no', frameborder: '0')
+    end
   end
 
   def width
@@ -188,7 +191,7 @@ class LinkDetailsExtractor
   end
 
   def language
-    valid_locale_or_nil(structured_data&.language || opengraph_tag('og:locale') || document.xpath('//html').map { |element| element['lang'] }.first)
+    valid_locale_or_nil(structured_data&.language || opengraph_tag('og:locale') || document.xpath('//html').pluck('lang').first)
   end
 
   def icon
@@ -220,15 +223,15 @@ class LinkDetailsExtractor
   end
 
   def link_tag(name)
-    document.xpath("//link[@rel=\"#{name}\"]").map { |link| link['href'] }.first
+    document.xpath("//link[@rel=\"#{name}\"]").pluck('href').first
   end
 
   def opengraph_tag(name)
-    document.xpath("//meta[@property=\"#{name}\" or @name=\"#{name}\"]").map { |meta| meta['content'] }.first
+    document.xpath("//meta[@property=\"#{name}\" or @name=\"#{name}\"]").pluck('content').first
   end
 
   def meta_tag(name)
-    document.xpath("//meta[@name=\"#{name}\"]").map { |meta| meta['content'] }.first
+    document.xpath("//meta[@name=\"#{name}\"]").pluck('content').first
   end
 
   def structured_data
@@ -248,7 +251,7 @@ class LinkDetailsExtractor
 
         structured_data
       rescue Oj::ParseError, EncodingError
-        Rails.logger.debug("Invalid JSON-LD in #{@original_url}")
+        Rails.logger.debug { "Invalid JSON-LD in #{@original_url}" }
         next
       end.first
     end

@@ -24,16 +24,16 @@ class Auth::RegistrationsController < Devise::RegistrationsController
     super(&:build_invite_request)
   end
 
-  def destroy
-    not_found
-  end
-
   def update
     super do |resource|
       if resource.saved_change_to_encrypted_password?
         resource.clear_other_sessions(current_session.session_id)
       end
     end
+  end
+
+  def destroy
+    not_found
   end
 
   protected
@@ -48,7 +48,7 @@ class Auth::RegistrationsController < Devise::RegistrationsController
     super(hash)
 
     resource.locale                 = I18n.locale
-    resource.invite_code            = params[:invite_code] if resource.invite_code.blank?
+    resource.invite_code            = @invite&.code if resource.invite_code.blank?
     resource.registration_form_time = session[:registration_form_time]
     resource.sign_up_ip             = request.remote_ip
 
@@ -57,7 +57,8 @@ class Auth::RegistrationsController < Devise::RegistrationsController
 
   def configure_sign_up_params
     devise_parameter_sanitizer.permit(:sign_up) do |user_params|
-      user_params.permit({ account_attributes: [:username, :display_name], invite_request_attributes: [:text] }, :email, :password, :password_confirmation, :invite_code, :agreement, :website, :confirm_password)
+      user_params.permit({ account_attributes: [:username, :display_name], invite_request_attributes: [:text] }, :email, :password,
+                         :password_confirmation, :invite_code, :agreement, :website, :confirm_password)
     end
   end
 

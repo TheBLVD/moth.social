@@ -10,7 +10,8 @@ class Api::V1::FollowedTagsController < Api::BaseController
   after_action :insert_pagination_headers
 
   def index
-    render json: @results.map(&:tag), each_serializer: REST::TagSerializer, relationships: TagRelationshipsPresenter.new(@results.map(&:tag), current_user&.account_id)
+    render json: @results.map(&:tag), each_serializer: REST::TagSerializer,
+           relationships: TagRelationshipsPresenter.new(@results.map(&:tag), current_user&.account_id)
   end
 
   private

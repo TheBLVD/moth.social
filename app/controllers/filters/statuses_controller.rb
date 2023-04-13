@@ -15,7 +15,9 @@ class Filters::StatusesController < ApplicationController
   end
 
   def batch
-    @status_filter_batch_action = Form::StatusFilterBatchAction.new(status_filter_batch_action_params.merge(current_account: current_account, filter_id: params[:filter_id], type: action_from_button))
+    @status_filter_batch_action = Form::StatusFilterBatchAction.new(status_filter_batch_action_params.merge(
+                                                                      current_account: current_account, filter_id: params[:filter_id], type: action_from_button
+                                                                    ))
     @status_filter_batch_action.save!
   rescue ActionController::ParameterMissing
     flash[:alert] = I18n.t('admin.statuses.no_status_selected')

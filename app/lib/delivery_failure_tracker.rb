@@ -6,7 +6,7 @@ class DeliveryFailureTracker
   FAILURE_DAYS_THRESHOLD = 7
 
   def initialize(url_or_host)
-    @host = url_or_host.start_with?('https://') || url_or_host.start_with?('http://') ? Addressable::URI.parse(url_or_host).normalized_host : url_or_host
+    @host = url_or_host.start_with?('https://', 'http://') ? Addressable::URI.parse(url_or_host).normalized_host : url_or_host
   end
 
   def track_failure!
@@ -32,7 +32,9 @@ class DeliveryFailureTracker
   end
 
   def exhausted_deliveries_days
-    @exhausted_deliveries_days ||= redis.smembers(exhausted_deliveries_key).sort.map { |date| Date.new(date.slice(0, 4).to_i, date.slice(4, 2).to_i, date.slice(6, 2).to_i) }
+    @exhausted_deliveries_days ||= redis.smembers(exhausted_deliveries_key).sort.map do |date|
+      Date.new(date.slice(0, 4).to_i, date.slice(4, 2).to_i, date.slice(6, 2).to_i)
+    end
   end
 
   alias reset! track_success!

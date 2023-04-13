@@ -24,7 +24,8 @@ class Api::V1::Statuses::BookmarksController < Api::BaseController
 
     bookmark&.destroy!
 
-    render json: @status, serializer: REST::StatusSerializer, relationships: StatusRelationshipsPresenter.new([@status], current_account.id, bookmarks_map: { @status.id => false })
+    render json: @status, serializer: REST::StatusSerializer,
+           relationships: StatusRelationshipsPresenter.new([@status], current_account.id, bookmarks_map: { @status.id => false })
   rescue Mastodon::NotPermittedError
     not_found
   end
