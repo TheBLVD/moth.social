@@ -11,7 +11,8 @@ class Admin::Trends::Links::PreviewCardProvidersController < Admin::BaseControll
   def batch
     authorize :preview_card_provider, :review?
 
-    @form = Trends::PreviewCardProviderBatch.new(trends_preview_card_provider_batch_params.merge(current_account: current_account, action: action_from_button))
+    @form = Trends::PreviewCardProviderBatch.new(trends_preview_card_provider_batch_params.merge(current_account: current_account,
+                                                                                                 action: action_from_button))
     @form.save
   rescue ActionController::ParameterMissing
     flash[:alert] = I18n.t('admin.trends.links.publishers.no_publisher_selected')

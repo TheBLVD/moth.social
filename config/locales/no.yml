@@ -1258,6 +1258,8 @@
     validation_errors:
       one: Noe er ikke helt riktig ennå. Vennligst se etter en gang til
       other: Noe er ikke helt riktig ennå. Det er ennå %{count} feil å rette på
+  html_validator:
+    invalid_markup: 'inneholder ugyldig HTML-markør: %{error}'
   imports:
     errors:
       empty: Tom CSV-fil

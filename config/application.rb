@@ -171,6 +171,7 @@ module Mastodon
       :sv,
       :szl,
       :ta,
+      :tai,
       :te,
       :th,
       :tr,

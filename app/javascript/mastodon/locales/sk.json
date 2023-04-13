@@ -592,6 +592,7 @@
   "sign_in_banner.sign_in": "Prihlás sa",
   "sign_in_banner.sso_redirect": "Prihlás sa, alebo zaregistruj",
   "status.admin_account": "Otvor moderovacie rozhranie užívateľa @{name}",
+  "status.admin_domain": "Open moderation interface for {domain}",
   "status.admin_status": "Otvor tento príspevok v moderovacom rozhraní",
   "status.block": "Blokuj @{name}",
   "status.bookmark": "Záložka",

@@ -10,7 +10,7 @@
   "about.domain_blocks.suspended.title": "Suspendert",
   "about.not_available": "Denne informasjonen er ikke gjort tilgjengelig på denne tjeneren.",
   "about.powered_by": "Desentraliserte sosiale medier drevet av {mastodon}",
-  "about.rules": "Regler for serveren",
+  "about.rules": "Regler for tjeneren",
   "account.account_note_header": "Notat",
   "account.add_or_remove_from_list": "Legg til eller fjern fra lister",
   "account.badges.bot": "Automatisert",

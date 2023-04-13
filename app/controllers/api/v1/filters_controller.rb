@@ -28,7 +28,10 @@ class Api::V1::FiltersController < Api::BaseController
     ApplicationRecord.transaction do
       @filter.update!(keyword_params)
       @filter.custom_filter.assign_attributes(filter_params)
-      raise Mastodon::ValidationError, I18n.t('filters.errors.deprecated_api_multiple_keywords') if @filter.custom_filter.changed? && @filter.custom_filter.keywords.count > 1
+      if @filter.custom_filter.changed? && @filter.custom_filter.keywords.count > 1
+        raise Mastodon::ValidationError,
+              I18n.t('filters.errors.deprecated_api_multiple_keywords')
+      end
 
       @filter.custom_filter.save!
     end

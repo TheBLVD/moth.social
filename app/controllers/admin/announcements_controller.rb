@@ -26,7 +26,8 @@ class Admin::AnnouncementsController < Admin::BaseController
     if @announcement.save
       PublishScheduledAnnouncementWorker.perform_async(@announcement.id) if @announcement.published?
       log_action :create, @announcement
-      redirect_to admin_announcements_path, notice: @announcement.published? ? I18n.t('admin.announcements.published_msg') : I18n.t('admin.announcements.scheduled_msg')
+      redirect_to admin_announcements_path,
+                  notice: @announcement.published? ? I18n.t('admin.announcements.published_msg') : I18n.t('admin.announcements.scheduled_msg')
     else
       render :new
     end

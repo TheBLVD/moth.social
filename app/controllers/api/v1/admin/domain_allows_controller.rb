@@ -49,7 +49,8 @@ class Api::V1::Admin::DomainAllowsController < Api::BaseController
   private
 
   def set_domain_allows
-    @domain_allows = filtered_domain_allows.order(id: :desc).to_a_paginated_by_id(limit_param(LIMIT), params_slice(:max_id, :since_id, :min_id))
+    @domain_allows = filtered_domain_allows.order(id: :desc).to_a_paginated_by_id(limit_param(LIMIT),
+                                                                                  params_slice(:max_id, :since_id, :min_id))
   end
 
   def set_domain_allow

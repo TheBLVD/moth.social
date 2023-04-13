@@ -54,7 +54,8 @@ class Api::V1::Admin::CanonicalEmailBlocksController < Api::BaseController
   end
 
   def set_canonical_email_blocks
-    @canonical_email_blocks = CanonicalEmailBlock.order(id: :desc).to_a_paginated_by_id(limit_param(LIMIT), params_slice(:max_id, :since_id, :min_id))
+    @canonical_email_blocks = CanonicalEmailBlock.order(id: :desc).to_a_paginated_by_id(limit_param(LIMIT),
+                                                                                        params_slice(:max_id, :since_id, :min_id))
   end
 
   def set_canonical_email_blocks_from_test

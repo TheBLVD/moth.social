@@ -229,7 +229,6 @@ class Request
 
       contents = truncated_body(limit)
       raise Mastodon::LengthValidationError if contents.bytesize > limit
-
       contents
     end
   end
@@ -255,7 +254,9 @@ class Request
           Resolv::DNS.open do |dns|
             dns.timeouts = 5
             addresses = dns.getaddresses(host)
-            addresses = addresses.filter { |addr| addr.is_a?(Resolv::IPv6) }.take(2) + addresses.filter { |addr| !addr.is_a?(Resolv::IPv6) }.take(2)
+            addresses = addresses.filter { |addr| addr.is_a?(Resolv::IPv6) }.take(2) + addresses.filter do |addr|
+                                                                                         !addr.is_a?(Resolv::IPv6)
+                                                                                       end.take(2)
           end
         end
 
@@ -298,7 +299,7 @@ class Request
               sock.connect_nonblock(addr_by_socket[sock])
             rescue Errno::EISCONN
               # Do nothing
-            rescue => e
+            rescue StandardError => e
               sock.close
               outer_e = e
               next

@@ -140,7 +140,6 @@ class Form::AdminSettings
   def validate_site_uploads
     UPLOAD_KEYS.each do |key|
       next unless instance_variable_defined?("@#{key}")
-
       upload = instance_variable_get("@#{key}")
       next if upload.valid?
 

@@ -101,7 +101,7 @@ de:
         trends: Trends zeigen, welche Beiträge, Hashtags und Nachrichten auf deinem Server immer beliebter werden.
         trends_as_landing_page: Dies zeigt nicht angemeldeten Personen Trendinhalte anstelle einer Beschreibung des Servers an. Erfordert, dass Trends aktiviert sind.
       form_challenge:
-        current_password: Du betrittst einen sicheren Bereich
+        current_password: Du betrittst einen gesicherten Bereich
       imports:
         data: CSV-Datei, die von einem Mastodon-Server exportiert worden ist
       invite_request:
@@ -111,7 +111,7 @@ de:
         expires_in: IP-Adressen sind eine begrenzte Ressource. Sie können außerdem auf viele Computer aufgeteilt sein und auch die Zuordnungen ändern sich. Deshalb werden unbestimmte IP-Sperren nicht empfohlen.
         ip: Gib eine IPv4- oder IPv6-Adresse an. Du kannst ganze Bereiche mit der CIDR-Syntax blockieren. Achte darauf, dass du dich nicht selbst aussperrst!
         severities:
-          no_access: Zugriff auf alle Ressourcen blockieren
+          no_access: Blockiere Zugriff auf alle Ressourcen
           sign_up_block: Neue Registrierungen werden nicht möglich sein
           sign_up_requires_approval: Neue Registrierungen müssen genehmigt werden
         severity: Wähle aus, was mit Anfragen von dieser IP-Adresse geschehen soll
@@ -150,7 +150,7 @@ de:
       account_alias:
         acct: Profilname des alten Kontos
       account_migration:
-        acct: Adresse des neuen Kontos
+        acct: Betreiber des neuen Kontos
       account_warning_preset:
         text: Vorlagentext
         title: Titel
@@ -175,7 +175,7 @@ de:
       appeal:
         text: Begründe, weshalb diese Entscheidung zurückgenommen werden sollte
       defaults:
-        autofollow: Meinem Profil automatisch folgen
+        autofollow: Lade ein, um deinem Konto zu folgen
         avatar: Profilbild
         bot: Dieses Profil ist automatisiert
         chosen_languages: Sprachen einschränken
@@ -200,7 +200,7 @@ de:
         password: Passwort
         phrase: Wort oder Formulierung
         setting_advanced_layout: Erweitertes Webinterface verwenden
-        setting_aggregate_reblogs: Geteilte Beiträge in den Timelines gruppieren
+        setting_aggregate_reblogs: Boosts in der Timeline gruppieren
         setting_always_send_emails: Benachrichtigungen immer senden
         setting_auto_play_gif: Animierte GIFs automatisch abspielen
         setting_boost_modal: Bestätigungsdialog beim Teilen eines Beitrags anzeigen

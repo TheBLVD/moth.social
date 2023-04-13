@@ -28,4 +28,8 @@ class PlainTextFormatter
   def insert_newlines
     text.gsub(NEWLINE_TAGS_RE) { |match| "#{match}\n" }
   end
+
+  def html_entities
+    HTMLEntities.new
+  end
 end

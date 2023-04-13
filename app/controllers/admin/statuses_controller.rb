@@ -21,7 +21,8 @@ module Admin
     def batch
       authorize [:admin, :status], :index?
 
-      @status_batch_action = Admin::StatusBatchAction.new(admin_status_batch_action_params.merge(current_account: current_account, report_id: params[:report_id], type: action_from_button))
+      @status_batch_action = Admin::StatusBatchAction.new(admin_status_batch_action_params.merge(current_account: current_account,
+                                                                                                 report_id: params[:report_id], type: action_from_button))
       @status_batch_action.save!
     rescue ActionController::ParameterMissing
       flash[:alert] = I18n.t('admin.statuses.no_status_selected')
@@ -54,7 +55,8 @@ module Admin
     end
 
     def set_statuses
-      @statuses = Admin::StatusFilter.new(@account, filter_params).results.preload(:application, :preloadable_poll, :media_attachments, active_mentions: :account, reblog: [:account, :application, :preloadable_poll, :media_attachments, active_mentions: :account]).page(params[:page]).per(PER_PAGE)
+      @statuses = Admin::StatusFilter.new(@account, filter_params).results.preload(:application, :preloadable_poll, :media_attachments,
+                                                                                   active_mentions: :account, reblog: [:account, :application, :preloadable_poll, :media_attachments, active_mentions: :account]).page(params[:page]).per(PER_PAGE)
     end
 
     def filter_params

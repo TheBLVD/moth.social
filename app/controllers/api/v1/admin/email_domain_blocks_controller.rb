@@ -47,7 +47,8 @@ class Api::V1::Admin::EmailDomainBlocksController < Api::BaseController
   private
 
   def set_email_domain_blocks
-    @email_domain_blocks = EmailDomainBlock.order(id: :desc).to_a_paginated_by_id(limit_param(LIMIT), params_slice(:max_id, :since_id, :min_id))
+    @email_domain_blocks = EmailDomainBlock.order(id: :desc).to_a_paginated_by_id(limit_param(LIMIT),
+                                                                                  params_slice(:max_id, :since_id, :min_id))
   end
 
   def set_email_domain_block

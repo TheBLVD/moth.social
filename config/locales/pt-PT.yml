@@ -367,7 +367,7 @@ pt-PT:
       sources: Origem de inscrições
       space: Utilização do espaço
       title: Painel de controlo
-      top_languages: Principais idiomas activos
+      top_languages: Principais línguas activas
       top_servers: Servidores mais activos
       website: Página na teia
     disputes:
@@ -460,7 +460,7 @@ pt-PT:
       no_file: Nenhum ficheiro selecionado
     follow_recommendations:
       description_html: "<strong>Recomendações de quem seguir ajudam novos utilizadores a encontrar conteúdo interessante rapidamente.</strong>. Quando um utilizador não interage com outros o suficiente para formar recomendações personalizadas, estas contas são recomendadas. Elas são recalculadas diariamente a partir de uma mistura de contas com mais atividade recente e maior número de seguidores locais para um determinado idioma."
-      language: Para o idioma
+      language: Para a língua
       status: Estado
       suppress: Suprimir recomendação de contas a seguir
       suppressed: Suprimida
@@ -500,7 +500,7 @@ pt-PT:
         instance_accounts_measure: contas armazenadas
         instance_followers_measure: nossos seguidores lá
         instance_follows_measure: os seus seguidores aqui
-        instance_languages_dimension: Idiomas mais populares
+        instance_languages_dimension: Liderança de línguas
         instance_media_attachments_measure: anexos de media armazenados
         instance_reports_measure: denúncias sobre eles
         instance_statuses_measure: publicações armazenadas
@@ -804,7 +804,7 @@ pt-PT:
       favourites: Marcadores
       history: Histórico de versões
       in_reply_to: A responder a
-      language: Idioma
+      language: Língua
       media:
         title: Media
       metadata: Metadados

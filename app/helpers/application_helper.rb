@@ -79,7 +79,8 @@ module ApplicationHelper
   end
 
   def provider_sign_in_link(provider)
-    label = Devise.omniauth_configs[provider]&.strategy&.display_name.presence || I18n.t("auth.providers.#{provider}", default: provider.to_s.chomp('_oauth2').capitalize)
+    label = Devise.omniauth_configs[provider]&.strategy&.display_name.presence || I18n.t("auth.providers.#{provider}",
+                                                                                         default: provider.to_s.chomp('_oauth2').capitalize)
     link_to label, omniauth_authorize_path(:user, provider), class: "button button-#{provider}", method: :post
   end
 
@@ -207,7 +208,8 @@ module ApplicationHelper
 
     state_params[:owner] = Account.local.without_suspended.where('id > 0').first if single_user_mode?
 
-    json = ActiveModelSerializers::SerializableResource.new(InitialStatePresenter.new(state_params), serializer: InitialStateSerializer).to_json
+    json = ActiveModelSerializers::SerializableResource.new(InitialStatePresenter.new(state_params),
+                                                            serializer: InitialStateSerializer).to_json
     # rubocop:disable Rails/OutputSafety
     content_tag(:script, json_escape(json).html_safe, id: 'initial-state', type: 'application/json')
     # rubocop:enable Rails/OutputSafety

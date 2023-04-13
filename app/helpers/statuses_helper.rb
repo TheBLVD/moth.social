@@ -31,7 +31,9 @@ module StatusesHelper
       end
     end
 
-    text = attachments.to_a.reject { |_, value| value.zero? }.map { |key, value| I18n.t("statuses.attached.#{key}", count: value) }.join(' · ')
+    text = attachments.to_a.reject do |_, value|
+             value.zero?
+           end.map { |key, value| I18n.t("statuses.attached.#{key}", count: value) }.join(' · ')
 
     return if text.blank?
 

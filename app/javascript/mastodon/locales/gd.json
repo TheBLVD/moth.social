@@ -633,7 +633,7 @@
   "status.favourite": "Cuir ris na h-annsachdan",
   "status.filter": "Criathraich am post seo",
   "status.filtered": "Criathraichte",
-  "status.hide": "Falaich am post",
+  "status.hide": "Hide post",
   "status.history.created": "Chruthaich {name} {date} e",
   "status.history.edited": "Dheasaich {name} {date} e",
   "status.load_more": "Luchdaich barrachd dheth",

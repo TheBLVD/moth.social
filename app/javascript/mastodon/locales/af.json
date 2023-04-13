@@ -160,6 +160,7 @@
   "empty_column.bookmarked_statuses": "Jy het nog geen boekmerke gelaat nie. Boekmerke wat jy by plasings laat, sal jy hier sien.",
   "empty_column.community": "Die plaaslike tydlyn is leeg. Kry die bal aan die rol deur iets te skryf wat mense kan lees!",
   "empty_column.follow_requests": "Jy het nog geen volgversoeke nie. Wanneer jy een ontvang, sal dit hier vertoon.",
+  "empty_column.followed_tags": "You have not followed any hashtags yet. When you do, they will show up here.",
   "empty_column.hashtag": "Daar is nog niks vir hierdie hutsetiket nie.",
   "empty_column.home": "Your home timeline is empty! Follow more people to fill it up. {suggestions}",
   "empty_column.list": "Hierdie lys is nog leeg. Nuwe plasings deur lyslede sal voortaan hier verskyn.",

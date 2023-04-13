@@ -10,7 +10,8 @@ module Admin
       @account_moderation_note = current_account.account_moderation_notes.new(resource_params)
 
       if @account_moderation_note.save
-        redirect_to admin_account_path(@account_moderation_note.target_account_id), notice: I18n.t('admin.account_moderation_notes.created_msg')
+        redirect_to admin_account_path(@account_moderation_note.target_account_id),
+                    notice: I18n.t('admin.account_moderation_notes.created_msg')
       else
         @account          = @account_moderation_note.target_account
         @moderation_notes = @account.targeted_moderation_notes.latest
@@ -23,7 +24,8 @@ module Admin
     def destroy
       authorize @account_moderation_note, :destroy?
       @account_moderation_note.destroy!
-      redirect_to admin_account_path(@account_moderation_note.target_account_id), notice: I18n.t('admin.account_moderation_notes.destroyed_msg')
+      redirect_to admin_account_path(@account_moderation_note.target_account_id),
+                  notice: I18n.t('admin.account_moderation_notes.destroyed_msg')
     end
 
     private

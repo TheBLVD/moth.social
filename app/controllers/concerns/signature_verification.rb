@@ -79,8 +79,12 @@ module SignatureVerification
     return @signed_request_actor if defined?(@signed_request_actor)
 
     raise SignatureVerificationError, 'Request not signed' unless signed_request?
-    raise SignatureVerificationError, 'Incompatible request signature. keyId and signature are required' if missing_required_signature_parameters?
-    raise SignatureVerificationError, 'Unsupported signature algorithm (only rsa-sha256 and hs2019 are supported)' unless %w(rsa-sha256 hs2019).include?(signature_algorithm)
+    if missing_required_signature_parameters?
+      raise SignatureVerificationError,
+            'Incompatible request signature. keyId and signature are required'
+    end
+    raise SignatureVerificationError, 'Unsupported signature algorithm (only rsa-sha256 and hs2019 are supported)' unless %w(rsa-sha256
+                                                                                                                             hs2019).include?(signature_algorithm)
     raise SignatureVerificationError, 'Signed request date outside acceptable time window' unless matches_time_window?
 
     verify_signature_strength!
@@ -144,10 +148,22 @@ module SignatureVerification
   end
 
   def verify_signature_strength!
-    raise SignatureVerificationError, 'Mastodon requires the Date header or (created) pseudo-header to be signed' unless signed_headers.include?('date') || signed_headers.include?('(created)')
-    raise SignatureVerificationError, 'Mastodon requires the Digest header or (request-target) pseudo-header to be signed' unless signed_headers.include?(Request::REQUEST_TARGET) || signed_headers.include?('digest')
-    raise SignatureVerificationError, 'Mastodon requires the Host header to be signed when doing a GET request' if request.get? && !signed_headers.include?('host')
-    raise SignatureVerificationError, 'Mastodon requires the Digest header to be signed when doing a POST request' if request.post? && !signed_headers.include?('digest')
+    unless signed_headers.include?('date') || signed_headers.include?('(created)')
+      raise SignatureVerificationError,
+            'Mastodon requires the Date header or (created) pseudo-header to be signed'
+    end
+    unless signed_headers.include?(Request::REQUEST_TARGET) || signed_headers.include?('digest')
+      raise SignatureVerificationError,
+            'Mastodon requires the Digest header or (request-target) pseudo-header to be signed'
+    end
+    if request.get? && !signed_headers.include?('host')
+      raise SignatureVerificationError,
+            'Mastodon requires the Host header to be signed when doing a GET request'
+    end
+    if request.post? && !signed_headers.include?('digest')
+      raise SignatureVerificationError,
+            'Mastodon requires the Digest header to be signed when doing a POST request'
+    end
   end
 
   def verify_body_digest!
@@ -156,14 +172,18 @@ module SignatureVerification
 
     digests = request.headers['Digest'].split(',').map { |digest| digest.split('=', 2) }.map { |key, value| [key.downcase, value] }
     sha256  = digests.assoc('sha-256')
-    raise SignatureVerificationError, "Mastodon only supports SHA-256 in Digest header. Offered algorithms: #{digests.map(&:first).join(', ')}" if sha256.nil?
+    if sha256.nil?
+      raise SignatureVerificationError,
+            "Mastodon only supports SHA-256 in Digest header. Offered algorithms: #{digests.map(&:first).join(', ')}"
+    end
 
     return if body_digest == sha256[1]
 
     digest_size = begin
       Base64.strict_decode64(sha256[1].strip).length
     rescue ArgumentError
-      raise SignatureVerificationError, "Invalid Digest value. The provided Digest value is not a valid base64 string. Given digest: #{sha256[1]}"
+      raise SignatureVerificationError,
+            "Invalid Digest value. The provided Digest value is not a valid base64 string. Given digest: #{sha256[1]}"
     end
 
     raise SignatureVerificationError, "Invalid Digest value. The provided Digest value is not a SHA-256 digest. Given digest: #{sha256[1]}" if digest_size != 32
@@ -187,12 +207,18 @@ module SignatureVerification
         "#{Request::REQUEST_TARGET}: #{request.method.downcase} #{request.path}"
       when '(created)'
         raise SignatureVerificationError, 'Invalid pseudo-header (created) for rsa-sha256' unless signature_algorithm == 'hs2019'
-        raise SignatureVerificationError, 'Pseudo-header (created) used but corresponding argument missing' if signature_params['created'].blank?
+        if signature_params['created'].blank?
+          raise SignatureVerificationError,
+                'Pseudo-header (created) used but corresponding argument missing'
+        end
 
         "(created): #{signature_params['created']}"
       when '(expires)'
         raise SignatureVerificationError, 'Invalid pseudo-header (expires) for rsa-sha256' unless signature_algorithm == 'hs2019'
-        raise SignatureVerificationError, 'Pseudo-header (expires) used but corresponding argument missing' if signature_params['expires'].blank?
+        if signature_params['expires'].blank?
+          raise SignatureVerificationError,
+                'Pseudo-header (expires) used but corresponding argument missing'
+        end
 
         "(expires): #{signature_params['expires']}"
       else
@@ -255,7 +281,8 @@ module SignatureVerification
     end
   rescue Mastodon::PrivateNetworkAddressError => e
     raise SignatureVerificationError, "Requests to private network addresses are disallowed (tried to query #{e.host})"
-  rescue Mastodon::HostValidationError, ActivityPub::FetchRemoteActorService::Error, ActivityPub::FetchRemoteKeyService::Error, Webfinger::Error => e
+  rescue Mastodon::HostValidationError, ActivityPub::FetchRemoteActorService::Error, ActivityPub::FetchRemoteKeyService::Error,
+         Webfinger::Error => e
     raise SignatureVerificationError, e.message
   end
 

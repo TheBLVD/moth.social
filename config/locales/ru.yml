@@ -357,10 +357,10 @@ ru:
       new_users: новые пользователи
       opened_reports: жалоб открыто
       pending_appeals_html:
-        few: "<strong>%{count}</strong> ожидают аппеляции"
-        many: "<strong>%{count}</strong> ожидают апелляции"
+        few: "<strong>%{count}</strong> аппеляции в ожидании"
+        many: "<strong>%{count}</strong> апелляций в ожидании"
         one: "<strong>%{count}</strong> ожидает апелляции"
-        other: 'Ожидают апелляции: <strong>%{count}</strong>'
+        other: "<strong>%{count}</strong> апелляций в ожидании"
       pending_reports_html:
         few: "<strong>%{count}</strong> ожидающих отчета"
         many: "<strong>%{count}</strong> ожидающих отчетов"

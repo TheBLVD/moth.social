@@ -28,13 +28,16 @@ class Importer::BaseImporter
 
   # Restore original index settings
   def optimize_for_search!
-    Chewy.client.indices.put_settings index: index.index_name, body: { index: { refresh_interval: index.settings_hash[:settings][:index][:refresh_interval] } }
+    Chewy.client.indices.put_settings index: index.index_name,
+                                      body: { index: { refresh_interval: index.settings_hash[:settings][:index][:refresh_interval] } }
   end
 
   # Estimate the amount of documents that would be indexed. Not exact!
   # @returns [Integer]
   def estimate!
-    ActiveRecord::Base.connection_pool.with_connection { |connection| connection.select_one("SELECT reltuples AS estimate FROM pg_class WHERE relname = '#{index.adapter.target.table_name}'")['estimate'].to_i }
+    ActiveRecord::Base.connection_pool.with_connection do |connection|
+      connection.select_one("SELECT reltuples AS estimate FROM pg_class WHERE relname = '#{index.adapter.target.table_name}'")['estimate'].to_i
+    end
   end
 
   # Import data from the database into the index

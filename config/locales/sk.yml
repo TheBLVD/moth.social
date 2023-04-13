@@ -592,6 +592,7 @@ sk:
           approved: Pre registráciu je nutné povolenie
           none: Nikto sa nemôže registrovať
           open: Ktokoľvek sa môže zaregistrovať
+      title: Nastavenia servera
     site_uploads:
       delete: Vymaž nahratý súbor
       destroyed_msg: Nahratie bolo zo stránky úspešne vymazané!

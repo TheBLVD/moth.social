@@ -20,4 +20,10 @@ class ApplicationMailer < ActionMailer::Base
     headers['X-Auto-Response-Suppress'] = 'All'
     headers['Auto-Submitted'] = 'auto-generated'
   end
+
+  def set_autoreply_headers!
+    headers['Precedence'] = 'list'
+    headers['X-Auto-Response-Suppress'] = 'All'
+    headers['Auto-Submitted'] = 'auto-generated'
+  end
 end

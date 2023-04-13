@@ -3,11 +3,9 @@ on:
   push:
     branches-ignore:
       - 'dependabot/**'
-      - 'renovate/**'
     paths:
       - 'package.json'
       - 'yarn.lock'
-      - '.nvmrc'
       - '.prettier*'
       - 'stylelint.config.js'
       - '**/*.css'
@@ -19,7 +17,6 @@ on:
     paths:
       - 'package.json'
       - 'yarn.lock'
-      - '.nvmrc'
       - '.prettier*'
       - 'stylelint.config.js'
       - '**/*.css'
@@ -33,13 +30,12 @@ jobs:
 
     steps:
       - name: Clone repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           cache: yarn
-          node-version-file: '.nvmrc'
 
       - name: Install all yarn packages
         run: yarn --frozen-lockfile
@@ -49,4 +45,4 @@ jobs:
       - run: echo "::add-matcher::.github/stylelint-matcher.json"
 
       - name: Stylelint
-        run: yarn lint:sass
+        run: yarn test:lint:sass
