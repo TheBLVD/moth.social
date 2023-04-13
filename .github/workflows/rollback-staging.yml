@@ -1,0 +1,26 @@
+name: Rollback :alert:
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "The environment to rollback staging | production"
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      BRANCH: ${{github.ref_name}}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          # ruby-version: 3.0.6 Not nessesary w/ ruby-version file
+          bundler-cache: true
+      - name: Rollback
+        uses: kaspernj/capistrano-deploy@custom-capistrano-command
+        with:
+          capistrano_commands: '["deploy:rollback"]'
+          target: ${{ github.event.inputs.environment }}
+          deploy_key: ${{ secrets.DEPLOY_ENC_KEY }}
