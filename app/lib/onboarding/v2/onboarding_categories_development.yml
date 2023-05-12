@@ -1,0 +1,29 @@
+---
+- name: Mammoth
+  items:
+    - account: '@mammoth@moth.social'
+      type: account
+      summary: The official Mammoth account.
+    - account: '@daily@moth.social'
+      type: account
+      summary: Light-hearted and wholesome content.
+- name: Mammoth Team
+  items:
+    - account: '@bart@moth.social'
+      type: account
+      summary: Co-Founder, Mammoth.
+    - account: '@nick@moth.social'
+      type: account
+      summary: Community at Mammoth.
+    - account: '@misspurple@moth.social'
+      type: account
+      summary: Community at Mammoth.
+    - account: '@rileyhBat@moth.social'
+      type: account
+      summary: Engineer at Mammoth.
+    - account: '@mmayo@hachyderm.io'
+      type: account
+      summary: Board Member, Mammoth.
+    - account: '@jtomchak@moth.social'
+      type: account
+      summary: Engineer at Mammoth.

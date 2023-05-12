@@ -6,7 +6,7 @@ csv = CSV.new(STDIN, headers: true)
 categories = csv.group_by { |row| row['Main Category'] }.map do |category, accounts|
   {
     'name' => category,
-    'accounts' => accounts.map do |row|
+    'items' => accounts.map do |row|
       case row[0]
       when 'Account'
         {
