@@ -159,6 +159,11 @@ class Api::BaseController < ApplicationController
 
   private
 
+  def username_and_domain(handle)
+    username, domain = handle.strip.gsub(/\A@/, '').split('@')
+    [username, domain]
+  end
+
   def respond_with_error(code)
     render json: { error: Rack::Utils::HTTP_STATUS_CODES[code] }, status: code
   end
