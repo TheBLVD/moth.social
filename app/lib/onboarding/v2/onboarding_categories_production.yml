@@ -266,15 +266,15 @@
     - account: '@misspurple@moth.social'
       type: account
       summary: Community at Mammoth.
-    - account: '@sdubinsky@moth.social'
-      type: account
-      summary: Backend Engineer at Mammoth.
-    - account: '@JPEGuin@moth.social'
-      type: account
-      summary: App Developer at Mammoth.
     - account: '@rileyhBat@moth.social'
       type: account
       summary: Engineer at Mammoth.
     - account: '@mmayo@hachyderm.io'
       type: account
       summary: Board Member, Mammoth.
+    - account: '@jtomchak@moth.social'
+      type: account
+      summary: Engineer at Mammoth.
+    - account: '@pxl@moth.social'
+      type: account
+      summary: Designer at Mammoth.
