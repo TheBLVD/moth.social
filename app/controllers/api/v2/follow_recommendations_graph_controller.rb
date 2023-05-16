@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V2::FollowRecommendationsGraphController < Api::BaseController
+  before_action -> { authorize_if_got_token! :read, :'read:accounts' }
   before_action :set_account
 
   def show
