@@ -682,10 +682,15 @@ Rails.application.routes.draw do
 
     namespace :v2 do
       get '/search', to: 'search#index', as: :search
+      
+      
+      resource :follow_recommendations, only: :show, controller: :follow_recommendations_graph
+      
 
       resources :media,       only: [:create]
       resources :suggestions, only: [:index]
       resource  :instance,    only: [:show]
+
       resources :filters,     only: [:index, :create, :show, :update, :destroy] do
         resources :keywords, only: [:index, :create], controller: 'filters/keywords'
         resources :statuses, only: [:index, :create], controller: 'filters/statuses'
@@ -701,6 +706,7 @@ Rails.application.routes.draw do
       end
 
       resources :onboarding_follow_recommendations, only: :index, controller: 'onboarding_follow_recommendations'
+      
     end
 
     namespace :web do

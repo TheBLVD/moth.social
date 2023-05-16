@@ -157,12 +157,12 @@ class Api::BaseController < ApplicationController
     ENV['DISALLOW_UNAUTHENTICATED_API_ACCESS'] == 'true' || Rails.configuration.x.whitelist_mode
   end
 
+  private
+
   def username_and_domain(handle)
     username, domain = handle.strip.gsub(/\A@/, '').split('@')
     [username, domain]
   end
-
-  private
 
   def respond_with_error(code)
     render json: { error: Rack::Utils::HTTP_STATUS_CODES[code] }, status: code
