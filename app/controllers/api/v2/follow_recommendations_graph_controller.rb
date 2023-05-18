@@ -18,8 +18,13 @@ class Api::V2::FollowRecommendationsGraphController < Api::BaseController
 
   private
 
+  # Parse acct parameter
+  # return account if local user
+  # return 404 if not a local user
   def set_account
-    username, _domain = username_and_domain(params[:acct])
+    username, domain = username_and_domain(params[:acct])
+    return not_found unless TagManager.instance.local_domain?(domain)
+
     @account = Account.find_local(username)
   end
 
