@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Api::V2::FollowRecommendationsGraphController < Api::BaseController
+  RECOMMENDED_ACCOUNTS_LIMIT = 80
+
   before_action -> { authorize_if_got_token! :read, :'read:accounts' }
   before_action :set_account
 
@@ -12,7 +14,7 @@ class Api::V2::FollowRecommendationsGraphController < Api::BaseController
     recommendations = recommendation_handles
                       .reject { |recommendation| follows.include?(recommendation) }
                       .filter_map { |h| handle_to_account_remote(h) }
-                      .take(limit_param(DEFAULT_ACCOUNTS_LIMIT))
+                      .take(limit_param(RECOMMENDED_ACCOUNTS_LIMIT))
     render json: recommendations, each_serializer: REST::AccountSerializer
   end
 
