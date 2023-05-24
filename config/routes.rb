@@ -685,6 +685,10 @@ Rails.application.routes.draw do
       
       
       resource :follow_recommendations, only: :show, controller: :follow_recommendations_graph
+
+      namespace :timelines do
+        resource :for_you, only: :show, controller: :for_you
+      end
       
 
       resources :media,       only: [:create]
