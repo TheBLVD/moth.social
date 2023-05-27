@@ -30,7 +30,7 @@ class Scheduler::StatusStatUpdateScheduler
   end
 
   def statuses_from_list
-    Status.where(account_id: list_accounts)
+    Status.where(account_id: list_accounts, created_at: (24.hours.ago)..Time.current)
   end
 
   def list_accounts

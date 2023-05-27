@@ -5,10 +5,9 @@ class UpdateStatusStatWorker
 
   sidekiq_options queue: 'pull', retry: 0
 
-  def perform(_status)
+  def perform(status)
     Rails.logger.debug '>>>>>>>>>>>'
-    # UpdateStatusStatService.new.call(status)
-    Rails.logger.debug 'DO THE THING'
+    FetchRemoteStatusService.new.call(status['uri'])
     Rails.logger.debug '>>>>>>>>>>>'
   rescue ActiveRecord::RecordNotFound
     true
