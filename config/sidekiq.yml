@@ -63,6 +63,6 @@
     class: Scheduler::SuspendedUserCleanupScheduler
   status_stat_update_scheduler:
     queue: scheduler
-    interval: 1 minute
+    interval: '10m'
     class: Scheduler::StatusStatUpdateScheduler
     queue: scheduler
