@@ -7,6 +7,12 @@ class FeedManager
   include Singleton
   include Redisable
 
+  # For You List 
+  FOR_YOU_OWNER_ACCOUNT = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
+  LIST_TITLE = 'For You'
+  MINIMUM_REBLOG_FOR_YOU_LIST = 2 
+  MINIMUM_LIKE_FOR_YOU_LIST = 2
+
   # Maximum number of items stored in a single feed
   MAX_ITEMS = 800
 
@@ -43,13 +49,26 @@ class FeedManager
     when :home
       filter_from_home?(status, receiver.id, build_crutches(receiver.id, [status]))
     when :list
-      filter_from_list?(status, receiver) || filter_from_home?(status, receiver.account_id, build_crutches(receiver.account_id, [status]))
+      filter_list_type(status, receiver)
     when :mentions
       filter_from_mentions?(status, receiver.id)
     when :tags
       filter_from_tags?(status, receiver.id, build_crutches(receiver.id, [status]))
     else
       false
+    end
+  end
+
+  # Check if the status should not be added to a timeline type list
+  # @param [Status] status
+  # @param [Account|List] receiver
+  # @return [Boolean]
+  def filter_list_type(status, list)
+    case list.title
+    when (list.title == LIST_TITLE && list.account.username == FOR_YOU_OWNER_ACCOUNT)
+      filter_from_list?(status, receiver) || filter_from_for_you_list?(status, receiver) || filter_from_home?(status, receiver.account_id, build_crutches(receiver.account_id, [status]))
+    else 
+      filter_from_list?(status, receiver) || filter_from_home?(status, receiver.account_id, build_crutches(receiver.account_id, [status]))
     end
   end
 
@@ -427,6 +446,18 @@ class FeedManager
       should_filter &&= !(list.show_list? && ListAccount.where(list_id: list.id, account_id: status.in_reply_to_account_id).exists?)
 
       return !!should_filter
+    end
+
+    false
+  end
+
+  # Algo check for status to be added to for you list 
+  # @param [Status] status
+  # @param [List] list
+  # @return [Boolean]
+  def filter_from_for_you_list?(status, list)
+    if status.reblogs_count > MINIMUM_REBLOG_FOR_YOU_LIST && status.favourites_count > MINIMUM_LIKE_FOR_YOU_LIST
+      return true
     end
 
     false
