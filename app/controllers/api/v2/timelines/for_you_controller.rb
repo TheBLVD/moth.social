@@ -34,12 +34,18 @@ class Api::V2::Timelines::ForYouController < Api::BaseController
   end
 
   def list_statuses
-    list_feed.get(
-      limit_param(DEFAULT_STATUSES_LIMIT),
+    statuses = list_feed.get(
+      limit_param(200),
       params[:max_id],
       params[:since_id],
       params[:min_id]
     )
+
+    statuses.filter do |status|
+      status.reblogs_count >= 2
+    end.first(40)
+
+    statuses
   end
 
   def list_feed
