@@ -65,4 +65,3 @@
     queue: scheduler
     interval: '10m'
     class: Scheduler::StatusStatUpdateScheduler
-    queue: scheduler
