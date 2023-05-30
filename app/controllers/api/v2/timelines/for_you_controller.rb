@@ -3,8 +3,9 @@
 class Api::V2::Timelines::ForYouController < Api::BaseController
   FOR_YOU_OWNER_ACCOUNT = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
   LIST_TITLE = 'For You'
-  MINIMUM_REBLOG = 2
-  MINIMUM_FAVORITE = 2
+  MINIMUM_REBLOG = 1
+  MINIMUM_FAVORITE = 1
+  MINIMUM_REPLIES = 1
 
   before_action :set_list
   before_action :set_statuses
@@ -37,15 +38,17 @@ class Api::V2::Timelines::ForYouController < Api::BaseController
 
   def list_statuses
     statuses = list_feed.get(
-      limit_param(200),
+      limit_param(2000),
       params[:max_id],
       params[:since_id],
       params[:min_id]
     )
 
     statuses.select do |status|
-      status.reblogs_count >= MINIMUM_REBLOG
-    end.first(50)
+      status.reblogs_count >= MINIMUM_REBLOG ||
+        status.replies_count >= MINIMUM_REPLIES ||
+        status.favourites_count >= MINIMUM_FAVORITE
+    end.first(DEFAULT_STATUSES_LIMIT)
   end
 
   def list_feed
