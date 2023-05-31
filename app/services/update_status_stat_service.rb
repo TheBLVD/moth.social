@@ -13,19 +13,8 @@ class UpdateStatusStatService < BaseService
   # @param [Hash] options
   def call(status, _options = {})
     # Fetch status from source
-    # Look up StatusStat by id
-    # Update attributes with new data
-    # StatusStat.transaction do
-    #   update_immediate_attributes!
-    # end
-
-    if status.reblog
-      host = URI.parse(status.reblog['uri']).host
-      status_id = status.reblog['id']
-    else
-      host = URI.parse(status['uri']).host
-      status_id = status['id']
-    end
+    host = URI.parse(status['uri']).host
+    status_id = status['id']
     get_status("https://#{host}#{ENDPOINT}#{status_id}")
   end
 

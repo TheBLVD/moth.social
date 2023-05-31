@@ -25,14 +25,18 @@ class Scheduler::StatusStatUpdateScheduler
   def update_for_you_status_stat!
     statuses = statuses_from_list
     statuses.each do |status|
-      UpdateStatusStatWorker.perform_async(status)
+      status_params = if status.reblog?
+                        { id: status.reblog.id, uri: status.reblog.uri }
+                      else
+                        { id: status.id, uri: status.uri }
+                      end
+      UpdateStatusStatWorker.perform_async(status_params)
     end
   end
 
   def statuses_from_list
-    Status.where(account_id: list_accounts, created_at: (GO_BACK.hours.ago)..Time.current).pluck(:id, :uri).map do |id, uri|
-      { id: id, uri: uri }
-    end
+    Status.where(account_id: list_accounts,
+                 created_at: (GO_BACK.hours.ago)..Time.current)
   end
 
   def list_accounts
