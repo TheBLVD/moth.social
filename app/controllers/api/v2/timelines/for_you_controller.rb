@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V2::Timelines::ForYouController < Api::BaseController
+  DEFAULT_STATUSES_LIST_LIMIT = 120
   FOR_YOU_OWNER_ACCOUNT = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
   LIST_TITLE = 'For You'
 
@@ -35,7 +36,7 @@ class Api::V2::Timelines::ForYouController < Api::BaseController
 
   def list_statuses
     list_feed.get(
-      limit_param(DEFAULT_STATUSES_LIMIT),
+      limit_param(DEFAULT_STATUSES_LIST_LIMIT),
       params[:max_id],
       params[:since_id],
       params[:min_id]
