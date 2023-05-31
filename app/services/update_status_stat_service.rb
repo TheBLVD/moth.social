@@ -24,8 +24,9 @@ class UpdateStatusStatService < BaseService
       body = response.body_with_limit
       status = body_to_json(body)
 
-      new_status = ActivityPub::FetchRemoteStatusService.new.call(status['uri'])
-      new_status.status_stat.update(
+      updated_status = Status.find(status['id'])
+
+      updated_status.status_stat.update(
         replies_count: status['replies_count'],
         favourites_count: status['favourites_count'],
         reblogs_count: status['reblogs_count']
