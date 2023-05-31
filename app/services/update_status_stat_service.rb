@@ -19,8 +19,13 @@ class UpdateStatusStatService < BaseService
     #   update_immediate_attributes!
     # end
 
-    host = URI.parse(status['uri']).host
-    status_id = status['id']
+    if status.reblog
+      host = URI.parse(status.reblog['uri']).host
+      status_id = status.reblog['id']
+    else
+      host = URI.parse(status['uri']).host
+      status_id = status['id']
+    end
     get_status("https://#{host}#{ENDPOINT}#{status_id}")
   end
 
