@@ -43,7 +43,7 @@ class Api::V2::Timelines::ForYouController < Api::BaseController
 
   def list_statuses
     list_feed.get(
-      limit_param(2000),
+      limit_param(1000),
       params[:max_id],
       params[:since_id],
       params[:min_id]
