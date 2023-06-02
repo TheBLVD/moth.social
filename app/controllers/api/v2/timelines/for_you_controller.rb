@@ -27,10 +27,12 @@ class Api::V2::Timelines::ForYouController < Api::BaseController
   end
 
   # Combine engagment actions. Greater than the min engagement set.
+  # Check status for reblog content or assign original content
   # Reject statues with a reply_to or poll_id
   # Return the default limit
   def set_statuses
-    filtered_statuses = cached_list_statuses.select do |status|
+    filtered_statuses = cached_list_statuses.select do |s|
+      status = s.reblog? ? s.reblog : s
       status_counts = status.reblogs_count + status.replies_count + status.favourites_count
       status_counts >= MINIMUM_ENGAGMENT_ACTIONS && status.in_reply_to_id.nil? && status.poll_id.nil?
     end
