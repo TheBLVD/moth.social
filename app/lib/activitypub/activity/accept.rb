@@ -39,7 +39,7 @@ class ActivityPub::Activity::Accept < ActivityPub::Activity
   def relay
     Rails.logger.info "Relay Information:\n"
     Rails.logger.info @relay.inspect
-    Rails.logger.info "object_uri: #{object_uri}, type: #{object_type}"
+    Rails.logger.info "object_uri: #{object_uri}"
     @relay ||= Relay.find_by(follow_activity_id: object_uri) unless object_uri.nil?
   end
 
