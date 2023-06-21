@@ -22,6 +22,7 @@ class ActivityPub::Activity
   class << self
     def factory(json, account, **options)
       @json = json
+      Rails.logger.info "ACTIVITY_PUB #{@json} \n FOR ACCOUNT: #{account}"
       klass&.new(json, account, **options)
     end
 

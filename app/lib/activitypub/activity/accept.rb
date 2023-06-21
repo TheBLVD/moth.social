@@ -2,6 +2,7 @@
 
 class ActivityPub::Activity::Accept < ActivityPub::Activity
   def perform
+    Rails.logger.info 'PERFORM ACTIVITYPUB ACCEPT>>'
     return accept_follow_for_relay if relay_follow?
     return accept_follow!(follow_request_from_object) unless follow_request_from_object.nil?
 
@@ -36,6 +37,9 @@ class ActivityPub::Activity::Accept < ActivityPub::Activity
   end
 
   def relay
+    Rails.logger.info "Relay Information:\n"
+    Rails.logger.info @relay.inspect
+    Rails.logger.info "object_uri: #{object_uri}, type: #{object_type}"
     @relay ||= Relay.find_by(follow_activity_id: object_uri) unless object_uri.nil?
   end
 
