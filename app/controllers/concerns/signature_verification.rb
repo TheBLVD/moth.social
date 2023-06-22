@@ -193,6 +193,9 @@ module SignatureVerification
   end
 
   def verify_signature(actor, signature, compare_signed_string)
+    Rails.logger.info actor.inspect
+    Rails.logger.info "SIGNATURE>>> #{signature}"
+    Rails.logger.info "COMPARE_SIGNED_STRING>>> #{compare_signed_string}"
     if actor.keypair.public_key.verify(OpenSSL::Digest.new('SHA256'), signature, compare_signed_string)
       @signed_request_actor = actor
       @signed_request_actor
