@@ -96,8 +96,9 @@ module SignatureVerification
 
     signature             = Base64.decode64(signature_params['signature'])
     compare_signed_string = build_signed_string
-    Rails.logger.info "THE SIGNATURE IS>>>> #{signature.inspect}"
-    Rails.logger.info "THE COMPARE STRING IS>>>> #{compare_signed_string.inspect}"
+    Rails.logger.info "\n\n\n\n\n\n\n\n\nActor:#{actor.to_log_human_identifier}"
+    Rails.logger.info "\n\n\n\n\n\n\n\n\nTHE SIGNATURE IS>>>> signature: #{signature_params['signature']}"
+    Rails.logger.info "THE COMPARE STRING IS>>>> #{compare_signed_string}\n\n\n\n\n\n\n\n\n"
 
     return actor unless verify_signature(actor, signature, compare_signed_string).nil?
 
