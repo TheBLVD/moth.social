@@ -33,17 +33,20 @@ class ActivityPub::Activity::Accept < ActivityPub::Activity
   end
 
   def accept_follow_for_relay
+    Rails.logger.info "Accept Follow for Relay:\n"
+    Rails.logger.info "RELAY: #{@relay}"
     relay.update!(state: :accepted)
   end
 
   def relay
     Rails.logger.info "Relay Information:\n"
     Rails.logger.info @relay.inspect
-    Rails.logger.info "object_uri: #{object_uri}"
     @relay ||= Relay.find_by(follow_activity_id: object_uri) unless object_uri.nil?
   end
 
   def relay_follow?
+    Rails.logger.info "IS Relay prensent?:\n"
+    Rails.logger.info "RELAY: #{@relay}"
     relay.present?
   end
 
