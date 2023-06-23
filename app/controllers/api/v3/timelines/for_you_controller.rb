@@ -18,14 +18,14 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
 
   def set_list
     @owner_account = set_owner
-    @list = List.where(account: @owner_account, title: LIST_TITLE).first!
   end
 
   def set_owner
     if params['acct']
       @username, @domain = params['acct'].strip.gsub(/\A@/, '').split('@')
       account = Account.where(username: @username, domain: @domain).first!
-      return account unless account.nil?
+      Rails.logger.debug { ">>>>>>> #{account}" }
+      account
     else
       Account.local.where(username: FOR_YOU_OWNER_ACCOUNT).first!
     end
@@ -39,7 +39,24 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     end
   end
 
-  def build_for_you_feed; end
+  def build_for_you_feed
+    # Get Fedi Accounts
+    Rails.logger.debug { "#{@username}@#{@domain}" }
+    fedi_account_handles = FollowRecommendationsService.new.call(handle: "#{@username}@#{@domain}")
+    # Get Account id's for all of them
+    username_query = Array.[]
+    domain_query = Array.[]
+    fedi_account_handles.each do |handle|
+      h = handle.split('@')
+      username_query.push(h[0])
+      domain_query.push(h[1])
+    end
+    # Array of account id's
+    account_ids = Account.where(username: username_query, domain: domain_query).pluck(:id)
+    Rails.logger.debug { "ACCOUNT_IDS>>>>>> #{account_ids.inspect}" }
+    # Get Statuses for those accounts
+    Status.where(account_id: account_ids)
+  end
 
   def cached_list_statuses
     cache_collection list_statuses, Status
