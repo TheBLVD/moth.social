@@ -55,7 +55,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     account_ids = Account.where(username: username_query, domain: domain_query).pluck(:id)
     Rails.logger.info { "ACCOUNT_IDS>>>>>> #{account_ids.inspect}" }
     # Get Statuses for those accounts
-    Status.where(account_id: account_ids)
+    Status.where(account_id: account_ids, updated_at: 2.hours.ago..Time.now).limit(60)
   end
 
   def cached_list_statuses
