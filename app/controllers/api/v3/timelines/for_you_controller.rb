@@ -24,7 +24,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     if params['acct']
       @username, @domain = params['acct'].strip.gsub(/\A@/, '').split('@')
       account = Account.where(username: @username, domain: @domain).first!
-      Rails.logger.debug { ">>>>>>> #{account}" }
+      Rails.logger.info { ">>>>>>> #{account}" }
       account
     else
       Account.local.where(username: FOR_YOU_OWNER_ACCOUNT).first!
@@ -41,7 +41,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
 
   def build_for_you_feed
     # Get Fedi Accounts
-    Rails.logger.debug { "#{@username}@#{@domain}" }
+    Rails.logger.info { "#{@username}@#{@domain}" }
     fedi_account_handles = FollowRecommendationsService.new.call(handle: "#{@username}@#{@domain}")
     # Get Account id's for all of them
     username_query = Array.[]
@@ -53,7 +53,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     end
     # Array of account id's
     account_ids = Account.where(username: username_query, domain: domain_query).pluck(:id)
-    Rails.logger.debug { "ACCOUNT_IDS>>>>>> #{account_ids.inspect}" }
+    Rails.logger.info { "ACCOUNT_IDS>>>>>> #{account_ids.inspect}" }
     # Get Statuses for those accounts
     Status.where(account_id: account_ids)
   end
