@@ -9,6 +9,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   after_action :insert_pagination_headers, unless: -> { @statuses.empty? }
 
   def show
+    @statuses = cached_list_statuses
     render json: @statuses,
            each_serializer: REST::StatusSerializer
   end
@@ -21,11 +22,13 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   end
 
   def set_owner
-    @username, @domain = params['acct'].strip.gsub(/\A@/, '').split('@')
-    account = Account.where(username: @username, domain: @domain)
-    return account unless account.nil?
-
-    Account.local.where(username: FOR_YOU_OWNER_ACCOUNT)
+    if params['acct']
+      @username, @domain = params['acct'].strip.gsub(/\A@/, '').split('@')
+      account = Account.where(username: @username, domain: @domain)
+      return account unless account.nil?
+    else
+      Account.local.where(username: FOR_YOU_OWNER_ACCOUNT)
+    end
   end
 
   def cached_list_statuses
