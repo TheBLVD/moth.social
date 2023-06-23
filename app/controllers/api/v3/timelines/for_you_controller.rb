@@ -21,12 +21,10 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   end
 
   def set_owner
-    if params['acct']
+    begin
       @username, @domain = params['acct'].strip.gsub(/\A@/, '').split('@')
-      account = Account.where(username: @username, domain: @domain).first!
-      Rails.logger.info { ">>>>>>> #{account}" }
-      account
-    else
+      Account.where(username: @username, domain: @domain).first!
+    rescue ActiveRecord::RecordNotFound
       Account.local.where(username: FOR_YOU_OWNER_ACCOUNT).first!
     end
   end
