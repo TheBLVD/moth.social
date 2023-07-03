@@ -3,6 +3,7 @@
 class Api::V3::Timelines::ForYouController < Api::BaseController
   DEFAULT_STATUSES_LIST_LIMIT = 40
   FOR_YOU_OWNER_ACCOUNT = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
+  BETA_LIST_TITLE = 'Beta ForYou Personalized'
   LIST_TITLE = 'For You'
   before_action :set_list
 
@@ -18,6 +19,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
 
   def set_list
     @owner_account = set_owner
+    @list = List.where(account: @owner_account, title: LIST_TITLE).first!
   end
 
   def set_owner
@@ -53,7 +55,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     account_ids = Account.where(username: username_query, domain: domain_query).pluck(:id)
     Rails.logger.info { "ACCOUNT_IDS>>>>>> #{account_ids.inspect}" }
     # Get Statuses for those accounts
-    Status.where(account_id: account_ids, updated_at: 2.hours.ago..Time.now).limit(60)
+    Status.where(account_id: account_ids, updated_at: 24.hours.ago..Time.now).limit(40)
   end
 
   def cached_list_statuses
@@ -82,7 +84,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   end
 
   def next_path
-    api_v2_timelines_for_you_url pagination_params(max_id: pagination_max_id)
+    api_v3_timelines_for_you_url pagination_params(max_id: pagination_max_id)
   end
 
   def prev_path
