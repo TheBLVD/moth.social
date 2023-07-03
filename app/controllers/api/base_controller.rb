@@ -4,6 +4,10 @@ class Api::BaseController < ApplicationController
   DEFAULT_STATUSES_LIMIT = 20
   MAX_LIMIT = 500
   DEFAULT_ACCOUNTS_LIMIT = 40
+  # Mammoth Constants
+  FOR_YOU_OWNER_ACCOUNT = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
+  LIST_TITLE = 'For You'
+  BETA_FOR_YOU_LIST = 'Beta ForYou Personalized'
 
   include RateLimitHeaders
   include AccessTokenTrackingConcern

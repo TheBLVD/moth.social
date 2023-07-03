@@ -2,9 +2,6 @@
 
 class Api::V3::Timelines::ForYouController < Api::BaseController
   DEFAULT_STATUSES_LIST_LIMIT = 40
-  FOR_YOU_OWNER_ACCOUNT = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
-  BETA_LIST_TITLE = 'Beta ForYou Personalized'
-  LIST_TITLE = 'For You'
   before_action :set_list
 
   after_action :insert_pagination_headers, unless: -> { @statuses.empty? }
