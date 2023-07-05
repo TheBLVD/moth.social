@@ -2,7 +2,7 @@
 
 class Api::V3::Timelines::ForYouController < Api::BaseController
   DEFAULT_STATUSES_LIST_LIMIT = 40
-  before_action :set_list
+  before_action :set_owner
 
   after_action :insert_pagination_headers, unless: -> { @statuses.empty? }
 
@@ -14,17 +14,12 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
 
   private
 
-  def set_list
-    @owner_account = set_owner
-    @list = List.where(account: @owner_account, title: LIST_TITLE).first!
-  end
-
   def set_owner
     begin
       @username, @domain = params['acct'].strip.gsub(/\A@/, '').split('@')
-      Account.where(username: @username, domain: @domain).first!
+      @owner_account = Account.where(username: @username, domain: @domain).first!
     rescue ActiveRecord::RecordNotFound
-      Account.local.where(username: FOR_YOU_OWNER_ACCOUNT).first!
+      @owner_account = Account.local.where(username: FOR_YOU_OWNER_ACCOUNT).first!
     end
   end
 
@@ -68,8 +63,12 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     )
   end
 
+  def default_list
+    List.where(account: FOR_YOU_OWNER_ACCOUNT, title: LIST_TITLE).first!
+  end
+
   def list_feed
-    ListFeed.new(@list)
+    ListFeed.new(default_list)
   end
 
   def insert_pagination_headers
