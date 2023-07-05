@@ -38,7 +38,7 @@ class Api::V1::Lists::AccountsController < Api::BaseController
     if current_account.username == FOR_YOU_OWNER_ACCOUNT && @list.title == BETA_FOR_YOU_LIST
       handle = "#{current_account.username}@#{current_account.domain}"
       list_accounts.each do |account|
-        FollowRecommendationsService.new.call(handle: handle)
+        FollowRecommendationsService.new.call(handle: handle, force: true)
       end
     end
   end
