@@ -10,6 +10,9 @@ class Scheduler::IndexingScheduler
   IMPORT_BATCH_SIZE = 1000
   SCAN_BATCH_SIZE = 10 * IMPORT_BATCH_SIZE
 
+  IMPORT_BATCH_SIZE = 1000
+  SCAN_BATCH_SIZE = 10 * IMPORT_BATCH_SIZE
+
   def perform
     return unless Chewy.enabled?
 
