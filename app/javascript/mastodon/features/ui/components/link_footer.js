@@ -33,7 +33,7 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
         confirm: intl.formatMessage(messages.logoutConfirm),
         closeWhenConfirm: false,
         onConfirm: () => logOut(),
-      })
+      }),
     );
   },
 });
@@ -42,6 +42,7 @@ export default
 @injectIntl
 @connect(null, mapDispatchToProps)
 class LinkFooter extends React.PureComponent {
+
   static contextTypes = {
     identity: PropTypes.object,
   };
@@ -71,27 +72,27 @@ class LinkFooter extends React.PureComponent {
     const DividingCircle = <span aria-hidden>{' · '}</span>;
 
     return (
-      <div className="link-footer">
+      <div className='link-footer'>
         <p>
           <strong>{domain}</strong>:{' '}
-          <Link to="/about">
-            <FormattedMessage id="footer.about" defaultMessage="About" />
+          <Link to='/about'>
+            <FormattedMessage id='footer.about' defaultMessage='About' />
           </Link>
           {statusPageUrl && (
             <>
               {DividingCircle}
-              <a href={statusPageUrl} target="_blank" rel="noopener">
-                <FormattedMessage id="footer.status" defaultMessage="Status" />
+              <a href={statusPageUrl} target='_blank' rel='noopener'>
+                <FormattedMessage id='footer.status' defaultMessage='Status' />
               </a>
             </>
           )}
           {canInvite && (
             <>
               {DividingCircle}
-              <a href="/invites" target="_blank">
+              <a href='/invites' target='_blank'>
                 <FormattedMessage
-                  id="footer.invite"
-                  defaultMessage="Invite people"
+                  id='footer.invite'
+                  defaultMessage='Invite people'
                 />
               </a>
             </>
@@ -99,47 +100,47 @@ class LinkFooter extends React.PureComponent {
           {canProfileDirectory && (
             <>
               {DividingCircle}
-              <Link to="/directory">
+              <Link to='/directory'>
                 <FormattedMessage
-                  id="footer.directory"
-                  defaultMessage="Profiles directory"
+                  id='footer.directory'
+                  defaultMessage='Profiles directory'
                 />
               </Link>
             </>
           )}
           {DividingCircle}
-          <Link to="/privacy-policy">
+          <Link to='/privacy-policy'>
             <FormattedMessage
-              id="footer.privacy_policy"
-              defaultMessage="Privacy policy"
+              id='footer.privacy_policy'
+              defaultMessage='Privacy policy'
             />
           </Link>
         </p>
 
         <p>
           <strong>Mastodon</strong>:{' '}
-          <a href="https://joinmastodon.org" target="_blank">
-            <FormattedMessage id="footer.about" defaultMessage="About" />
+          <a href='https://joinmastodon.org' target='_blank'>
+            <FormattedMessage id='footer.about' defaultMessage='About' />
           </a>
           {DividingCircle}
-          <a href="https://joinmastodon.org/apps" target="_blank">
+          <a href='https://joinmastodon.org/apps' target='_blank'>
             <FormattedMessage
-              id="footer.get_app"
-              defaultMessage="Get the app"
+              id='footer.get_app'
+              defaultMessage='Get the app'
             />
           </a>
           {DividingCircle}
-          <Link to="/keyboard-shortcuts">
+          <Link to='/keyboard-shortcuts'>
             <FormattedMessage
-              id="footer.keyboard_shortcuts"
-              defaultMessage="Keyboard shortcuts"
+              id='footer.keyboard_shortcuts'
+              defaultMessage='Keyboard shortcuts'
             />
           </Link>
           {DividingCircle}
-          <a href={source_url} rel="noopener noreferrer" target="_blank">
+          <a href={source_url} rel='noopener noreferrer' target='_blank'>
             <FormattedMessage
-              id="footer.source_code"
-              defaultMessage="View source code"
+              id='footer.source_code'
+              defaultMessage='View source code'
             />
           </a>
           {DividingCircle}v{version}
@@ -147,4 +148,5 @@ class LinkFooter extends React.PureComponent {
       </div>
     );
   }
+
 }
