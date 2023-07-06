@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ForYouFeedWorker
+  include Redisable
   include Sidekiq::Worker
 
   def perform(status_id, id, type = 'personal', options = {})
@@ -11,25 +12,36 @@ class ForYouFeedWorker
     case @type
     when :personal
       @follower = Account.find(id)
-    when :list
-      @list     = List.find(id)
-      @follower = @list.account
+    when :foryou
+      @list_id = id
     end
-
-    perform_push
+    perform_push_to_feed
   rescue ActiveRecord::RecordNotFound
     true
   end
 
   private
 
-  def perform_push
+  def perform_push_to_feed
     case @type
-    when :personal
-      FeedManager.instance.push_to_home(@follower, @status, update: update?)
-    when :list
-      add_to_feed(@type, @list.id, @status)
+    when :foryou
+      # TODO: Filter statuses before add to feed
+      add_to_feed(@type, @list_id, @status)
     end
+  end
+
+  # Combine engagment actions. Greater than the min engagement set.
+  # Check status for reblog content or assign original content
+  # Reject statues with a reply_to or poll_id
+  # Return the default limit
+  def fetch_statuses
+    filtered_statuses = list_statuses.select do |s|
+      status = s.reblog? ? s.reblog : s
+      status_counts = status.reblogs_count + status.replies_count + status.favourites_count
+      status_counts >= MINIMUM_ENGAGMENT_ACTIONS && status.in_reply_to_id.nil? && status.poll_id.nil?
+    end
+
+    filtered_statuses.take((DEFAULT_STATUSES_LIST_LIMIT))
   end
 
   # MAMMOTH: Taken directly from FeedManager
@@ -56,40 +68,7 @@ class ForYouFeedWorker
   # @return [Boolean]
   def add_to_feed(timeline_type, account_id, status, aggregate_reblogs: true)
     timeline_key = key(timeline_type, account_id)
-    reblog_key   = key(timeline_type, account_id, 'reblogs')
 
-    if status.reblog? && (aggregate_reblogs.nil? || aggregate_reblogs)
-      # If the original status or a reblog of it is within
-      # REBLOG_FALLOFF statuses from the top, do not re-insert it into
-      # the feed
-      rank = redis.zrevrank(timeline_key, status.reblog_of_id)
-
-      return false if !rank.nil? && rank < FeedManager::REBLOG_FALLOFF
-
-      # The ordered set at `reblog_key` holds statuses which have a reblog
-      # in the top `REBLOG_FALLOFF` statuses of the timeline
-      if redis.zadd(reblog_key, status.id, status.reblog_of_id, nx: true)
-        # This is not something we've already seen reblogged, so we
-        # can just add it to the feed (and note that we're reblogging it).
-        redis.zadd(timeline_key, status.id, status.id)
-      else
-        # Another reblog of the same status was already in the
-        # REBLOG_FALLOFF most recent statuses, so we note that this
-        # is an "extra" reblog, by storing it in reblog_set_key.
-        reblog_set_key = key(timeline_type, account_id, "reblogs:#{status.reblog_of_id}")
-        redis.sadd(reblog_set_key, status.id)
-        return false
-      end
-    else
-      # A reblog may reach earlier than the original status because of the
-      # delay of the worker delivering the original status, the late addition
-      # by merging timelines, and other reasons.
-      # If such a reblog already exists, just do not re-insert it into the feed.
-      return false unless redis.zscore(reblog_key, status.id).nil?
-
-      redis.zadd(timeline_key, status.id, status.id)
-    end
-
-    true
+    redis.zadd(timeline_key, status.id, status.id)
   end
 end
