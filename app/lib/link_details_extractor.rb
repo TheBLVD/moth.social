@@ -141,8 +141,8 @@ class LinkDetailsExtractor
 
   def html
     if player_url.present?
-      content_tag(:iframe, nil, src: player_url, width: width, height: height, allowtransparency: 'true',
-    scrolling: 'no', frameborder: '0')
+      content_tag(:iframe, nil, src: player_url, width: width, height: height, allowfullscreen: 'true',
+    allowtransparency: 'true', scrolling: 'no', frameborder: '0')
     end
   end
 

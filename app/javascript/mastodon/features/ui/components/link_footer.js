@@ -122,14 +122,14 @@ class LinkFooter extends React.PureComponent {
           <a href='https://joinmastodon.org' target='_blank'>
             <FormattedMessage id='footer.about' defaultMessage='About' />
           </a>
-          {' · '}
-          <a href='https://getmammoth.app' target='_blank'>
+          {DividingCircle}
+          <a href='https://joinmastodon.org/apps' target='_blank'>
             <FormattedMessage
               id='footer.get_app'
               defaultMessage='Get the app'
             />
           </a>
-          {' · '}
+          {DividingCircle}
           <Link to='/keyboard-shortcuts'>
             <FormattedMessage
               id='footer.keyboard_shortcuts'
