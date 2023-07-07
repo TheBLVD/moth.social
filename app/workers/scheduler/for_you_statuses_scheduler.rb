@@ -4,9 +4,6 @@ require 'http'
 require 'json'
 
 class Scheduler::ForYouStatusesScheduler
-  DEFAULT_STATUSES_LIST_LIMIT = 240
-  MINIMUM_ENGAGMENT_ACTIONS = 2
-
   FOR_YOU_OWNER_ACCOUNT = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
   LIST_TITLE = 'For You'
   BETA_FOR_YOU_LIST = 'Beta ForYou Personalized'
