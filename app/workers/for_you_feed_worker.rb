@@ -53,17 +53,6 @@ class ForYouFeedWorker
 
   # MAMMOTH: Taken directly from FeedManager
 
-  # Redis key of a feed
-  # @param [Symbol] type
-  # @param [Integer] id
-  # @param [Symbol] subtype
-  # @return [String]
-  def key(type, id, subtype = nil)
-    return "feed:#{type}:#{id}" unless subtype
-
-    "feed:#{type}:#{id}:#{subtype}"
-  end
-
   # Adds a status to an account's feed, returning true if a status was
   # added, and false if it was not added to the feed. Note that this is
   # an internal helper: callers must call trim or push updates if
@@ -74,7 +63,7 @@ class ForYouFeedWorker
   # @param [Boolean] aggregate_reblogs
   # @return [Boolean]
   def add_to_feed(timeline_type, account_id, status, aggregate_reblogs: true)
-    timeline_key = key(timeline_type, account_id)
+    timeline_key = FeedManager.instance.key(timeline_type, account_id)
 
     redis.zadd(timeline_key, status.id, status.id)
 
@@ -87,7 +76,7 @@ class ForYouFeedWorker
   # @param [Integer] timeline_id
   # @return [void]
   def trim(type, timeline_id)
-    timeline_key = key(type, timeline_id)
+    timeline_key = FeedManager.instance.key(type, timeline_id)
 
     # Remove any items past the MAX_ITEMS'th entry in our feed
     redis.zremrangebyrank(timeline_key, 0, -(MAX_ITEMS + 1))
