@@ -28,8 +28,9 @@ class ForYouFeedWorker
   def perform_push_to_feed
     case @type
     when :foryou
-      # return false if filter_from_feed?(status) || add_to_feed(@type, @list_id, @status)
-      add_to_feed(@type, @list_id, @status)
+      if filter_from_feed?(@status)
+        add_to_feed(@type, @list_id, @status)
+      end
     end
   end
 
