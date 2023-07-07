@@ -4,6 +4,9 @@ class ForYouFeedWorker
   include Redisable
   include Sidekiq::Worker
 
+  MAX_ITEMS = 1000
+  MINIMUM_ENGAGMENT_ACTIONS = 2
+
   def perform(status_id, id, type = 'personal', options = {})
     @type      = type.to_sym
     @status    = Status.find(status_id)
@@ -25,23 +28,27 @@ class ForYouFeedWorker
   def perform_push_to_feed
     case @type
     when :foryou
-      # TODO: Filter statuses before add to feed
+      # return false if filter_from_feed?(status) || add_to_feed(@type, @list_id, @status)
       add_to_feed(@type, @list_id, @status)
     end
   end
 
+  # Check if status should not be added to the list feed
   # Combine engagment actions. Greater than the min engagement set.
   # Check status for reblog content or assign original content
   # Reject statues with a reply_to or poll_id
-  # Return the default limit
-  def fetch_statuses
-    filtered_statuses = list_statuses.select do |s|
-      status = s.reblog? ? s.reblog : s
-      status_counts = status.reblogs_count + status.replies_count + status.favourites_count
-      status_counts >= MINIMUM_ENGAGMENT_ACTIONS && status.in_reply_to_id.nil? && status.poll_id.nil?
+  # @param [Status] status
+  # @param [List] list
+  # @return [Boolean]
+  def filter_from_feed?(wrapped_status)
+    status = wrapped_status.reblog? ? wrapped_status.reblog : wrapped_status
+    status_counts = status.reblogs_count + status.replies_count + status.favourites_count
+
+    if status_counts >= MINIMUM_ENGAGMENT_ACTIONS && status.in_reply_to_id.nil? && status.poll_id.nil?
+      return true
     end
 
-    filtered_statuses.take((DEFAULT_STATUSES_LIST_LIMIT))
+    false
   end
 
   # MAMMOTH: Taken directly from FeedManager
@@ -70,5 +77,19 @@ class ForYouFeedWorker
     timeline_key = key(timeline_type, account_id)
 
     redis.zadd(timeline_key, status.id, status.id)
+
+    # Keep the list from growning infinitely
+    trim(timeline_key, account_id)
+  end
+
+  # Trim a feed to maximum size by removing older items
+  # @param [Symbol] type
+  # @param [Integer] timeline_id
+  # @return [void]
+  def trim(type, timeline_id)
+    timeline_key = key(type, timeline_id)
+
+    # Remove any items past the MAX_ITEMS'th entry in our feed
+    redis.zremrangebyrank(timeline_key, 0, -(MAX_ITEMS + 1))
   end
 end
