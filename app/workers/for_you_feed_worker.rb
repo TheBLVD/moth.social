@@ -45,11 +45,7 @@ class ForYouFeedWorker
     status = wrapped_status.reblog? ? wrapped_status.reblog : wrapped_status
     status_counts = status.reblogs_count + status.replies_count + status.favourites_count
 
-    if status_counts >= MINIMUM_ENGAGMENT_ACTIONS && status.in_reply_to_id.nil? && status.poll_id.nil?
-      return true
-    end
-
-    false
+    status_counts >= MINIMUM_ENGAGMENT_ACTIONS && status.in_reply_to_id.nil? && status.poll_id.nil?
   end
 
   # MAMMOTH: Taken directly from FeedManager
