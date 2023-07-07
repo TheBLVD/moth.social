@@ -25,7 +25,6 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
 
   def set_for_you_feed
     should_personalize = validate_owner_account
-    Rails.logger.debug { "SHOULD_PERSONALIZE:>>>>>>> #{should_personalize}" }
     if should_personalize
       for_you_feed
     else
@@ -33,13 +32,14 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     end
   end
 
+  # Check the For You Beta Personal List
+  # @return [Boolean]
   def validate_owner_account
     # TODO: Verify Local DOMAIN
     @username, @domain = params['acct'].strip.gsub(/\A@/, '').split('@')
 
     @owner_account = @beta_for_you_list.accounts.without_suspended.includes(:account_stat).where(username: @username,
                                                                                                  domain: @domain).first
-    Rails.logger.debug { "VALID ON THE BETA????????? #{@owner_account.inspect}" }
     !@owner_account.nil?
   end
 
