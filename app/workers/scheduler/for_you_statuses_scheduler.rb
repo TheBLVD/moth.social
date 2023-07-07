@@ -28,10 +28,7 @@ class Scheduler::ForYouStatusesScheduler
   private
 
   def update_for_you_list!
-    Rails.logger.debug { '>>>>>>FORYOUFEEDSCHEDULER: STATUS:' }
-
     list_statuses.each do |status|
-      Rails.logger.debug { ">>>>>>LOOOOP: STATUS: #{status.inspect}" }
       ForYouFeedWorker.perform_async(status['id'], @list.id, 'foryou')
     end
   end
