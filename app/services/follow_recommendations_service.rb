@@ -22,7 +22,7 @@ class FollowRecommendationsService < BaseService
     @handle = handle
     @limit = limit
     cache_key = "follow_recommendations:#{@handle}"
-    Rails.cache.fetch(cache_key, expires_in: 1.week, force: force) do
+    Rails.cache.fetch(cache_key, expires_in: 6.months, force: force) do
       direct_follows = account_follows(@handle).map(&:symbolize_keys)
       if direct_follows.empty?
         Rails.logger.info("No follows found for #{@handle}, defaulting to `DEFAULT_FOLLOW_LIST`")
