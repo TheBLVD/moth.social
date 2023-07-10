@@ -33,13 +33,12 @@ class Api::V1::Lists::AccountsController < Api::BaseController
   private
 
   # For Mammoth Beta For You List ONLY
-  # Added accounts execute follow recommendation service
+  # Added accounts execute follow recommendation service then pushed to AccountRelay
   def for_you_follow_suggestions
     if current_account.username == FOR_YOU_OWNER_ACCOUNT && @list.title == BETA_FOR_YOU_LIST
       list_accounts.each do |account|
         handle = "#{account.username}@#{account.domain}"
-        recommended_accounts = FollowRecommendationsService.new.call(handle: handle, force: true)
-        AccountRelayService.new.call(handle, recommended_accounts)
+        PushFollowSuggestedWorker.perform_async(handle)
       end
     end
   end
