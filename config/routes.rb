@@ -713,6 +713,13 @@ Rails.application.routes.draw do
       
     end
 
+    # V3
+    namespace :v3 do
+      namespace :timelines do
+        resource :for_you, only: :show, controller: :for_you
+      end
+    end
+
     namespace :web do
       resource :settings, only: [:update]
       resource :embed, only: [:create]

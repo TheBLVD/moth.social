@@ -15,6 +15,7 @@ class Api::V1::Lists::AccountsController < Api::BaseController
   end
 
   def create
+    for_you_follow_suggestions
     ApplicationRecord.transaction do
       list_accounts.each do |account|
         @list.accounts << account
@@ -30,6 +31,17 @@ class Api::V1::Lists::AccountsController < Api::BaseController
   end
 
   private
+
+  # For Mammoth Beta For You List ONLY
+  # Added accounts execute follow recommendation service
+  def for_you_follow_suggestions
+    if current_account.username == FOR_YOU_OWNER_ACCOUNT && @list.title == BETA_FOR_YOU_LIST
+      list_accounts.each do |account|
+        handle = "#{account.username}@#{account.domain}"
+        FollowRecommendationsService.new.call(handle: handle, force: true)
+      end
+    end
+  end
 
   def set_list
     @list = List.where(account: current_account).find(params[:list_id])

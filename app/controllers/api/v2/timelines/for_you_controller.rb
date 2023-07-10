@@ -2,8 +2,6 @@
 
 class Api::V2::Timelines::ForYouController < Api::BaseController
   DEFAULT_STATUSES_LIST_LIMIT = 120
-  FOR_YOU_OWNER_ACCOUNT = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
-  LIST_TITLE = 'For You'
   MINIMUM_ENGAGMENT_ACTIONS = 2
   before_action :set_list
   before_action :set_statuses

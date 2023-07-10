@@ -65,3 +65,7 @@
     queue: scheduler
     interval: '10m'
     class: Scheduler::StatusStatUpdateScheduler
+  for_you_statuses_scheduler:
+    queue: scheduler
+    interval: '5m'
+    class: Scheduler::ForYouStatusesScheduler
