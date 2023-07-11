@@ -836,6 +836,7 @@ DEPENDENCIES
   makara (~> 0.5)
   mario-redis-lock (~> 1.2)
   memory_profiler
+  microformats (~> 4.4)
   mime-types (~> 3.4.1)
   net-ldap (~> 0.17)
   nokogiri (~> 1.14)
