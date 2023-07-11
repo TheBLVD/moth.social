@@ -24,7 +24,7 @@ module Attachmentable
     def self.has_attached_file(name, options = {}) # rubocop:disable Naming/PredicateName
       super(name, options)
 
-      send(:"before_#{name}_validate") do
+      send(:"before_#{name}_validate", prepend: true) do
         attachment = send(name)
         check_image_dimension(attachment)
         set_file_content_type(attachment)
@@ -45,7 +45,9 @@ module Attachmentable
   def set_file_extension(attachment) # rubocop:disable Naming/AccessorMethodName
     return if attachment.blank?
 
-    attachment.instance_write :file_name, [Paperclip::Interpolations.basename(attachment, :original), appropriate_extension(attachment)].delete_if(&:blank?).join('.')
+    attachment.instance_write :file_name,
+                              [Paperclip::Interpolations.basename(attachment, :original),
+                               appropriate_extension(attachment)].delete_if(&:blank?).join('.')
   end
 
   def check_image_dimension(attachment)
@@ -54,7 +56,10 @@ module Attachmentable
     width, height = FastImage.size(attachment.queued_for_write[:original].path)
     matrix_limit  = attachment.content_type == 'image/gif' ? GIF_MATRIX_LIMIT : MAX_MATRIX_LIMIT
 
-    raise Mastodon::DimensionsValidationError, "#{width}x#{height} images are not supported" if width.present? && height.present? && (width * height > matrix_limit)
+    if width.present? && height.present? && (width * height > matrix_limit)
+      raise Mastodon::DimensionsValidationError,
+            "#{width}x#{height} images are not supported"
+    end
   end
 
   def appropriate_extension(attachment)

@@ -641,7 +641,7 @@ GEM
       fugit (~> 1.1, >= 1.1.6)
     safety_net_attestation (0.4.0)
       jwt (~> 2.0)
-    sanitize (6.0.1)
+    sanitize (6.0.2)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     scenic (1.7.0)
@@ -836,7 +836,6 @@ DEPENDENCIES
   makara (~> 0.5)
   mario-redis-lock (~> 1.2)
   memory_profiler
-  microformats (~> 4.4)
   mime-types (~> 3.4.1)
   net-ldap (~> 0.17)
   nokogiri (~> 1.14)
