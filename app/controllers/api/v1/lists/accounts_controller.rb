@@ -37,8 +37,8 @@ class Api::V1::Lists::AccountsController < Api::BaseController
   def for_you_follow_suggestions
     if current_account.username == FOR_YOU_OWNER_ACCOUNT && @list.title == BETA_FOR_YOU_LIST
       list_accounts.each do |account|
-        # TODO: domain is nil on local accounts?
-        handle = "#{account.username}@#{account.domain}"
+        # handle is full account (user@domain.com, jesse@moth.social)
+        handle = account.local? ? account.local_username_and_domain : account.acct
         PushFollowSuggestedWorker.perform_async(handle)
       end
     end
