@@ -20,6 +20,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
 
   def set_for_you_feed
     should_personalize = validate_owner_account
+    Rails.logger.debug { "SHOULD_PERSONALIZE:::::>>>>>> #{should_personalize}" }
     if should_personalize
       cached_personalized_statuses
     else
