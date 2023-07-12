@@ -38,11 +38,11 @@ class Scheduler::PersonalizedForYouStatusesScheduler
   # IE Friends of Friends
   def statuses_for_indirect_follows(account)
     # Get Fedi Accounts
-    Rails.logger.debug { "ACCOUNT>>>>> #{account.inspect}" }
     account_handle = account.local? ? account.local_username_and_domain : account.acct
+    Rails.logger.info { "ACCOUNT>>>>> #{account_handle.inspect}" }
     cache_key = "follow_recommendations:#{account_handle}"
     fedi_account_handles = Rails.cache.fetch(cache_key)
-    Rails.logger.debug { "CACHE_VALUE:: #{fedi_account_handles}" }
+    Rails.logger.info { "CACHE_VALUE:: #{fedi_account_handles}" }
     # Get Account id's for all of them
     username_query = Array.[]
     domain_query = Array.[]
