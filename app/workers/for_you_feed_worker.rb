@@ -29,7 +29,7 @@ class ForYouFeedWorker
     case @type
     when :personal
       if filter_from_feed?(@status)
-        add_to_personal_feed
+        add_to_personal_feed(@type, @account_id, @status)
       end
     when :foryou
       if filter_from_feed?(@status)
