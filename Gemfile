@@ -163,3 +163,5 @@ gem 'cocoon', '~> 1.2'
 # https://github.com/net-ssh/net-ssh/issues/565#issuecomment-491321965
 gem 'ed25519', '>= 1.3', '< 2.0'
 gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
+
+gem "async", "~> 1.31"
