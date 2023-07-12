@@ -14,7 +14,7 @@ class ForYouFeedWorker
 
     case @type
     when :personal
-      @follower = Account.find(id)
+      @account_id = id
     when :foryou
       @list_id = id
     end
@@ -27,6 +27,10 @@ class ForYouFeedWorker
 
   def perform_push_to_feed
     case @type
+    when :personal
+      if filter_from_feed?(@status)
+        add_to_personal_feed
+      end
     when :foryou
       if filter_from_feed?(@status)
         add_to_feed(@type, @list_id, @status)
@@ -60,6 +64,16 @@ class ForYouFeedWorker
   # @param [Boolean] aggregate_reblogs
   # @return [Boolean]
   def add_to_feed(timeline_type, account_id, status, aggregate_reblogs: true)
+    timeline_key = FeedManager.instance.key(timeline_type, account_id)
+
+    redis.zadd(timeline_key, status.id, status.id)
+
+    # Keep the list from growning infinitely
+    trim(timeline_key, account_id)
+  end
+
+  # Adds to Account's Personal For You Feed
+  def add_to_personal_feed(timeline_type, account_id, status, aggregate_reblogs: true)
     timeline_key = FeedManager.instance.key(timeline_type, account_id)
 
     redis.zadd(timeline_key, status.id, status.id)
