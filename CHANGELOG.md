@@ -386,9 +386,14 @@ The following changelog entries focus on changes visible to users, administrator
 - Fix performance of streaming by parsing message JSON once ([ThisIsMissEm](https://github.com/mastodon/mastodon/pull/25278), [ThisIsMissEm](https://github.com/mastodon/mastodon/pull/25361))
 - Fix CSP headers when `S3_ALIAS_HOST` includes a path component ([ClearlyClaire](https://github.com/mastodon/mastodon/pull/25273))
   <<<<<<< HEAD
+  <<<<<<< HEAD
 - # Fix `tootctl accounts approve --number N` not approving N earliest registrations ([danielmbrasil](https://github.com/mastodon/mastodon/pull/24605))
 - Fix `tootctl accounts approve --number N` not aproving N earliest registrations ([danielmbrasil](https://github.com/mastodon/mastodon/pull/24605))
-  > > > > > > > d0c14d9fd (MAM-2093-security-patch-via-official-mastodon-76 (#163))
+  > > > > > > > # d0c14d9fd (MAM-2093-security-patch-via-official-mastodon-76 (#163))
+- # Fix `tootctl accounts approve --number N` not aproving N earliest registrations ([danielmbrasil](https://github.com/mastodon/mastodon/pull/24605))
+- Fix `tootctl accounts approve --number N` not approving N earliest registrations ([danielmbrasil](https://github.com/mastodon/mastodon/pull/24605))
+  > > > > > > > v4.1.4
+  > > > > > > > c858c1334 (MAM-2126-v414-mastodon-update (#165))
 - Fix reports not being closed when performing batch suspensions ([ClearlyClaire](https://github.com/mastodon/mastodon/pull/24988))
 - Fix being able to vote on your own polls ([ClearlyClaire](https://github.com/mastodon/mastodon/pull/25015))
 - Fix race condition when reblogging a status ([ClearlyClaire](https://github.com/mastodon/mastodon/pull/25016))

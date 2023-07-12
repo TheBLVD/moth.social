@@ -119,11 +119,11 @@ GEM
       activerecord (>= 3.2, < 8.0)
       rake (>= 10.4, < 14.0)
     ast (2.4.2)
-    attr_encrypted (4.0.0)
     async (1.31.0)
       console (~> 1.10)
       nio4r (~> 2.3)
       timers (~> 4.1)
+    attr_encrypted (4.0.0)
     attr_required (1.0.1)
     awrence (1.2.1)
     aws-eventstream (1.2.0)
@@ -213,10 +213,10 @@ GEM
     color_diff (0.1)
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
-    cose (1.3.0)
-    console (1.17.2)
+    console (1.23.2)
       fiber-annotation
       fiber-local
+    cose (1.3.0)
     crack (0.4.5)
       rexml
     crass (1.0.6)
@@ -266,7 +266,6 @@ GEM
     elasticsearch-transport (7.13.3)
       faraday (~> 1)
       multi_json
-    encryptor (3.0.0)
     erubi (1.12.0)
     et-orbi (1.2.7)
       tzinfo
@@ -750,6 +749,7 @@ GEM
     thor (1.2.2)
     tilt (2.2.0)
     timeout (0.4.0)
+    timers (4.3.5)
     tpm-key_attestation (0.12.0)
       bindata (~> 2.4)
       openssl (> 2.0)
@@ -820,8 +820,8 @@ DEPENDENCIES
   active_model_serializers (~> 0.10)
   addressable (~> 2.8)
   annotate (~> 3.2)
-  aws-sdk-s3 (~> 1.123)
   async (~> 1.31)
+  aws-sdk-s3 (~> 1.123)
   bcrypt_pbkdf (>= 1.0, < 2.0)
   better_errors (~> 2.9)
   binding_of_caller (~> 1.0)
