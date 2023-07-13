@@ -15,7 +15,6 @@ class Scheduler::PersonalizedForYouStatusesScheduler
   sidekiq_options retry: 0
 
   def perform
-    Rails.logger.debug 'Scheduler::PersonalizedForYouStatusesScheduler>>>>>>>>'
     # Get accounts on beta list
     # For each account get fedigraph of follows
     # For each follow account get statuses and send to for_you_worker
@@ -37,13 +36,11 @@ class Scheduler::PersonalizedForYouStatusesScheduler
   # Indirect Follows are the following of your followers
   # IE Friends of Friends
   def statuses_for_indirect_follows(account)
-    # Get Fedi Accounts
+    # Get full account handle <example@moth.social>
     account_handle = account.local? ? account.local_username_and_domain : account.acct
-    Rails.logger.info { "ACCOUNT>>>>> #{account_handle.inspect}" }
     cache_key = "follow_recommendations:#{account_handle}"
     fedi_account_handles = Rails.cache.fetch(cache_key)
-    Rails.logger.info { "CACHE_VALUE:: #{fedi_account_handles}" }
-    # Get Account id's for all of them
+    # Parse handles into username & domain array for batch account query
     username_query = Array.[]
     domain_query = Array.[]
     fedi_account_handles.each do |handle|
@@ -51,9 +48,8 @@ class Scheduler::PersonalizedForYouStatusesScheduler
       username_query.push(h[0])
       domain_query.push(h[1])
     end
-    # Array of account id's
+    # Array of account id's from fedi_account_handles
     account_ids = Account.where(username: username_query, domain: domain_query).pluck(:id)
-    Rails.logger.info { "ACCOUNT_IDS>>>>>> #{account_ids.inspect}" }
     # Get Statuses for those accounts
     Status.where(account_id: account_ids, updated_at: 12.hours.ago..Time.now).limit(200)
   end
