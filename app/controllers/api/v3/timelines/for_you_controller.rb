@@ -16,6 +16,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   def set_for_you_default
     @default_owner_account = Account.local.where(username: FOR_YOU_OWNER_ACCOUNT).first!
     @beta_for_you_list = List.where(account: @default_owner_account, title: BETA_FOR_YOU_LIST).first!
+    @account = account_from_acct
   end
 
   def set_for_you_feed
@@ -31,8 +32,6 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   # Check the For You Beta Personal List
   # @return [Boolean]
   def validate_owner_account
-    @account = account_from_acct
-
     @owner_account = @beta_for_you_list.accounts.without_suspended.includes(:account_stat).where(id: @account.id).first
     !@owner_account.nil?
   end
@@ -64,8 +63,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   end
 
   def personalzied_feed
-    # Have username & domain
-    ForYouFeed.new('foryou', @account.id)
+    ForYouFeed.new('personal', @account.id)
   end
 
   def default_list
