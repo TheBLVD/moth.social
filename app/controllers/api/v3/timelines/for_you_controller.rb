@@ -31,11 +31,9 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   # Check the For You Beta Personal List
   # @return [Boolean]
   def validate_owner_account
-    # TODO: Verify Local DOMAIN
-    @username, @domain = params['acct'].strip.gsub(/\A@/, '').split('@')
+    @account = account_from_acct
 
-    @owner_account = @beta_for_you_list.accounts.without_suspended.includes(:account_stat).where(username: @username,
-                                                                                                 domain: @domain).first
+    @owner_account = @beta_for_you_list.accounts.without_suspended.includes(:account_stat).find(@account.id)
     !@owner_account.nil?
   end
 
@@ -66,7 +64,8 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   end
 
   def personalzied_feed
-    ForYouFeed.new('foryou', current_account.id)
+    # Have username & domain
+    ForYouFeed.new('foryou', @account.id)
   end
 
   def default_list
@@ -77,6 +76,23 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     ForYouFeed.new('foryou', default_list.id)
   end
 
+  def account_from_acct
+    resource_user    = acct_param
+    username, domain = resource_user.split('@')
+
+    if domain == Rails.configuration.x.local_domain
+      domain = nil
+    end
+
+    Rails.logger.info { "ACCOUNT_FROM_ACCT_PARAMS: #{username} :: #{domain}" }
+    Account.where(username: username, domain: domain).first
+  end
+
+  def acct_param
+    params.require(:acct)
+  end
+
+  # Pagination
   def insert_pagination_headers
     set_pagination_headers(next_path, prev_path)
   end
