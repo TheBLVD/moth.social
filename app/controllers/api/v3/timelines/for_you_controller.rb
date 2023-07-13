@@ -16,12 +16,13 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   def set_for_you_default
     @default_owner_account = Account.local.where(username: FOR_YOU_OWNER_ACCOUNT).first!
     @beta_for_you_list = List.where(account: @default_owner_account, title: BETA_FOR_YOU_LIST).first!
+    @account = account_from_acct
   end
 
   def set_for_you_feed
     should_personalize = validate_owner_account
     if should_personalize
-      for_you_feed
+      cached_personalized_statuses
     else
       cached_list_statuses
     end
@@ -30,31 +31,12 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   # Check the For You Beta Personal List
   # @return [Boolean]
   def validate_owner_account
-    # TODO: Verify Local DOMAIN
-    @username, @domain = params['acct'].strip.gsub(/\A@/, '').split('@')
-
-    @owner_account = @beta_for_you_list.accounts.without_suspended.includes(:account_stat).where(username: @username,
-                                                                                                 domain: @domain).first
+    @owner_account = @beta_for_you_list.accounts.without_suspended.includes(:account_stat).where(id: @account.id).first
     !@owner_account.nil?
   end
 
-  def for_you_feed
-    # Get Fedi Accounts
-    Rails.logger.debug { "#{@username}@#{@domain}" }
-    fedi_account_handles = FollowRecommendationsService.new.call(handle: "#{@username}@#{@domain}")
-    # Get Account id's for all of them
-    username_query = Array.[]
-    domain_query = Array.[]
-    fedi_account_handles.each do |handle|
-      h = handle.split('@')
-      username_query.push(h[0])
-      domain_query.push(h[1])
-    end
-    # Array of account id's
-    account_ids = Account.where(username: username_query, domain: domain_query).pluck(:id)
-    Rails.logger.info { "ACCOUNT_IDS>>>>>> #{account_ids.inspect}" }
-    # Get Statuses for those accounts
-    Status.where(account_id: account_ids, updated_at: 24.hours.ago..Time.now).limit(40)
+  def cached_personalized_statuses
+    cache_collection personalized_for_you_list_statuses, Status
   end
 
   def cached_list_statuses
@@ -70,6 +52,19 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     )
   end
 
+  def personalized_for_you_list_statuses
+    personalzied_feed.get(
+      limit_param(DEFAULT_STATUSES_LIST_LIMIT),
+      params[:max_id],
+      params[:since_id],
+      params[:min_id]
+    )
+  end
+
+  def personalzied_feed
+    ForYouFeed.new('personal', @account.id)
+  end
+
   def default_list
     List.where(account: @default_owner_account, title: LIST_TITLE).first!
   end
@@ -78,6 +73,22 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     ForYouFeed.new('foryou', default_list.id)
   end
 
+  def account_from_acct
+    resource_user    = acct_param
+    username, domain = resource_user.split('@')
+
+    if domain == Rails.configuration.x.local_domain
+      domain = nil
+    end
+
+    Account.where(username: username, domain: domain).first
+  end
+
+  def acct_param
+    params.require(:acct)
+  end
+
+  # Pagination
   def insert_pagination_headers
     set_pagination_headers(next_path, prev_path)
   end
