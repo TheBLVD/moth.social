@@ -34,6 +34,11 @@ class Scheduler::StatusStatUpdateScheduler
     end
   end
 
+  def update_personalized_for_you_status_stat!
+    # Accounts from users fedigraph (array of account_id)
+    # Status from those accounts 'created_at'
+  end
+
   def statuses_from_list
     Status.where(account_id: list_accounts,
                  created_at: (GO_BACK.hours.ago)..Time.current)
