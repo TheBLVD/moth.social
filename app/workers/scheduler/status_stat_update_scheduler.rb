@@ -18,6 +18,7 @@ class Scheduler::StatusStatUpdateScheduler
 
   def perform
     update_for_you_status_stat!
+    update_personalized_for_you_status_stat!
   end
 
   private
@@ -34,9 +35,25 @@ class Scheduler::StatusStatUpdateScheduler
     end
   end
 
+  # Accounts from users fedigraph (array of account_id)
+  # Status from those accounts 'created_at'
   def update_personalized_for_you_status_stat!
-    # Accounts from users fedigraph (array of account_id)
-    # Status from those accounts 'created_at'
+    statuses_from_personalized_for_you.each do |status|
+      status_params = if status.reblog?
+                        { id: status.reblog.id, uri: status.reblog.uri }
+                      else
+                        { id: status.id, uri: status.uri }
+                      end
+      UpdateStatusStatWorker.perform_async(status_params)
+    end
+  end
+
+  # Statuses from all the 'indirect follows' from all the accounts on the beta list
+  def statuses_from_personalized_for_you
+    personal_for_you = PersonalForYou.new
+    personal_for_you.beta_list_accounts
+                    .map { |account| personal_for_you.statuses_for_indirect_follows(account) }
+                    .flatten
   end
 
   def statuses_from_list
