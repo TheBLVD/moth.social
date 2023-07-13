@@ -33,7 +33,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   def validate_owner_account
     @account = account_from_acct
 
-    @owner_account = @beta_for_you_list.accounts.without_suspended.includes(:account_stat).find(@account.id)
+    @owner_account = @beta_for_you_list.accounts.without_suspended.includes(:account_stat).where(id: @account.id).first
     !@owner_account.nil?
   end
 
