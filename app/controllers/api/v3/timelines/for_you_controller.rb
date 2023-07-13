@@ -81,7 +81,6 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
       domain = nil
     end
 
-    Rails.logger.info { "ACCOUNT_FROM_ACCT_PARAMS: #{username} :: #{domain}" }
     Account.where(username: username, domain: domain).first
   end
 
