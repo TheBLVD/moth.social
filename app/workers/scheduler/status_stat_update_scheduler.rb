@@ -49,6 +49,7 @@ class Scheduler::StatusStatUpdateScheduler
   end
 
   # Statuses from all the 'indirect follows' from all the accounts on the beta list
+  # Take the accounts from the beta list, get all the indirect follows
   def statuses_from_personalized_for_you
     personal_for_you = PersonalForYou.new
     personal_for_you.beta_list_accounts
