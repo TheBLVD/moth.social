@@ -23,6 +23,7 @@ class Scheduler::StatusStatUpdateScheduler
 
   private
 
+  # Statuses from accounts on Public For You Feed
   def update_for_you_status_stat!
     statuses = statuses_from_list
     statuses.each do |status|
