@@ -28,15 +28,27 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     end
   end
 
+  # Check account_from_acct finds an account
   # Check the For You Beta Personal List
   # @return [Boolean]
   def validate_owner_account
+    if @account.nil?
+      return false
+    end
     @owner_account = @beta_for_you_list.accounts.without_suspended.includes(:account_stat).where(id: @account.id).first
     !@owner_account.nil?
   end
 
+  # Will not return an empty list
+  # If no statuses are found for the user,
+  # but they are on the beta list then we return the default Public Feed
   def cached_personalized_statuses
-    cache_collection personalized_for_you_list_statuses, Status
+    statuses = cache_collection personalized_for_you_list_statuses, Status
+    if statuses.empty?
+      cached_list_statuses
+    else
+      statuses
+    end
   end
 
   def cached_list_statuses
