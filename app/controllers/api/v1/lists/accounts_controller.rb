@@ -15,13 +15,14 @@ class Api::V1::Lists::AccountsController < Api::BaseController
   end
 
   def create
-    for_you_follow_suggestions
     ApplicationRecord.transaction do
       list_accounts.each do |account|
         @list.accounts << account
       end
     end
 
+    # Trigger after add accounts transaction
+    for_you_follow_suggestions
     render_empty
   end
 
@@ -42,7 +43,7 @@ class Api::V1::Lists::AccountsController < Api::BaseController
         # Run the scheduler to populate the account's timeline
         handle = account.local? ? account.local_username_and_domain : account.acct
         PushFollowSuggestedWorker.perform_async(handle)
-        Scheduler::PersonalizedForYouStatusesScheduler.new.perform_async
+        Scheduler::PersonalizedForYouStatusesScheduler.new.perform
       end
     end
   end
