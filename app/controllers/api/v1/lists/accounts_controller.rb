@@ -38,8 +38,11 @@ class Api::V1::Lists::AccountsController < Api::BaseController
     if current_account.username == FOR_YOU_OWNER_ACCOUNT && @list.title == BETA_FOR_YOU_LIST
       list_accounts.each do |account|
         # handle is full account (user@domain.com, jesse@moth.social)
+        # Push Suggested followers for account to AccountRelay Server
+        # Run the scheduler to populate the account's timeline
         handle = account.local? ? account.local_username_and_domain : account.acct
         PushFollowSuggestedWorker.perform_async(handle)
+        Scheduler::PersonalizedForYouStatusesScheduler.new.perform_async
       end
     end
   end
