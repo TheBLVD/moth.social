@@ -45,7 +45,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   def cached_personalized_statuses
     statuses = cache_collection personalized_for_you_list_statuses, Status
     if statuses.empty?
-      cache_collection
+      cached_list_statuses
     else
       statuses
     end
