@@ -15,13 +15,14 @@ class Api::V1::Lists::AccountsController < Api::BaseController
   end
 
   def create
-    for_you_follow_suggestions
     ApplicationRecord.transaction do
       list_accounts.each do |account|
         @list.accounts << account
       end
     end
 
+    # Trigger after add accounts transaction
+    for_you_follow_suggestions
     render_empty
   end
 
