@@ -3,7 +3,12 @@
 class Api::V3::Timelines::ForYouController < Api::BaseController
   before_action :set_for_you_default
 
-  after_action :insert_pagination_headers, unless: -> { @statuses.empty? }
+  after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
+
+  def index
+    type = validate_owner_account ? 'Personal' : 'Public'
+    render json: { type: type }
+  end
 
   def show
     @statuses = set_for_you_feed
