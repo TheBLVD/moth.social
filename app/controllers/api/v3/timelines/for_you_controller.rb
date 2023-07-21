@@ -6,7 +6,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
 
   def index
-    type = validate_owner_account ? 'Personal' : 'Public'
+    type = validate_owner_account ? 'personal' : 'public'
     render json: { type: type }
   end
 
