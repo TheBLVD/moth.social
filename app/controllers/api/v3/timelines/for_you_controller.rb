@@ -17,13 +17,17 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     @default_owner_account = Account.local.where(username: FOR_YOU_OWNER_ACCOUNT).first!
     @beta_for_you_list = List.where(account: @default_owner_account, title: BETA_FOR_YOU_LIST).first!
     @account = account_from_acct
+    @is_beta_program = beta_param
   end
 
   def set_for_you_feed
     should_personalize = validate_owner_account
     if should_personalize
+      # Getting personalized
       cached_personalized_statuses
     else
+      # Getting the public feed
+      check_beta_status
       cached_list_statuses
     end
   end
@@ -37,6 +41,17 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     end
     @owner_account = @beta_for_you_list.accounts.without_suspended.includes(:account_stat).where(id: @account.id).first
     !@owner_account.nil?
+  end
+
+  # Only checking for beta parameter
+  # After we've validated the acct is NOT on the beta list
+  # So if you're already on the beta list we're not going check
+  def check_beta_status
+    if @is_beta_program
+      Rails.logger.info 'Beta Testflight>> TRUE'
+    else
+      Rails.logger.info 'Beta Testflight>> FALSE'
+    end
   end
 
   # Will not return an empty list
@@ -98,6 +113,14 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
 
   def acct_param
     params.require(:acct)
+  end
+
+  # Used to indicate beta group
+  # for testflight
+  def beta_param
+    unless params[:beta].nil?
+      params[:beta].casecmp('true').zero?
+    end
   end
 
   # Pagination
