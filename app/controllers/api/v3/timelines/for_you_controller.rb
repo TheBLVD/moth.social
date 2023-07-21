@@ -32,7 +32,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
       cached_personalized_statuses
     else
       # Getting the public feed
-      check_beta_status
+      enroll_beta
       cached_list_statuses
     end
   end
@@ -50,12 +50,12 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
 
   # Only checking for beta parameter
   # After we've validated the acct is NOT on the beta list
-  # So if you're already on the beta list we're not going check
-  def check_beta_status
+  # So if you're already on the beta list we're not going add them
+  def enroll_beta
     if @is_beta_program
-      Rails.logger.info 'Beta Testflight>> TRUE'
-    else
-      Rails.logger.info 'Beta Testflight>> FALSE'
+      # Add to beta enrollment list
+      for_you = ForYouBeta.new
+      for_you.add_to_enrollment(acct_param)
     end
   end
 
