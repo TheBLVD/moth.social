@@ -38,10 +38,9 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   end
 
   # Check for account on the peronalized list
-  # AND that account personalized feed has been populated
+  # AND that account personalized feed is NOT empty.
   def for_you_feed_type
-    on_personalized_list = validate_owner_account
-    if on_personalized_list && cached_personalized_statuses.empty?
+    if validate_owner_account && !cached_personalized_statuses.empty?
       'personal'
     else
       'public'
