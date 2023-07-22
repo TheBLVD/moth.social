@@ -43,7 +43,6 @@ class Api::V1::Lists::AccountsController < Api::BaseController
         # Run the scheduler to populate the account's timeline
         handle = account.local? ? account.local_username_and_domain : account.acct
         PushFollowSuggestedWorker.perform_async(handle)
-        Scheduler::PersonalizedForYouStatusesScheduler.new.perform
       end
     end
   end

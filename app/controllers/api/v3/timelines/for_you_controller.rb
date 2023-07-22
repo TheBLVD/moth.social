@@ -3,7 +3,12 @@
 class Api::V3::Timelines::ForYouController < Api::BaseController
   before_action :set_for_you_default
 
-  after_action :insert_pagination_headers, unless: -> { @statuses.empty? }
+  after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
+
+  def index
+    type = for_you_feed_type
+    render json: { type: type }
+  end
 
   def show
     @statuses = set_for_you_feed
@@ -17,14 +22,28 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     @default_owner_account = Account.local.where(username: FOR_YOU_OWNER_ACCOUNT).first!
     @beta_for_you_list = List.where(account: @default_owner_account, title: BETA_FOR_YOU_LIST).first!
     @account = account_from_acct
+    @is_beta_program = beta_param
   end
 
   def set_for_you_feed
     should_personalize = validate_owner_account
     if should_personalize
-      cached_personalized_statuses
+      # Getting personalized
+      fufill_personalized_statuses
     else
+      # Getting the public feed
+      enroll_beta
       cached_list_statuses
+    end
+  end
+
+  # Check for account on the peronalized list
+  # AND that account personalized feed is NOT empty.
+  def for_you_feed_type
+    if validate_owner_account && !cached_personalized_statuses.empty?
+      'personal'
+    else
+      'public'
     end
   end
 
@@ -39,16 +58,31 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     !@owner_account.nil?
   end
 
+  # Only checking for beta parameter
+  # After we've validated the acct is NOT on the beta list
+  # So if you're already on the beta list we're not going add them
+  def enroll_beta
+    if @is_beta_program
+      # Add to beta enrollment list
+      for_you = ForYouBeta.new
+      for_you.add_to_enrollment(acct_param)
+    end
+  end
+
   # Will not return an empty list
   # If no statuses are found for the user,
   # but they are on the beta list then we return the default Public Feed
-  def cached_personalized_statuses
-    statuses = cache_collection personalized_for_you_list_statuses, Status
+  def fufill_personalized_statuses
+    statuses = cached_personalized_statuses
     if statuses.empty?
       cached_list_statuses
     else
       statuses
     end
+  end
+
+  def cached_personalized_statuses
+    cache_collection personalized_for_you_list_statuses, Status
   end
 
   def cached_list_statuses
@@ -98,6 +132,14 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
 
   def acct_param
     params.require(:acct)
+  end
+
+  # Used to indicate beta group
+  # for testflight
+  def beta_param
+    unless params[:beta].nil?
+      params[:beta].casecmp('true').zero?
+    end
   end
 
   # Pagination
