@@ -716,7 +716,9 @@ Rails.application.routes.draw do
     # V3
     namespace :v3 do
       namespace :timelines do
-        resource :for_you, only: :show, controller: :for_you
+        resource :for_you, only: [:show], controller: 'for_you' do
+          get '/me',      to: 'for_you#index'
+        end   
       end
     end
 
