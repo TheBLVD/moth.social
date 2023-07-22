@@ -6,7 +6,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
 
   def index
-    type = validate_owner_account ? 'personal' : 'public'
+    type = for_you_feed_type
     render json: { type: type }
   end
 
@@ -29,11 +29,22 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     should_personalize = validate_owner_account
     if should_personalize
       # Getting personalized
-      cached_personalized_statuses
+      fufill_personalized_statuses
     else
       # Getting the public feed
       enroll_beta
       cached_list_statuses
+    end
+  end
+
+  # Check for account on the peronalized list
+  # AND that account personalized feed has been populated
+  def for_you_feed_type
+    on_personalized_list = validate_owner_account
+    if on_personalized_list && cached_personalized_statuses.empty?
+      'personal'
+    else
+      'public'
     end
   end
 
@@ -62,13 +73,17 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   # Will not return an empty list
   # If no statuses are found for the user,
   # but they are on the beta list then we return the default Public Feed
-  def cached_personalized_statuses
-    statuses = cache_collection personalized_for_you_list_statuses, Status
+  def fufill_personalized_statuses
+    statuses = cached_personalized_statuses
     if statuses.empty?
       cached_list_statuses
     else
       statuses
     end
+  end
+
+  def cached_personalized_statuses
+    cache_collection personalized_for_you_list_statuses, Status
   end
 
   def cached_list_statuses
