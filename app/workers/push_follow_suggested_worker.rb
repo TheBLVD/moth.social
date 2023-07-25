@@ -9,6 +9,7 @@ class PushFollowSuggestedWorker
   def perform(handle)
     @handle = handle
     recommended_accounts = suggested_accounts.wait
+    Rails.logger.info { "ACCOUNT ADDED>>>>>>>>RECOMMENDED: #{recommended_accounts}" }
     AccountRelayService.new.call(handle, recommended_accounts)
   end
 
