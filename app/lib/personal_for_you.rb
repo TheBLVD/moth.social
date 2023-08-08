@@ -3,6 +3,9 @@
 class PersonalForYou
   FOR_YOU_OWNER_ACCOUNT = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
   BETA_FOR_YOU_LIST = 'Beta ForYou Personalized'
+  ACCOUNT_RELAY_AUTH = "Bearer #{ENV.fetch('ACCOUNT_RELAY_KEY')}"
+  # ACCOUNT_RELAY_HOST = 'https://acctrelay.moth.social'
+  ACCOUNT_RELAY_HOST = 'http://localhost:3001'
 
   def beta_list_accounts
     default_owner_account = Account.local.where(username: FOR_YOU_OWNER_ACCOUNT).first!
@@ -29,5 +32,16 @@ class PersonalForYou
     account_ids = Account.where(username: username_query, domain: domain_query).pluck(:id)
     # Get Statuses for those accounts
     Status.where(account_id: account_ids, updated_at: 12.hours.ago..Time.now).limit(200)
+  end
+
+  # Get All registered users from AcctRely
+  # `api/v1/foryou/users`
+  # That are local:true, meaning they are Mammoth Users
+  def acct_relay_users
+    response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
+      "#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users"
+    )
+    results = JSON.parse(response.body).map(&:symbolize_keys).pluck(:acct)
+    return results unless response.code != 200
   end
 end

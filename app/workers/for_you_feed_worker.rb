@@ -12,6 +12,7 @@ class ForYouFeedWorker
     @status    = Status.find(status_id)
     @options   = options.symbolize_keys
 
+   
     case @type
     when :personal
       @account_id = id

@@ -2,7 +2,7 @@
 
 require 'http'
 require 'json'
-
+# V1 ForYou Public List. Using Mammoth Curated List
 class Scheduler::ForYouStatusesScheduler
   FOR_YOU_OWNER_ACCOUNT = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
   LIST_TITLE = 'For You'
