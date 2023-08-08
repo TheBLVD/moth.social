@@ -73,3 +73,7 @@
     queue: scheduler
     interval: '10m'
     class: Scheduler::PersonalizedForYouStatusesScheduler
+  mammoth_for_you_statuses_scheduler:
+    queue: scheduler
+    interval: '7d'
+    class: Scheduler::ForYouMammothScheduler
