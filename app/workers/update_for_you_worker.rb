@@ -46,11 +46,12 @@ class UpdateForYouWorker
   end
 
   # TODO: update account.id to user.acct
+  # TODO: update from personal to following
   def push_following_status!
     Rails.logger.debug { "STATUS>>>>> #{@account_id}" }
     PersonalForYou.new.statuses_for_direct_follows(@acct)
                   .filter_map { |s| engagment_threshold(s) }
-                  .map { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'following') }
+                  .map { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
   end
 
   # Check status for User's level of engagment

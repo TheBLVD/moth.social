@@ -4,6 +4,8 @@ class ForYouFeedWorker
   include Redisable
   include Sidekiq::Worker
 
+  sidekiq_options queue: 'pull', retry: 0
+
   MAX_ITEMS = 1000
   MINIMUM_ENGAGMENT_ACTIONS = 2
 
