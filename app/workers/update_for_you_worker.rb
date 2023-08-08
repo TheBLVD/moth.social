@@ -13,7 +13,9 @@ class UpdateForYouWorker
   def perform(acct, _options = {})
     @acct = acct
     @user = mammoth_user(acct)
-    Rails.logger.debug { "UPDATEFORYOU::#{@user['acct']} >> #{@user.inspect}" }
+    # This is temperary
+    @account = local_account
+
     # Account Prefereces here
     @user_min_engagment = 0
     # Indirect Follow
@@ -26,6 +28,11 @@ class UpdateForYouWorker
 
   private
 
+  def local_account
+    domain = @user['domain'] == 'moth.social' ? nil : @user['domain']
+    Account.where(username: @user['username'], domain: domain).first
+  end
+
   def user_following(acct)
     PersonalForYou.new.user_following(acct)
   end
@@ -35,11 +42,14 @@ class UpdateForYouWorker
   end
 
   def push_following_status!
+    Rails.logger.debug { "STATUS>>>>> #{@account_id}" }
     PersonalForYou.new.statuses_for_direct_follows(@acct)
                   .filter_map { |s| engagment_threshold(s) }
-                  .map { |s| ForYouFeedWorker.perform_async(s['id'], @acct, 'following') }
+                  .map { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'following') }
   end
 
+  # Check status for User's level of engagment
+  # Filter out polls and replys
   def engagment_threshold(wrapped_status)
     status = wrapped_status.reblog? ? wrapped_status.reblog : wrapped_status
 

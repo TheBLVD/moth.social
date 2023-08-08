@@ -13,10 +13,9 @@ class ForYouFeedWorker
     @options   = options.symbolize_keys
 
     case @type
-    when :personal
+    when :personal, :following
       @account_id = id
-    when :following
-      @acct = id
+
     when :foryou
       @list_id = id
     end
@@ -34,8 +33,8 @@ class ForYouFeedWorker
         add_to_personal_feed(@type, @account_id, @status)
       end
     when :following
-      Rails.logger.debug(@status)
-      Rails.logger.debug(@acct)
+      Rails.logger.debug @account_id
+      # add_to_personal_feed
     when :foryou
       if filter_from_feed?(@status)
         add_to_feed(@type, @list_id, @status)
@@ -68,7 +67,7 @@ class ForYouFeedWorker
   # @param [Status] status
   # @param [Boolean] aggregate_reblogs
   # @return [Boolean]
-  def add_to_feed(timeline_type, account_id, status, aggregate_reblogs: true)
+  def add_to_feed(timeline_type, account_id, status)
     timeline_key = FeedManager.instance.key(timeline_type, account_id)
 
     redis.zadd(timeline_key, status.id, status.id)
@@ -78,7 +77,7 @@ class ForYouFeedWorker
   end
 
   # Adds to Account's Personal For You Feed
-  def add_to_personal_feed(timeline_type, account_id, status, aggregate_reblogs: true)
+  def add_to_personal_feed(timeline_type, account_id, status)
     timeline_key = FeedManager.instance.key(timeline_type, account_id)
 
     redis.zadd(timeline_key, status.id, status.id)
