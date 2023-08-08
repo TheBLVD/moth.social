@@ -15,6 +15,10 @@ class UpdateForYouWorker
     @user = mammoth_user(acct)
     # This is temperary
     @account = local_account
+    if @account.nil?
+      ResolveAccountWorker.perform_async(@acct)
+      return nil
+    end
 
     # Account Prefereces here
     @user_min_engagment = 0
