@@ -29,7 +29,7 @@ class UpdateForYouWorker
   private
 
   def local_account
-    domain = @user['domain'] == 'moth.social' ? nil : @user['domain']
+    domain = @user['domain'] == ENV['LOCAL_DOMAIN'] ? nil : @user['domain']
     Account.where(username: @user['username'], domain: domain).first
   end
 
