@@ -33,8 +33,7 @@ class ForYouFeedWorker
         add_to_personal_feed(@type, @account_id, @status)
       end
     when :following
-      Rails.logger.debug @account_id
-      # add_to_personal_feed
+      add_to_personal_feed(@type, @account_id, @status)
     when :foryou
       if filter_from_feed?(@status)
         add_to_feed(@type, @list_id, @status)

@@ -45,6 +45,7 @@ class UpdateForYouWorker
     PersonalForYou.new.user(acct)
   end
 
+  # TODO: update account.id to user.acct
   def push_following_status!
     Rails.logger.debug { "STATUS>>>>> #{@account_id}" }
     PersonalForYou.new.statuses_for_direct_follows(@acct)
