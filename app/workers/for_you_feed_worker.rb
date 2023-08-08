@@ -12,10 +12,11 @@ class ForYouFeedWorker
     @status    = Status.find(status_id)
     @options   = options.symbolize_keys
 
-   
     case @type
     when :personal
       @account_id = id
+    when :following
+      @acct = id
     when :foryou
       @list_id = id
     end
@@ -32,6 +33,9 @@ class ForYouFeedWorker
       if filter_from_feed?(@status)
         add_to_personal_feed(@type, @account_id, @status)
       end
+    when :following
+      Rails.logger.debug(@status)
+      Rails.logger.debug(@acct)
     when :foryou
       if filter_from_feed?(@status)
         add_to_feed(@type, @list_id, @status)
