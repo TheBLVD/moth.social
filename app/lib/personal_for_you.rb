@@ -70,8 +70,10 @@ class PersonalForYou
     username_query = Array.[]
     domain_query = Array.[]
     following.each do |user|
+      # Local accounts will have a domain of nil
+      domain = user['domain'] == ENV['LOCAL_DOMAIN'] ? nil : @user['domain']
       username_query.push(user['username'])
-      domain_query.push(user['domain'])
+      domain_query.push(domain)
     end
     # Array of account id's from fedi_account_handles
     account_ids = Account.where(username: username_query, domain: domain_query).pluck(:id)
