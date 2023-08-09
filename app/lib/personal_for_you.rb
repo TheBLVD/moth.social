@@ -71,7 +71,7 @@ class PersonalForYou
     domain_query = Array.[]
     following.each do |user|
       # Local accounts will have a domain of nil
-      domain = user['domain'] == ENV['LOCAL_DOMAIN'] ? nil : @user['domain']
+      domain = user['domain'] == ENV['LOCAL_DOMAIN'] ? nil : user['domain']
       username_query.push(user['username'])
       domain_query.push(domain)
     end
