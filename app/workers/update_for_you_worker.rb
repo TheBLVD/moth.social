@@ -37,10 +37,6 @@ class UpdateForYouWorker
     Account.where(username: @user['username'], domain: domain).first
   end
 
-  def user_following(acct)
-    PersonalForYou.new.user_following(acct)
-  end
-
   def mammoth_user(acct)
     PersonalForYou.new.user(acct)
   end
@@ -51,7 +47,7 @@ class UpdateForYouWorker
     Rails.logger.debug { "STATUS>>>>> #{@account_id}" }
     PersonalForYou.new.statuses_for_direct_follows(@acct)
                   .filter_map { |s| engagment_threshold(s) }
-                  .map { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
+                  .map { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'following') }
   end
 
   # Check status for User's level of engagment

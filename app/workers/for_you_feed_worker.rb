@@ -34,8 +34,9 @@ class ForYouFeedWorker
       if filter_from_feed?(@status)
         add_to_personal_feed(@type, @account_id, @status)
       end
+    # following needs to be added to personal, but is already filtered
     when :following
-      add_to_personal_feed(@type, @account_id, @status)
+      add_to_personal_feed('personal', @account_id, @status)
     when :foryou
       if filter_from_feed?(@status)
         add_to_feed(@type, @list_id, @status)
