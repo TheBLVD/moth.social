@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class Api::V3::Timelines::ForYouController < Api::BaseController
-  before_action :set_for_you_default
+  before_action :set_for_you_default, only: [:show]
 
   after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
 
   def index
-    type = for_you_feed_type
-    render json: { type: type }
+    result = MammothServices::FetchUser.new.call(acct_param)
+    render json: result
   end
 
   def show
