@@ -6,7 +6,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
 
   def index
-    result = MammothServices::FetchUser.new.call(acct_param)
+    result = PersonalForYou.new.user(acct_param)
     render json: result
   end
 
@@ -14,6 +14,11 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     @statuses = set_for_you_feed
     render json: @statuses,
            each_serializer: REST::StatusSerializer
+  end
+
+  def update
+    result = PersonalForYou.new.update_user(acct_param, for_you_params)
+    render json: result
   end
 
   private
@@ -132,6 +137,15 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
 
   def acct_param
     params.require(:acct)
+  end
+
+  def for_you_params
+    params.permit(
+      :acct,
+      :curated_by_mammoth,
+      :friends_of_friends,
+      :from_your_channels
+    ).except('acct')
   end
 
   # Used to indicate beta group
