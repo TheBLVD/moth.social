@@ -50,7 +50,7 @@ class PersonalForYou
     response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
       "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}"
     )
-    JSON.parse(response.body)
+    JSON.parse(response.body, symbolize_names: true)
   end
 
   # PUT Mammoth user for you settings / preferences

@@ -4,7 +4,7 @@ class UpdateForYouWorker
   include Redisable
   include Sidekiq::Worker
 
-  sidekiq_options retry: 0
+  sidekiq_options retry: 0, queue: 'pull'
 
   #  Fetch Acct Config from AcctRelay
   #  Fetch Following from AcctRelay
@@ -20,8 +20,6 @@ class UpdateForYouWorker
       return nil
     end
 
-    # Account Prefereces here
-    @user_min_engagment = 0
     # Indirect Follow
 
     # Direct Follows
@@ -33,8 +31,8 @@ class UpdateForYouWorker
   private
 
   def local_account
-    domain = @user['domain'] == ENV['LOCAL_DOMAIN'] ? nil : @user['domain']
-    Account.where(username: @user['username'], domain: domain).first
+    domain = @user[:domain] == ENV['LOCAL_DOMAIN'] ? nil : @user[:domain]
+    Account.where(username: @user[:username], domain: domain).first
   end
 
   def mammoth_user(acct)
@@ -42,20 +40,25 @@ class UpdateForYouWorker
   end
 
   # TODO: update account.id to user.acct
-  # TODO: update from personal to following
+  # Return early if user setting is Zero, meaning 'off' from the iOS perspective
   def push_following_status!
-    Rails.logger.debug { "STATUS>>>>> #{@account_id}" }
+    user_setting = @user[:for_you_settings]
+    return if user_setting[:your_follows].zero?
+    Rails.logger.debug { "ACCOUNT>>>>> #{@account}" }
+    Rails.logger.debug { "USER>>>>> #{@user.inspect}" }
     PersonalForYou.new.statuses_for_direct_follows(@acct)
-                  .filter_map { |s| engagment_threshold(s) }
+                  .filter_map { |s| engagment_threshold(s, user_setting[:your_follows]) }
                   .map { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'following') }
   end
 
   # Check status for User's level of engagment
   # Filter out polls and replys
-  def engagment_threshold(wrapped_status)
+  def engagment_threshold(wrapped_status, user_engagment_setting)
+    # follows enagagment threshold
+    engagment = { 1 => 2, 2 => 4, 3 => 6 }
     status = wrapped_status.reblog? ? wrapped_status.reblog : wrapped_status
 
     status_counts = status.reblogs_count + status.replies_count + status.favourites_count
-    status if status_counts >= @user_min_engagment && status.in_reply_to_id.nil? && status.poll_id.nil?
+    status if status_counts >= engagment[user_engagment_setting] && status.in_reply_to_id.nil? && status.poll_id.nil?
   end
 end
