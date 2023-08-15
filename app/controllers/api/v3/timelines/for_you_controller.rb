@@ -144,7 +144,8 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
       :acct,
       :curated_by_mammoth,
       :friends_of_friends,
-      :from_your_channels
+      :from_your_channels,
+      :your_follows
     ).except('acct')
   end
 
