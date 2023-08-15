@@ -4,8 +4,7 @@ class PersonalForYou
   FOR_YOU_OWNER_ACCOUNT = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
   BETA_FOR_YOU_LIST = 'Beta ForYou Personalized'
   ACCOUNT_RELAY_AUTH = "Bearer #{ENV.fetch('ACCOUNT_RELAY_KEY')}"
-  # ACCOUNT_RELAY_HOST = 'acctrelay.moth.social'
-  ACCOUNT_RELAY_HOST = 'localhost:3001'
+  ACCOUNT_RELAY_HOST = 'acctrelay.moth.social'
 
   def beta_list_accounts
     default_owner_account = Account.local.where(username: FOR_YOU_OWNER_ACCOUNT).first!
@@ -54,12 +53,11 @@ class PersonalForYou
     JSON.parse(response.body)
   end
 
+  # PUT Mammoth user for you settings / preferences
   def update_user(acct, payload)
-    Rails.logger.debug { "UPDATE:>>> #{payload}" }
     response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).put(
-      "http://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}", json: payload
+      "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}", json: payload
     )
-    Rails.logger.debug { "UPDATE:>>> #{response}" }
     JSON.parse(response.body)
   end
 
