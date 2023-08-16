@@ -2,6 +2,7 @@
 
 class UpdateForYouWorker
   include Redisable
+  include Async
   include Sidekiq::Worker
 
   sidekiq_options retry: 0, queue: 'pull'
@@ -13,14 +14,14 @@ class UpdateForYouWorker
   def perform(acct, options = {})
     @personal = PersonalForYou.new
     @acct = acct
-    @user = mammoth_user(acct)
+    @user = mammoth_user(acct).wait
     # This is temperary
     @account = local_account
 
     # Unable to resolve account
     # Set Status to 'error'
     if @account.nil?
-      update_user_status('error')
+      update_user_status('error').wait
       ResolveAccountWorker.perform_async(@acct)
       return nil
     end
@@ -37,13 +38,15 @@ class UpdateForYouWorker
 
     # Final Step:
     # Set user's status to 'idle'
-    update_user_status('idle')
+    update_user_status('idle').wait
   end
 
   private
 
   def update_user_status(status)
-    @personal.update_user(@acct, { status: status })
+    Async do
+      @personal.update_user(@acct, { status: status })
+    end
   end
 
   def local_account
@@ -52,7 +55,9 @@ class UpdateForYouWorker
   end
 
   def mammoth_user(acct)
-    @personal.user(acct)
+    Async do
+      @personal.user(acct)
+    end
   end
 
   # TODO: update account.id to user.acct
@@ -60,7 +65,7 @@ class UpdateForYouWorker
   def push_following_status!
     user_setting = @user[:for_you_settings]
     return if user_setting[:your_follows].zero?
-
+    Rails.logger.info "FOLLOWING STATUS \n\n\n\n\n\n\n #{user_setting[:your_follows]}"
     @personal.statuses_for_direct_follows(@acct)
              .filter_map { |s| engagment_threshold(s, user_setting[:your_follows], 'following') }
              .map { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'following') }
@@ -70,6 +75,7 @@ class UpdateForYouWorker
   def push_indirect_following_status!
     user_setting = @user[:for_you_settings]
     return if user_setting[:friends_of_friends].zero?
+    Rails.logger.info "INDIRECT FOLLOWING STATUS \n\n\n\n\n\n\n #{user_setting[:your_follows]}"
 
     @personal.statuses_for_indirect_follows(@account)
              .filter_map { |s| engagment_threshold(s, user_setting[:friends_of_friends], 'indirect') }
