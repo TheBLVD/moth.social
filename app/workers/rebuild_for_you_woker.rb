@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UpdateForYouWorker
+class RebuildForYouWorker
   include Redisable
   include Sidekiq::Worker
 
@@ -10,23 +10,15 @@ class UpdateForYouWorker
   #  Fetch Following from AcctRelay
   #  Then status of those account from following
   #  Finally send them to for_you_feed_worker
-  def perform(acct, options = {})
-    @personal = PersonalForYou.new
+  def perform(acct, _options = {})
     @acct = acct
     @user = mammoth_user(acct)
     # This is temperary
     @account = local_account
-
-    # Unable to resolve account
-    # Set Status to 'error'
     if @account.nil?
-      update_user_status('error')
       ResolveAccountWorker.perform_async(@acct)
       return nil
     end
-
-    # If rebuild is true, Zero Out User's for you feed
-    personal_for_you.reset_feed(@account.id) if options[:rebuild] == true
 
     # Indirect Follow
 
@@ -34,17 +26,9 @@ class UpdateForYouWorker
     push_following_status!
     # Public Feed
     # push_status!
-
-    # Final Step:
-    # Set user's status to 'idle'
-    update_user_status('idle')
   end
 
   private
-
-  def update_user_status(status)
-    @personal.update_user(@acct, { status: status })
-  end
 
   def local_account
     domain = @user[:domain] == ENV['LOCAL_DOMAIN'] ? nil : @user[:domain]
@@ -52,7 +36,7 @@ class UpdateForYouWorker
   end
 
   def mammoth_user(acct)
-    @personal.user(acct)
+    PersonalForYou.new.user(acct)
   end
 
   # TODO: update account.id to user.acct
@@ -62,9 +46,9 @@ class UpdateForYouWorker
     return if user_setting[:your_follows].zero?
     Rails.logger.debug { "ACCOUNT>>>>> #{@account}" }
     Rails.logger.debug { "USER>>>>> #{@user.inspect}" }
-    @personal.statuses_for_direct_follows(@acct)
-             .filter_map { |s| engagment_threshold(s, user_setting[:your_follows]) }
-             .map { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'following') }
+    PersonalForYou.new.statuses_for_direct_follows(@acct)
+                  .filter_map { |s| engagment_threshold(s, user_setting[:your_follows]) }
+                  .map { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'following') }
   end
 
   # Check status for User's level of engagment

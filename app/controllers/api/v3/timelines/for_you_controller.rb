@@ -16,8 +16,15 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
            each_serializer: REST::StatusSerializer
   end
 
+  # When Updating User with new settings
+  # Update status to 'pending'
+  # Also need to trigger a clear & rebuild of their personal for you feed
   def update
-    result = PersonalForYou.new.update_user(acct_param, for_you_params)
+    payload = for_you_params
+    payload[:status] = 'pending'
+    result = PersonalForYou.new.update_user(acct_param, payload)
+
+    UpdateForYouWorker.perform_async(acct_param, { rebuild: true })
     render json: result
   end
 

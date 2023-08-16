@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class PersonalForYou
+  include Redisable
+
   FOR_YOU_OWNER_ACCOUNT = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
   BETA_FOR_YOU_LIST = 'Beta ForYou Personalized'
   ACCOUNT_RELAY_AUTH = "Bearer #{ENV.fetch('ACCOUNT_RELAY_KEY')}"
@@ -53,7 +55,7 @@ class PersonalForYou
     JSON.parse(response.body, symbolize_names: true)
   end
 
-  # PUT Mammoth user for you settings / preferences
+  # PUT Mammoth user for you settings / preferences / status
   def update_user(acct, payload)
     response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).put(
       "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}", json: payload
@@ -86,5 +88,12 @@ class PersonalForYou
     account_ids = Account.where(username: username_query, domain: domain_query).pluck(:id)
     # Get Statuses for those accounts
     Status.where(account_id: account_ids, updated_at: 12.hours.ago..Time.now).limit(200)
+  end
+
+  # Remove personal timeline this will remove all entries in user's personal for you feed
+  # Current behavior is to default to 'public' mammoth curated feed if user's personal feed is blank 8/16/2023
+  def reset_feed(account_id)
+    timeline_key = FeedManager.instance.key('personal', account_id)
+    redis.del(timeline_key)
   end
 end
