@@ -29,7 +29,7 @@ class UpdateForYouWorker
     personal_for_you.reset_feed(@account.id) if options[:rebuild] == true
 
     # Indirect Follow
-
+    push_indirect_following_status!
     # Direct Follows
     push_following_status!
     # Public Feed
@@ -60,21 +60,41 @@ class UpdateForYouWorker
   def push_following_status!
     user_setting = @user[:for_you_settings]
     return if user_setting[:your_follows].zero?
-    Rails.logger.debug { "ACCOUNT>>>>> #{@account}" }
-    Rails.logger.debug { "USER>>>>> #{@user.inspect}" }
+
     @personal.statuses_for_direct_follows(@acct)
-             .filter_map { |s| engagment_threshold(s, user_setting[:your_follows]) }
+             .filter_map { |s| engagment_threshold(s, user_setting[:your_follows], 'following') }
              .map { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'following') }
+  end
+
+  # Indirect Follows
+  def push_indirect_following_status!
+    user_setting = @user[:for_you_settings]
+    return if user_setting[:friends_of_friends].zero?
+
+    @personal.statuses_for_indirect_follows(@acct)
+             .filter_map { |s| engagment_threshold(s, user_setting[:friends_of_friends], 'indirect') }
+             .map { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
   end
 
   # Check status for User's level of engagment
   # Filter out polls and replys
-  def engagment_threshold(wrapped_status, user_engagment_setting)
+  def engagment_threshold(wrapped_status, user_engagment_setting, type)
     # follows enagagment threshold
-    engagment = { 1 => 2, 2 => 4, 3 => 6 }
+    engagment = engagment_metrics(type)
     status = wrapped_status.reblog? ? wrapped_status.reblog : wrapped_status
 
     status_counts = status.reblogs_count + status.replies_count + status.favourites_count
     status if status_counts >= engagment[user_engagment_setting] && status.in_reply_to_id.nil? && status.poll_id.nil?
+  end
+
+  # Threshold setttings variation for each specific branch of the for you feed
+  # 1,2,3 relates to low,med, high and it's respectice value as it relates to engagment
+  def engagment_metrics(type)
+    case type
+    when 'following'
+      { 1 => 2, 2 => 4, 3 => 6 }
+    when 'indirect', 'public'
+      { 1 => 1, 2 => 2, 3 => 3 }
+    end
   end
 end

@@ -31,9 +31,7 @@ class ForYouFeedWorker
   def perform_push_to_feed
     case @type
     when :personal
-      if filter_from_feed?(@status)
-        add_to_personal_feed(@type, @account_id, @status)
-      end
+      add_to_personal_feed(@type, @account_id, @status)
     # following needs to be added to personal, but is already filtered
     when :following
       add_to_personal_feed('personal', @account_id, @status)
