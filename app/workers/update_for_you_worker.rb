@@ -14,6 +14,7 @@ class UpdateForYouWorker
     @personal = PersonalForYou.new
     @acct = acct
     @user = mammoth_user(acct)
+    @statuses = []
     # This is temperary
     @account = local_account
 
@@ -29,11 +30,13 @@ class UpdateForYouWorker
     personal_for_you.reset_feed(@account.id) if options[:rebuild] == true
 
     # Indirect Follow
-    push_indirect_following_status!
+    @statuses.append(indirect_following_status!)
     # Direct Follows
-    push_following_status!
+    @statuses.append(following_status!)
     # Public Feed
-    # push_status!
+
+    # Pump all those statuses into through FeedWorker
+    push_status!
 
     # Final Step:
     # Set user's status to 'idle'
@@ -57,23 +60,25 @@ class UpdateForYouWorker
 
   # TODO: update account.id to user.acct
   # Return early if user setting is Zero, meaning 'off' from the iOS perspective
-  def push_following_status!
+  def following_status!
     user_setting = @user[:for_you_settings]
     return if user_setting[:your_follows].zero?
 
     @personal.statuses_for_direct_follows(@acct)
              .filter_map { |s| engagment_threshold(s, user_setting[:your_follows], 'following') }
-             .map { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'following') }
   end
 
   # Indirect Follows
-  def push_indirect_following_status!
+  def indirect_following_status!
     user_setting = @user[:for_you_settings]
     return if user_setting[:friends_of_friends].zero?
 
     @personal.statuses_for_indirect_follows(@account)
              .filter_map { |s| engagment_threshold(s, user_setting[:friends_of_friends], 'indirect') }
-             .map { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
+  end
+
+  def push_statuses!
+    @statuses.map { |s| ForYouFeedWorker.new.perform(s['id'], @account.id, 'following') }
   end
 
   # Check status for User's level of engagment
