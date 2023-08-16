@@ -8,7 +8,7 @@ class UpdateForYouWorker
 
   #  Fetch Acct Config from AcctRelay
   #  Fetch Following from AcctRelay
-  #  Then status of those account from following
+  #  Then status of those accounts from following locally
   #  Finally send them to for_you_feed_worker
   def perform(acct, options = {})
     @personal = PersonalForYou.new
@@ -79,7 +79,7 @@ class UpdateForYouWorker
   # Check status for User's level of engagment
   # Filter out polls and replys
   def engagment_threshold(wrapped_status, user_engagment_setting, type)
-    # follows enagagment threshold
+    # enagagment threshold
     engagment = engagment_metrics(type)
     status = wrapped_status.reblog? ? wrapped_status.reblog : wrapped_status
 

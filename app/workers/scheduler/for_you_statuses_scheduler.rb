@@ -6,7 +6,6 @@ require 'json'
 class Scheduler::ForYouStatusesScheduler
   FOR_YOU_OWNER_ACCOUNT = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
   LIST_TITLE = 'For You'
-  BETA_FOR_YOU_LIST = 'Beta ForYou Personalized'
 
   # Get Statuses for the last n hours from the 'For You' list
   # Iterate over and task a worker to fetch the status from original source
