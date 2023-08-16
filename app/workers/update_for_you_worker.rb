@@ -68,7 +68,7 @@ class UpdateForYouWorker
     Rails.logger.info "FOLLOWING STATUS \n\n\n\n\n\n\n #{user_setting[:your_follows]}"
     @personal.statuses_for_direct_follows(@acct)
              .filter_map { |s| engagment_threshold(s, user_setting[:your_follows], 'following') }
-             .map { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'following') }
+             .map { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
   end
 
   # Indirect Follows
