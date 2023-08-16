@@ -71,7 +71,7 @@ class UpdateForYouWorker
     user_setting = @user[:for_you_settings]
     return if user_setting[:friends_of_friends].zero?
 
-    @personal.statuses_for_indirect_follows(@acct)
+    @personal.statuses_for_indirect_follows(@account)
              .filter_map { |s| engagment_threshold(s, user_setting[:friends_of_friends], 'indirect') }
              .map { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
   end
