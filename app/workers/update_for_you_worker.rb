@@ -11,7 +11,7 @@ class UpdateForYouWorker
   #  Fetch Following from AcctRelay
   #  Then status of those accounts from following locally
   #  Finally send them to for_you_feed_worker
-  def perform(acct, options = {})
+  def perform(acct, options = { rebuild: false })
     @personal = PersonalForYou.new
     @acct = acct
     @user = mammoth_user(acct).wait
