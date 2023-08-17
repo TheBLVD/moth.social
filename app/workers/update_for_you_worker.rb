@@ -27,7 +27,7 @@ class UpdateForYouWorker
     end
 
     # If rebuild is true, Zero Out User's for you feed
-    Rails.logger.info "\nOPTIONS FOR UPDATING>>>>>>\n #{options}"
+    Rails.logger.info "\nOPTIONS FOR UPDATING>>>>>>\n #{opts}"
     @personal.reset_feed(@account.id) if opts['rebuild']
 
     push_status!
