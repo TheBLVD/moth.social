@@ -11,9 +11,9 @@ class UpdateForYouWorker
   #  Fetch Following from AcctRelay
   #  Then status of those accounts from following locally
   #  Finally send them to for_you_feed_worker
-  def perform(acct, rebuild: false)
+  def perform(opts)
     @personal = PersonalForYou.new
-    @acct = acct
+    @acct = opts[:acct]
     @user = mammoth_user(acct).wait
     # This is temperary
     @account = local_account
@@ -28,7 +28,7 @@ class UpdateForYouWorker
 
     # If rebuild is true, Zero Out User's for you feed
     Rails.logger.info "\nOPTIONS FOR UPDATING>>>>>>\n #{options}"
-    @personal.reset_feed(@account.id) if rebuild
+    @personal.reset_feed(@account.id) if opts[:rebuild]
 
     push_status!
 
