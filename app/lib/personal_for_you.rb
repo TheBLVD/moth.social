@@ -21,7 +21,7 @@ class PersonalForYou
     account_handle = account.local? ? account.local_username_and_domain : account.acct
     cache_key = "follow_recommendations:#{account_handle}"
     fedi_account_handles = Rails.cache.fetch(cache_key)
-    Rails.logger.info "INDIRECT FOLLOW RECOMMENDATIONS \n #{fedi_account_handles}"
+    Rails.logger.info "INDIRECT FOLLOW RECOMMENDATIONS HANDLES\n #{fedi_account_handles}"
     # Parse handles into username & domain array for batch account query
     username_query = Array.[]
     domain_query = Array.[]
@@ -32,10 +32,10 @@ class PersonalForYou
     end
     # Array of account id's from fedi_account_handles
     account_ids = Account.where(username: username_query, domain: domain_query).pluck(:id)
-    Rails.logger.info "INDIRECT FOLLOW RECOMMENDATIONS \n #{username_query}"
-    Rails.logger.info "INDIRECT FOLLOW RECOMMENDATIONS \n #{account_ids}"
+    Rails.logger.info "INDIRECT FOLLOW RECOMMENDATIONS USERNAMES\n #{username_query}"
+    Rails.logger.info "INDIRECT FOLLOW RECOMMENDATIONS ACCOUNT_IDS\n #{account_ids}"
     # Get Statuses for those accounts
-    Status.where(account_id: account_ids, updated_at: 12.hours.ago..Time.now).limit(200)
+    Status.where(account_id: account_ids, updated_at: 12.hours.ago..Time.current).limit(200)
   end
 
   # Get All registered users from AcctRely
@@ -68,19 +68,17 @@ class PersonalForYou
 
   # Get Mammoth user following
   def user_following(acct)
-    Async do
-      response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
-        "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}/following"
-      )
-      # Get Following
-      results = JSON.parse(response.body)['following']
-      return results unless response.code != 200
-    end
+    response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
+      "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}/following"
+    )
+    # Get Following
+    results = JSON.parse(response.body)['following']
+    return results unless response.code != 200
   end
 
   def statuses_for_direct_follows(acct)
-    following = user_following(acct).await
-    Rails.logger.info "FOLLOW RECOMMENDATIONS \n #{fedi_account_handles}"
+    following = user_following(acct)
+    Rails.logger.info "FOLLOW RECOMMENDATIONS RETURN \n #{following}"
     # Parse handles into username & domain array for batch account query
     username_query = Array.[]
     domain_query = Array.[]
@@ -90,12 +88,11 @@ class PersonalForYou
       username_query.push(user['username'])
       domain_query.push(domain)
     end
-    Rails.logger.info "FOLLOW RECOMMENDATIONS \n #{username_query}"
-    Rails.logger.info "FOLLOW RECOMMENDATIONS \n #{domain_query}"
+    Rails.logger.info "FOLLOW RECOMMENDATIONS USERNAMES \n #{username_query}"
     # Array of account id's from fedi_account_handles
     account_ids = Account.where(username: username_query, domain: domain_query).pluck(:id)
     # Get Statuses for those accounts
-    Status.where(account_id: account_ids, updated_at: 12.hours.ago..Time.now).limit(200)
+    Status.where(account_id: account_ids, updated_at: 12.hours.ago..Time.current).limit(200)
   end
 
   # Remove personal timeline this will remove all entries in user's personal for you feed
