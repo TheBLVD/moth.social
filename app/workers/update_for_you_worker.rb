@@ -14,7 +14,7 @@ class UpdateForYouWorker
   def perform(opts)
     @personal = PersonalForYou.new
     @acct = opts[:acct]
-    @user = mammoth_user(acct).wait
+    @user = mammoth_user(@acct).wait
     # This is temperary
     @account = local_account
 
