@@ -27,7 +27,7 @@ class UpdateForYouWorker
     end
 
     # If rebuild is true, Zero Out User's for you feed
-    personal_for_you.reset_feed(@account.id) if options[:rebuild] == true
+    @personal.reset_feed(@account.id) if options[:rebuild] == true
 
     push_status!
 
