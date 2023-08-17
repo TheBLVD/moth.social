@@ -29,12 +29,7 @@ class UpdateForYouWorker
     # If rebuild is true, Zero Out User's for you feed
     personal_for_you.reset_feed(@account.id) if options[:rebuild] == true
 
-    # Indirect Follow
-    push_indirect_following_status!
-    # Direct Follows
-    push_following_status!
-    # Public Feed
-    # push_status!
+    push_status!
 
     # Final Step:
     # Set user's status to 'idle'
@@ -42,6 +37,14 @@ class UpdateForYouWorker
   end
 
   private
+
+  def push_status!
+    # Indirect Follow
+    push_indirect_following_status
+    # Direct Follows
+    push_following_status
+    # Public Feed
+  end
 
   def update_user_status(status)
     Async do
@@ -62,24 +65,24 @@ class UpdateForYouWorker
 
   # TODO: update account.id to user.acct
   # Return early if user setting is Zero, meaning 'off' from the iOS perspective
-  def push_following_status!
+  def push_following_status
     user_setting = @user[:for_you_settings]
     return if user_setting[:your_follows].zero?
     Rails.logger.info "FOLLOWING STATUS \n\n\n\n\n\n\n #{user_setting[:your_follows]}"
     @personal.statuses_for_direct_follows(@acct)
              .filter_map { |s| engagment_threshold(s, user_setting[:your_follows], 'following') }
-             .map { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
+             .each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
   end
 
   # Indirect Follows
-  def push_indirect_following_status!
+  def push_indirect_following_status
     user_setting = @user[:for_you_settings]
     return if user_setting[:friends_of_friends].zero?
-    Rails.logger.info "INDIRECT FOLLOWING STATUS \n\n\n\n\n\n\n #{user_setting[:your_follows]}"
+    Rails.logger.info "INDIRECT FOLLOWING STATUS \n\n\n\n\n\n\n #{user_setting[:friends_of_friends]}"
 
     @personal.statuses_for_indirect_follows(@account)
              .filter_map { |s| engagment_threshold(s, user_setting[:friends_of_friends], 'indirect') }
-             .map { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
+             .each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
   end
 
   # Check status for User's level of engagment
