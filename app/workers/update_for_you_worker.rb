@@ -27,7 +27,8 @@ class UpdateForYouWorker
     end
 
     # If rebuild is true, Zero Out User's for you feed
-    @personal.reset_feed(@account.id) if options[:rebuild] == true
+    Rails.logger.info "\nOPTIONS FOR UPDATING>>>>>>\n #{options}"
+    @personal.reset_feed(@account.id) if options[:rebuild]
 
     push_status!
 
@@ -67,11 +68,11 @@ class UpdateForYouWorker
   # Return early if user setting is Zero, meaning 'off' from the iOS perspective
   def push_following_status
     user_setting = @user[:for_you_settings]
-    return if user_setting[:your_follows].zero?
+
     Rails.logger.info "FOLLOWING STATUS \n\n\n\n\n\n\n #{user_setting[:your_follows]}"
     @personal.statuses_for_direct_follows(@acct)
              .filter_map { |s| engagment_threshold(s, user_setting[:your_follows], 'following') }
-             .each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
+             .each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') } unless user_setting[:your_follows].zero?
   end
 
   # Indirect Follows
