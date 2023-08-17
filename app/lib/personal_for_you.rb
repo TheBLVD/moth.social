@@ -21,7 +21,7 @@ class PersonalForYou
     account_handle = account.local? ? account.local_username_and_domain : account.acct
     cache_key = "follow_recommendations:#{account_handle}"
     fedi_account_handles = Rails.cache.fetch(cache_key)
-    Rails.logger.info "INDIRECT FOLLOW RECOMMENDATIONS HANDLES\n #{fedi_account_handles}"
+    Rails.logger.debug { "INDIRECT FOLLOW RECOMMENDATIONS HANDLES\n #{fedi_account_handles}" }
     # Parse handles into username & domain array for batch account query
     username_query = Array.[]
     domain_query = Array.[]
@@ -32,8 +32,8 @@ class PersonalForYou
     end
     # Array of account id's from fedi_account_handles
     account_ids = Account.where(username: username_query, domain: domain_query).pluck(:id)
-    Rails.logger.info "INDIRECT FOLLOW RECOMMENDATIONS USERNAMES\n #{username_query}"
-    Rails.logger.info "INDIRECT FOLLOW RECOMMENDATIONS ACCOUNT_IDS\n #{account_ids}"
+    Rails.logger.debug { "INDIRECT FOLLOW RECOMMENDATIONS USERNAMES\n #{username_query}" }
+    Rails.logger.debug { "INDIRECT FOLLOW RECOMMENDATIONS ACCOUNT_IDS\n #{account_ids}" }
     # Get Statuses for those accounts
     Status.where(account_id: account_ids, updated_at: 12.hours.ago..Time.current).limit(200)
   end
@@ -78,7 +78,7 @@ class PersonalForYou
 
   def statuses_for_direct_follows(acct)
     following = user_following(acct)
-    Rails.logger.info "FOLLOW RECOMMENDATIONS RETURN \n #{following}"
+    Rails.logger.debug { "FOLLOW RECOMMENDATIONS RETURN \n #{following}" }
     # Parse handles into username & domain array for batch account query
     username_query = Array.[]
     domain_query = Array.[]
@@ -88,7 +88,7 @@ class PersonalForYou
       username_query.push(user['username'])
       domain_query.push(domain)
     end
-    Rails.logger.info "FOLLOW RECOMMENDATIONS USERNAMES \n #{username_query}"
+    Rails.logger.debug { "FOLLOW RECOMMENDATIONS USERNAMES \n #{username_query}" }
     # Array of account id's from fedi_account_handles
     account_ids = Account.where(username: username_query, domain: domain_query).pluck(:id)
     # Get Statuses for those accounts
@@ -98,7 +98,7 @@ class PersonalForYou
   # Remove personal timeline this will remove all entries in user's personal for you feed
   # Current behavior is to default to 'public' mammoth curated feed if user's personal feed is blank 8/16/2023
   def reset_feed(account_id)
-    Rails.logger.info "RESETTING THE FEED>>>>>>>>>> \n #{account_id} \n"
+    Rails.logger.debug { "RESETTING THE FEED>>>>>>>>>> \n #{account_id} \n" }
     timeline_key = FeedManager.instance.key('personal', account_id)
     redis.del(timeline_key)
   end

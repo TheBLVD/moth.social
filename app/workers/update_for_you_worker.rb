@@ -27,7 +27,6 @@ class UpdateForYouWorker
     end
 
     # If rebuild is true, Zero Out User's for you feed
-    Rails.logger.info "\nOPTIONS FOR UPDATING>>>>>>\n #{opts}"
     @personal.reset_feed(@account.id) if opts['rebuild']
 
     push_status!
@@ -69,7 +68,6 @@ class UpdateForYouWorker
   def push_following_status
     user_setting = @user[:for_you_settings]
 
-    Rails.logger.info "FOLLOWING STATUS \n\n\n\n\n\n\n #{user_setting[:your_follows]}"
     @personal.statuses_for_direct_follows(@acct)
              .filter_map { |s| engagment_threshold(s, user_setting[:your_follows], 'following') }
              .each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') } unless user_setting[:your_follows].zero?
@@ -79,7 +77,6 @@ class UpdateForYouWorker
   def push_indirect_following_status
     user_setting = @user[:for_you_settings]
     return if user_setting[:friends_of_friends].zero?
-    Rails.logger.info "INDIRECT FOLLOWING STATUS \n\n\n\n\n\n\n #{user_setting[:friends_of_friends]}"
 
     @personal.statuses_for_indirect_follows(@account)
              .filter_map { |s| engagment_threshold(s, user_setting[:friends_of_friends], 'indirect') }

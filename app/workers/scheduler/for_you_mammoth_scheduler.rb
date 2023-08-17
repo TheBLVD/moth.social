@@ -14,7 +14,6 @@ class Scheduler::ForYouMammothScheduler
   def perform
     users = mammoth_users.wait
     users.each do |acct|
-      Rails.logger.debug { ">>>>>USERS:: #{acct}" }
       UpdateForYouWorker.perform_async({ acct: acct, rebuild: false })
     end
   end

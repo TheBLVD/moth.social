@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# V1 of adding personalize statuses to a user's For You Feed
+# Done by indiviual statuses and filtered. :foryou is the
+# Mammoth curated list
 class ForYouFeedWorker
   include Redisable
   include Sidekiq::Worker
