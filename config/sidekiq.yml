@@ -69,7 +69,7 @@
     queue: scheduler
     interval: '5m'
     class: Scheduler::ForYouStatusesScheduler
-  personal_for_you_statuses_scheduler:
+  mammoth_for_you_statuses_scheduler:
     queue: scheduler
     interval: '10m'
-    class: Scheduler::PersonalizedForYouStatusesScheduler
+    class: Scheduler::ForYouMammothScheduler

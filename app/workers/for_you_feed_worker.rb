@@ -1,8 +1,13 @@
 # frozen_string_literal: true
 
+# V1 of adding personalize statuses to a user's For You Feed
+# Done by indiviual statuses and filtered. :foryou is the
+# Mammoth curated list
 class ForYouFeedWorker
   include Redisable
   include Sidekiq::Worker
+
+  sidekiq_options queue: 'pull', retry: 0
 
   MAX_ITEMS = 1000
   MINIMUM_ENGAGMENT_ACTIONS = 2
@@ -13,8 +18,9 @@ class ForYouFeedWorker
     @options   = options.symbolize_keys
 
     case @type
-    when :personal
+    when :personal, :following
       @account_id = id
+
     when :foryou
       @list_id = id
     end
@@ -28,9 +34,8 @@ class ForYouFeedWorker
   def perform_push_to_feed
     case @type
     when :personal
-      if filter_from_feed?(@status)
-        add_to_personal_feed(@type, @account_id, @status)
-      end
+      add_to_personal_feed(@type, @account_id, @status)
+
     when :foryou
       if filter_from_feed?(@status)
         add_to_feed(@type, @list_id, @status)
@@ -63,7 +68,7 @@ class ForYouFeedWorker
   # @param [Status] status
   # @param [Boolean] aggregate_reblogs
   # @return [Boolean]
-  def add_to_feed(timeline_type, account_id, status, aggregate_reblogs: true)
+  def add_to_feed(timeline_type, account_id, status)
     timeline_key = FeedManager.instance.key(timeline_type, account_id)
 
     redis.zadd(timeline_key, status.id, status.id)
@@ -73,7 +78,7 @@ class ForYouFeedWorker
   end
 
   # Adds to Account's Personal For You Feed
-  def add_to_personal_feed(timeline_type, account_id, status, aggregate_reblogs: true)
+  def add_to_personal_feed(timeline_type, account_id, status)
     timeline_key = FeedManager.instance.key(timeline_type, account_id)
 
     redis.zadd(timeline_key, status.id, status.id)
