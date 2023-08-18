@@ -6,7 +6,7 @@ require 'json'
 class Scheduler::StatusStatUpdateScheduler
   FOR_YOU_OWNER_ACCOUNT = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
   LIST_TITLE = 'For You'
-  GO_BACK = 24 # number of hours back to fetch statuses
+  GO_BACK = 12 # number of hours back to fetch statuses
 
   # Get Statuses for the last n hours from the 'For You' list
   # Iterate over and task a worker to fetch the status from original source

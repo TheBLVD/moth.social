@@ -1,19 +1,31 @@
 # frozen_string_literal: true
 
 class Api::V3::Timelines::ForYouController < Api::BaseController
-  before_action :set_for_you_default
+  before_action :set_for_you_default, only: [:show]
 
   after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
 
   def index
-    type = for_you_feed_type
-    render json: { type: type }
+    result = PersonalForYou.new.user(acct_param)
+    render json: result
   end
 
   def show
     @statuses = set_for_you_feed
     render json: @statuses,
            each_serializer: REST::StatusSerializer
+  end
+
+  # When Updating User with new settings
+  # Update status to 'pending'
+  # Also need to trigger a clear & rebuild of their personal for you feed
+  def update
+    payload = for_you_params
+    payload[:status] = 'pending'
+    result = PersonalForYou.new.update_user(acct_param, payload)
+
+    UpdateForYouWorker.perform_async({ acct: acct_param, rebuild: true })
+    render json: result
   end
 
   private
@@ -132,6 +144,16 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
 
   def acct_param
     params.require(:acct)
+  end
+
+  def for_you_params
+    params.permit(
+      :acct,
+      :curated_by_mammoth,
+      :friends_of_friends,
+      :from_your_channels,
+      :your_follows
+    ).except('acct')
   end
 
   # Used to indicate beta group

@@ -209,4 +209,6 @@ gem 'hcaptcha', '~> 7.1'
 gem 'ed25519', '>= 1.3', '< 2.0'
 gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
 
-gem "async", "~> 1.31"
+# Async
+gem 'async', '~> 1.31'
+gem 'async-http'
