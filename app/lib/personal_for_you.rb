@@ -22,6 +22,8 @@ class PersonalForYou
     cache_key = "follow_recommendations:#{account_handle}"
     fedi_account_handles = Rails.cache.fetch(cache_key)
     Rails.logger.debug { "INDIRECT FOLLOW RECOMMENDATIONS HANDLES\n #{fedi_account_handles}" }
+    # Early return if no fedi account handles found
+    return [] if fedi_account_handles.nil?
     # Parse handles into username & domain array for batch account query
     username_query = Array.[]
     domain_query = Array.[]
