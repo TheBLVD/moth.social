@@ -713,8 +713,9 @@ Rails.application.routes.draw do
       
     end
 
-    # V3
+    # V3 Mammoth
     namespace :v3 do
+      resources :channels, only: [:index, :show]
       namespace :timelines do
         resource :for_you, only: [:show], controller: 'for_you' do
           get '/me',      to: 'for_you#index'
