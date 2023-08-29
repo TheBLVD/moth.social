@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-lock '3.17.1'
+lock '3.17.3'
 
 set :repo_url, ENV.fetch('REPO', 'git@github.com:TheBLVD/moth.social.git')
 set :branch, ENV.fetch('BRANCH', 'main')
