@@ -3,30 +3,21 @@
 class PersonalForYou
   include Redisable
 
-  FOR_YOU_OWNER_ACCOUNT = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
-  BETA_FOR_YOU_LIST = 'Beta ForYou Personalized'
   ACCOUNT_RELAY_AUTH = "Bearer #{ENV.fetch('ACCOUNT_RELAY_KEY')}"
   ACCOUNT_RELAY_HOST = 'acctrelay.moth.social'
 
-  def beta_list_accounts
-    default_owner_account = Account.local.where(username: FOR_YOU_OWNER_ACCOUNT).first!
-    beta_list = List.where(account: default_owner_account, title: BETA_FOR_YOU_LIST).first!
-    beta_list.accounts.without_suspended.includes(:account_stat)
-  end
-
   # Indirect Follows are the following of your followers
+  # Get full account handle <example@moth.social>
   # IE Friends of Friends
-  def statuses_for_indirect_follows(account)
-    # Get full account handle <example@moth.social>
-    account_handle = account.local? ? account.local_username_and_domain : account.acct
+  def statuses_for_indirect_follows(account_handle)
     cache_key = "follow_recommendations:#{account_handle}"
     fedi_account_handles = Rails.cache.fetch(cache_key)
     Rails.logger.debug { "INDIRECT FOLLOW RECOMMENDATIONS HANDLES\n #{fedi_account_handles}" }
     # Early return if no fedi account handles found
     return [] if fedi_account_handles.nil?
     # Parse handles into username & domain array for batch account query
-    username_query = Array.[]
-    domain_query = Array.[]
+    username_query = []
+    domain_query = []
     fedi_account_handles.each do |handle|
       h = handle.split('@')
       username_query.push(h[0])
@@ -48,16 +39,26 @@ class PersonalForYou
       "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users"
     )
     results = JSON.parse(response.body).map(&:symbolize_keys).pluck(:acct)
-    return results unless response.code != 200
+    results unless response.code != 200
   end
 
   # Get Mammoth user details
   # Includes any settings/preferences/configurations for feeds
   def user(acct)
-    response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
-      "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}"
-    )
-    JSON.parse(response.body, symbolize_names: true)
+    cache_key = "mammoth:user:#{acct}"
+    Rails.cache.fetch(cache_key, expires_in: 60.seconds) do
+      response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
+        "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}"
+      )
+      JSON.parse(response.body, symbolize_names: true)
+    end
+  end
+
+  # Defined as a 'local' user on AccountRelay
+  # A Mammoth user will have thier foryou settings type listed as 'personal'
+  # The default foryou settings type is 'public
+  def mammoth_user?(acct)
+    user(acct).dig(:for_you_settings, :type) == 'personal'
   end
 
   # PUT Mammoth user for you settings / preferences / status
@@ -75,15 +76,15 @@ class PersonalForYou
     )
     # Get Following
     results = JSON.parse(response.body)['following']
-    return results unless response.code != 200
+    results unless response.code != 200
   end
 
   def statuses_for_direct_follows(acct)
     following = user_following(acct)
     Rails.logger.debug { "FOLLOW RECOMMENDATIONS RETURN \n #{following}" }
     # Parse handles into username & domain array for batch account query
-    username_query = Array.[]
-    domain_query = Array.[]
+    username_query = []
+    domain_query = []
     following.each do |user|
       # Local accounts will have a domain of nil
       domain = user['domain'] == ENV['LOCAL_DOMAIN'] ? nil : user['domain']

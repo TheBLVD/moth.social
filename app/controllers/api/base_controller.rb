@@ -8,7 +8,6 @@ class Api::BaseController < ApplicationController
   DEFAULT_STATUSES_LIST_LIMIT = 40
   FOR_YOU_OWNER_ACCOUNT = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
   LIST_TITLE = 'For You'
-  BETA_FOR_YOU_LIST = 'Beta ForYou Personalized'
 
   include RateLimitHeaders
   include AccessTokenTrackingConcern

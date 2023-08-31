@@ -63,21 +63,19 @@ class Scheduler::StatusStatUpdateScheduler
     end
   end
 
-  # Statuses from all the 'indirect follows' from all the accounts on the beta list
-  # Take the accounts from the beta list, get all the indirect follows
+  # Statuses from all the 'indirect follows' from all the accounts on from acctrelay that are Mammoth users
+  # Take the accounts from acctrelay that are Mammoth users, get all the indirect follows
   def statuses_from_personalized_for_you
-    personal_for_you = PersonalForYou.new
-    personal_for_you.beta_list_accounts
-                    .map { |account| personal_for_you.statuses_for_indirect_follows(account) }
-                    .flatten
+    mammoth_users
+      .map { |acct| personal_for_you.statuses_for_indirect_follows(acct) }
+      .flatten
   end
 
   # Statuses from all the 'direct follows' from all the accounts of Mammoth users
   # Take the users from Mammoth, get all the direct follows
   def statuses_from_direct_follows_for_you
-    personal_for_you = PersonalForYou.new
     mammoth_users
-      .map { |account| personal_for_you.statuses_for_direct_follows(account) }
+      .map { |acct| personal_for_you.statuses_for_direct_follows(acct) }
       .flatten
   end
 
@@ -100,6 +98,7 @@ class Scheduler::StatusStatUpdateScheduler
   end
 
   # Fetch acct of mammoth users from AcctRelay
+  # Returns array of acct strings ['jtomchak@moth.social, ...]
   def mammoth_users
     personal_for_you = PersonalForYou.new
     personal_for_you.acct_relay_users

@@ -21,8 +21,6 @@ class Api::V1::Lists::AccountsController < Api::BaseController
       end
     end
 
-    # Trigger after add accounts transaction
-    for_you_follow_suggestions
     render_empty
   end
 
@@ -32,20 +30,6 @@ class Api::V1::Lists::AccountsController < Api::BaseController
   end
 
   private
-
-  # For Mammoth Beta For You List ONLY
-  # Added accounts execute follow recommendation service then pushed to AccountRelay
-  def for_you_follow_suggestions
-    if current_account.username == FOR_YOU_OWNER_ACCOUNT && @list.title == BETA_FOR_YOU_LIST
-      list_accounts.each do |account|
-        # handle is full account (user@domain.com, jesse@moth.social)
-        # Push Suggested followers for account to AccountRelay Server
-        # Run the scheduler to populate the account's timeline
-        handle = account.local? ? account.local_username_and_domain : account.acct
-        PushFollowSuggestedWorker.perform_async(handle)
-      end
-    end
-  end
 
   def set_list
     @list = List.where(account: current_account).find(params[:list_id])
