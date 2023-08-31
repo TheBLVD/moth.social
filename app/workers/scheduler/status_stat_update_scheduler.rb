@@ -67,8 +67,8 @@ class Scheduler::StatusStatUpdateScheduler
   # Take the accounts from the beta list, get all the indirect follows
   def statuses_from_personalized_for_you
     personal_for_you = PersonalForYou.new
-    personal_for_you.beta_list_accounts
-                    .map { |account| personal_for_you.statuses_for_indirect_follows(account) }
+    personal_for_you.mammoth_users
+                    .map { |acct| personal_for_you.statuses_for_indirect_follows(acct) }
                     .flatten
   end
 
