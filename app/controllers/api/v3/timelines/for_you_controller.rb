@@ -32,13 +32,12 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
 
   def set_for_you_default
     @default_owner_account = Account.local.where(username: FOR_YOU_OWNER_ACCOUNT).first!
-    @beta_for_you_list = List.where(account: @default_owner_account, title: BETA_FOR_YOU_LIST).first!
     @account = account_from_acct
     @is_beta_program = beta_param
   end
 
   def set_for_you_feed
-    should_personalize = validate_owner_account
+    should_personalize = validate_mammoth_account
     if should_personalize
       # Getting personalized
       fufill_personalized_statuses
@@ -49,25 +48,14 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     end
   end
 
-  # Check for account on the peronalized list
-  # AND that account personalized feed is NOT empty.
-  def for_you_feed_type
-    if validate_owner_account && !cached_personalized_statuses.empty?
-      'personal'
-    else
-      'public'
-    end
-  end
-
   # Check account_from_acct finds an account
   # Check the For You Beta Personal List
   # @return [Boolean]
-  def validate_owner_account
+  def validate_mammoth_account
     if @account.nil?
       return false
     end
-    @owner_account = @beta_for_you_list.accounts.without_suspended.includes(:account_stat).where(id: @account.id).first
-    !@owner_account.nil?
+    PersonalForYou.new.mammoth_user?(acct_param)
   end
 
   # Only checking for beta parameter
