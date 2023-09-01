@@ -71,8 +71,13 @@ class PersonalForYou
     response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).put(
       "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}", json: payload
     )
-    Rails.cache.delete(key(acct))
+    clear_user_cache(acct)
     JSON.parse(response.body)
+  end
+
+  # Cache bust local user
+  def clear_user_cache(acct)
+    Rails.cache.delete(key(acct))
   end
 
   # Get Mammoth user following
