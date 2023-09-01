@@ -45,13 +45,10 @@ class PersonalForYou
   # Get Mammoth user details
   # Includes any settings/preferences/configurations for feeds
   def user(acct)
-    cache_key = "mammoth:user:#{acct}"
-    Rails.cache.fetch(cache_key, expires_in: 60.seconds) do
-      response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
-        "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}"
-      )
-      JSON.parse(response.body, symbolize_names: true)
-    end
+    response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
+      "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}"
+    )
+    JSON.parse(response.body, symbolize_names: true)
   end
 
   # Defined as a 'local' user on AccountRelay
