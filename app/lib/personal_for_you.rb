@@ -6,6 +6,11 @@ class PersonalForYou
   ACCOUNT_RELAY_AUTH = "Bearer #{ENV.fetch('ACCOUNT_RELAY_KEY')}"
   ACCOUNT_RELAY_HOST = 'acctrelay.moth.social'
 
+  # Cache Key for User
+  def key(acct)
+    "mammoth:user:#{acct}"
+  end
+
   # Indirect Follows are the following of your followers
   # Get full account handle <example@moth.social>
   # IE Friends of Friends
@@ -45,10 +50,12 @@ class PersonalForYou
   # Get Mammoth user details
   # Includes any settings/preferences/configurations for feeds
   def user(acct)
-    response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
-      "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}"
-    )
-    JSON.parse(response.body, symbolize_names: true)
+    Rails.cache.fetch(key(acct), expires_in: 60.seconds) do
+      response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
+        "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}"
+      )
+      JSON.parse(response.body, symbolize_names: true)
+    end
   end
 
   # Defined as a 'local' user on AccountRelay
@@ -59,10 +66,12 @@ class PersonalForYou
   end
 
   # PUT Mammoth user for you settings / preferences / status
+  # Bust User cache when updating user settings
   def update_user(acct, payload)
     response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).put(
       "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}", json: payload
     )
+    Rails.cache.delete(key(acct))
     JSON.parse(response.body)
   end
 
