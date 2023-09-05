@@ -97,7 +97,7 @@ class Scheduler::StatusStatUpdateScheduler
     Account.local.where(username: FOR_YOU_OWNER_ACCOUNT)
   end
 
-  # Fetch acct of mammoth users from AcctRelay
+  # Fetch acct of mammoth users from AcctRelay that are 'personalize'
   # Returns array of acct strings ['jtomchak@moth.social, ...]
   def mammoth_users
     personal_for_you = PersonalForYou.new

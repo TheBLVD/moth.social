@@ -21,6 +21,7 @@ class Scheduler::ForYouMammothScheduler
   private
 
   # Fetch acct of mammoth users from AcctRelay
+  # These are users that are 'personalize'
   def mammoth_users
     personal_for_you = PersonalForYou.new
     Async do
