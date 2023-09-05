@@ -715,7 +715,13 @@ Rails.application.routes.draw do
 
     # V3 Mammoth
     namespace :v3 do
-      resources :channels, only: [:index, :show]
+      resources :channels, only: [:index, :show] do 
+        member do
+          post :subscribe, constraints: { user_acct: %r{[^/]+} }
+          post :unsubscribe, constraints: { user_acct: %r{[^/]+} }
+        end
+      end 
+      
       namespace :timelines do
         resource :for_you, only: [:show], controller: 'for_you' do
           get '/me',      to: 'for_you#index'

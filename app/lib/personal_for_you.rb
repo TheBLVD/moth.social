@@ -38,7 +38,7 @@ class PersonalForYou
 
   # Get All registered users from AcctRely
   # `api/v1/foryou/users`
-  # That are local:true, meaning they are Mammoth Users
+  # That are  personalize:true, meaning they are Mammoth Users
   def acct_relay_users
     response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
       "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users"
@@ -49,19 +49,18 @@ class PersonalForYou
 
   # Get Mammoth user details
   # Includes any settings/preferences/configurations for feeds
+  # Not caching user. If it becomes an issue cache it at the source. AcctRelay
   def user(acct)
-    Rails.cache.fetch(key(acct), expires_in: 60.seconds) do
-      response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
-        "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}"
-      )
-      JSON.parse(response.body, symbolize_names: true)
-    end
+    response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
+      "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}"
+    )
+    JSON.parse(response.body, symbolize_names: true)
   end
 
-  # Defined as a 'local' user on AccountRelay
-  # A Mammoth user will have thier foryou settings type listed as 'personal'
+  # Defined as a 'personalize' user on AccountRelay
+  # A Mammoth user will have thier foryou settings type listed as 'personal' once it's generated
   # The default foryou settings type is 'public
-  def mammoth_user?(acct)
+  def personalized_mammoth_user?(acct)
     user(acct).dig(:for_you_settings, :type) == 'personal'
   end
 
@@ -71,8 +70,13 @@ class PersonalForYou
     response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).put(
       "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}", json: payload
     )
-    Rails.cache.delete(key(acct))
+    clear_user_cache(acct)
     JSON.parse(response.body)
+  end
+
+  # Cache bust local user
+  def clear_user_cache(acct)
+    Rails.cache.delete(key(acct))
   end
 
   # Get Mammoth user following
