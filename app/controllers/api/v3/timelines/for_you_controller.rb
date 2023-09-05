@@ -55,7 +55,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     if @account.nil?
       return false
     end
-    PersonalForYou.new.mammoth_user?(acct_param)
+    PersonalForYou.new.personalized_mammoth_user?(acct_param)
   end
 
   # Only checking for beta parameter
