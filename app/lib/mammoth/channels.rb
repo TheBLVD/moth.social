@@ -7,7 +7,7 @@ module Mammoth
     ACCOUNT_RELAY_HOST = 'acctrelay.moth.social'
 
     # GET all available channels as a list
-    # Channl includes id, title, description, owner
+    # Channel includes id, title, description, owner
     def list
       cache_key = 'channels:list'
       Rails.cache.fetch(cache_key, expires_in: 60.seconds) do
@@ -29,6 +29,15 @@ module Mammoth
 
         JSON.parse(response.body, symbolize_names: true)
       end
+    end
+
+    # GET all available channel accounts
+    # Account username, domain
+    def accounts
+      response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
+        "https://#{ACCOUNT_RELAY_HOST}/api/v1/channels/accounts"
+      )
+      JSON.parse(response.body, symbolize_names: true)
     end
 
     # Subscribe to Channel
