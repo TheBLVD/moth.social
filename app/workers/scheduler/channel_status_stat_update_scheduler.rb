@@ -18,8 +18,8 @@ class Scheduler::ChannelStatusStatUpdateScheduler
 
   private
 
-  #   Iterate over all statuses
-  #  Pass id,uri to Update Worker
+  #  Iterate over all statuses
+  #  Pass {id,uri} to Update Worker
   def update_channel_account_status_stat!
     statuses_from_channel_accounts.each do |status|
       status_params = if status.reblog?
@@ -37,6 +37,7 @@ class Scheduler::ChannelStatusStatUpdateScheduler
   end
 
   # Get local account id's from channel accounts by username & domain
+  # This account id's are specific to Moth.Social. AcctRelay doesn't know about
   # Returns an array of account id's
   def accounts_list
     channel_accounts = mammoth_channel_accounts.wait
@@ -46,8 +47,9 @@ class Scheduler::ChannelStatusStatUpdateScheduler
     Account.where(username: usernames, domain: domains).pluck(:id)
   end
 
-  # Fetch acct of mammoth users from AcctRelay
-  # These are users that are 'personalize'
+  # Fetch all accounts of all channels from AcctRelay
+  # Bc we're updating statuses of accounts, the channel or channels they
+  # belong to is not needed
   def mammoth_channel_accounts
     channels = Mammoth::Channels.new
     Async do
