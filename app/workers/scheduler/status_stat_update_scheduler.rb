@@ -66,6 +66,7 @@ class Scheduler::StatusStatUpdateScheduler
   # Statuses from all the 'indirect follows' from all the accounts on from acctrelay that are Mammoth users
   # Take the accounts from acctrelay that are Mammoth users, get all the indirect follows
   def statuses_from_personalized_for_you
+    personal_for_you = PersonalForYou.new
     mammoth_users
       .map { |acct| personal_for_you.statuses_for_indirect_follows(acct) }
       .flatten
@@ -74,6 +75,7 @@ class Scheduler::StatusStatUpdateScheduler
   # Statuses from all the 'direct follows' from all the accounts of Mammoth users
   # Take the users from Mammoth, get all the direct follows
   def statuses_from_direct_follows_for_you
+    personal_for_you = PersonalForYou.new
     mammoth_users
       .map { |acct| personal_for_you.statuses_for_direct_follows(acct) }
       .flatten
