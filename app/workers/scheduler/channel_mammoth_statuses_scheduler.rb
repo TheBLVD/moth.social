@@ -25,14 +25,14 @@ class Scheduler::ChannelMammothStatusesScheduler
   def update_channel_feeds!
     @channels = channels_with_statuses
     @channels.each do |channel|
-      Rails.logger.debug { "CHANNEL::  #{channel} \n" }
+      Rails.logger.info { "CHANNEL::  #{channel} \n" }
       push_statuses(channel[:statuses], channel[:id])
     end
   end
 
   def push_statuses(statuses, channel_id)
     statuses.each do |status|
-      Rails.logger.debug { "STATUS::  #{status} \n" }
+      Rails.logger.info { "STATUS::  #{status} \n" }
       ChannelFeedWorker.perform_async(status['id'], channel_id)
     end
   end

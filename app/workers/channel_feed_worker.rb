@@ -18,7 +18,7 @@ class ChannelFeedWorker
     @options = options.symbolize_keys
 
     # perform_push_to_feed
-    Rails.logger.debug { "CHANNELFEED_WORKER>>>>>>> #{@status.inspect}" }
+    Rails.logger.info { "CHANNELFEED_WORKER>>>>>>> #{@status.inspect}" }
   rescue ActiveRecord::RecordNotFound
     # Status not found
     true
