@@ -69,6 +69,10 @@
     queue: scheduler
     interval: '2m'
     class: Scheduler::ChannelStatusStatUpdateScheduler
+  channel_statuses_scheduler:
+    queue: scheduler
+    interval: '5m'
+    class: Scheduler::ChannelMammothStatusesScheduler
   for_you_statuses_scheduler:
     queue: scheduler
     interval: '5m'
