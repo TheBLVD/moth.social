@@ -5,6 +5,7 @@ require 'json'
 # V1 Channels updating statuses for unique channel feeds
 class Scheduler::ChannelMammothStatusesScheduler
   GO_BACK = 2 # number of hours back to fetch statuses
+  MINIMUM_ENGAGMENT_ACTIONS = 2
 
   # Get Statuses for the last n hours from all channels
   # Iterate over and task a worker to fetch the status from original source
@@ -21,7 +22,7 @@ class Scheduler::ChannelMammothStatusesScheduler
   private
 
   # Get statuses for accounts of each channel
-  # FeedWorker w/ status_id & channel_id will 'process' status
+  # FeedWorker w/ status_id & channel_id will add status
   def update_channel_feeds!
     @channels = channels_with_statuses
     @channels.each do |channel|
@@ -30,11 +31,10 @@ class Scheduler::ChannelMammothStatusesScheduler
     end
   end
 
+  # Filter statuses based on engagment and push to feed.
   def push_statuses(statuses, channel_id)
-    statuses.each do |status|
-      Rails.logger.info { "STATUS::  #{status} \n" }
-      ChannelFeedWorker.perform_async(status['id'], channel_id)
-    end
+    statuses.filter_map { |status| engagment_threshold(status) }
+            .each { |status| ChannelFeedWorker.perform_async(status['id'], channel_id) }
   end
 
   # Get all channels
@@ -68,5 +68,16 @@ class Scheduler::ChannelMammothStatusesScheduler
     Async do
       channels.list(include_accounts: true)
     end
+  end
+
+  # Check status for Channel level of engagment
+  # Filter out polls and replys
+  def engagment_threshold(wrapped_status)
+    # enagagment threshold
+    engagment = MINIMUM_ENGAGMENT_ACTIONS
+    status = wrapped_status.reblog? ? wrapped_status.reblog : wrapped_status
+
+    status_counts = status.reblogs_count + status.replies_count + status.favourites_count
+    status if status_counts >= engagment[user_engagment_setting] && status.in_reply_to_id.nil? && status.poll_id.nil?
   end
 end

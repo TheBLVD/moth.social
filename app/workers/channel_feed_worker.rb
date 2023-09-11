@@ -10,71 +10,32 @@ class ChannelFeedWorker
   sidekiq_options queue: 'pull', retry: 0
 
   MAX_ITEMS = 1000
-  MINIMUM_ENGAGMENT_ACTIONS = 2
 
   def perform(status_id, id, options = {})
-    @status = Status.find(status_id)
+    @status_id  = status_id
     @channel_id = id
     @options = options.symbolize_keys
 
     # perform_push_to_feed
-    Rails.logger.info { "CHANNELFEED_WORKER>>>>>>> #{@status.inspect}" }
-  rescue ActiveRecord::RecordNotFound
-    # Status not found
-    true
+    Rails.logger.info { "CHANNELFEED_WORKER>>>>>>> #{@status_id.inspect}" }
+
+    add_to_feed!
   end
 
   private
 
-  def perform_push_to_feed
-    case @type
-    when :personal
-      add_to_personal_feed(@type, @account_id, @status)
-
-    when :foryou
-      if filter_from_feed?(@status)
-        add_to_feed(@type, @list_id, @status)
-      end
-    end
-  end
-
-  # Check if status should not be added to the list feed
-  # Combine engagment actions. Greater than the min engagement set.
-  # Check status for reblog content or assign original content
-  # Reject statues with a reply_to or poll_id
-  # @param [Status] status
-  # @param [List] list
-  # @return [Boolean]
-  def filter_from_feed?(wrapped_status)
-    status = wrapped_status.reblog? ? wrapped_status.reblog : wrapped_status
-    status_counts = status.reblogs_count + status.replies_count + status.favourites_count
-
-    status_counts >= MINIMUM_ENGAGMENT_ACTIONS && status.in_reply_to_id.nil? && status.poll_id.nil?
-  end
-
   # MAMMOTH: Taken directly from FeedManager
 
-  # Adds a status to an account's feed, returning true if a status was
+  # Adds a status to an channel's feed, returning true if a status was
   # added, and false if it was not added to the feed. Note that this is
   # an internal helper: callers must call trim or push updates if
   # either action is appropriate.
-  # @param [Symbol] timeline_type
-  # @param [Integer] account_id
-  # @param [Status] status
-  # @param [Boolean] aggregate_reblogs
+  # @param [Integer] channel_id
+  # @param [Status] status_id
   # @return [Boolean]
-  def add_to_feed(timeline_type, account_id, status)
-    timeline_key = FeedManager.instance.key(timeline_type, account_id)
-
-    redis.zadd(timeline_key, status.id, status.id)
-
-    # Keep the list from growning infinitely
-    trim(timeline_key, account_id)
-  end
-
-  # Adds to Account's Personal For You Feed
-  def add_to_personal_feed(timeline_type, account_id, status)
-    timeline_key = FeedManager.instance.key(timeline_type, account_id)
+  def add_to_feed!
+    timeline_type = 'channel'
+    timeline_key = FeedManager.instance.key(timeline_type, @channel_id)
 
     redis.zadd(timeline_key, status.id, status.id)
 
