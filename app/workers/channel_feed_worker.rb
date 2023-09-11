@@ -37,19 +37,17 @@ class ChannelFeedWorker
     timeline_type = 'channel'
     timeline_key = FeedManager.instance.key(timeline_type, @channel_id)
 
-    redis.zadd(timeline_key, status.id, status.id)
+    redis.zadd(timeline_key, @status_id, @status_id)
 
     # Keep the list from growning infinitely
-    trim(timeline_key, account_id)
+    trim(timeline_key)
   end
 
   # Trim a feed to maximum size by removing older items
   # @param [Symbol] type
   # @param [Integer] timeline_id
   # @return [void]
-  def trim(type, timeline_id)
-    timeline_key = FeedManager.instance.key(type, timeline_id)
-
+  def trim(timeline_key)
     # Remove any items past the MAX_ITEMS'th entry in our feed
     redis.zremrangebyrank(timeline_key, 0, -(MAX_ITEMS + 1))
   end
