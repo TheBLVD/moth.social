@@ -9,7 +9,7 @@ class Api::V3::Timelines::ChannelsController < Api::BaseController
 
   def show
     @statuses = channel_statuses
-    Rails.logger.debug { "STATUSES>>>>> #{@statues}" }
+    Rails.logger.info { "STATUSES>>>>> #{@statues}" }
     render json: @statuses,
            each_serializer: REST::StatusSerializer
   end
@@ -19,7 +19,7 @@ class Api::V3::Timelines::ChannelsController < Api::BaseController
   def set_channel
     @mammoth = Mammoth::Channels.new
     @channel = @mammoth.find(channel_id_param)
-    Rails.logger.debug { "CHANNEL:::::: #{@channel}" }
+    Rails.logger.info { "CHANNEL:::::: #{@channel}" }
   end
 
   def cached_channel_statuses
