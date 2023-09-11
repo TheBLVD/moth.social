@@ -23,7 +23,8 @@ class Api::V3::Timelines::ChannelsController < Api::BaseController
   end
 
   def cached_channel_statuses
-    cache_collection(channel_statuses, Status)
+    # cache_collection(channel_statuses, Status)
+    channel_statuses
   end
 
   def channel_statuses
