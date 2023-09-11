@@ -17,7 +17,7 @@ class ChannelFeedWorker
     @options = options.symbolize_keys
 
     # perform_push_to_feed
-    Rails.logger.info { "CHANNELFEED_WORKER>>>>>>> #{@status_id.inspect}" }
+    Rails.logger.debug { "CHANNELFEED_WORKER>>>>>>> #{@status_id.inspect}" }
 
     add_to_feed!
   end
