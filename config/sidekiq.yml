@@ -75,7 +75,7 @@
     class: Scheduler::ChannelMammothStatusesScheduler
   for_you_statuses_scheduler:
     queue: scheduler
-    interval: '5m'
+    interval: '2m'
     class: Scheduler::ForYouStatusesScheduler
   mammoth_for_you_statuses_scheduler:
     queue: scheduler
