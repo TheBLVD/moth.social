@@ -78,6 +78,6 @@ class Scheduler::ChannelMammothStatusesScheduler
     status = wrapped_status.reblog? ? wrapped_status.reblog : wrapped_status
 
     status_counts = status.reblogs_count + status.replies_count + status.favourites_count
-    status if status_counts >= engagment[user_engagment_setting] && status.in_reply_to_id.nil? && status.poll_id.nil?
+    status if status_counts >= engagment && status.in_reply_to_id.nil? && status.poll_id.nil?
   end
 end
