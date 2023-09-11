@@ -34,8 +34,7 @@ class ChannelFeedWorker
   # @param [Status] status_id
   # @return [Boolean]
   def add_to_feed!
-    timeline_type = 'channel'
-    timeline_key = FeedManager.instance.key(timeline_type, @channel_id)
+    timeline_key = FeedManager.instance.key(:channel, @channel_id)
 
     redis.zadd(timeline_key, @status_id, @status_id)
 

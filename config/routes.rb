@@ -723,6 +723,7 @@ Rails.application.routes.draw do
       end 
       
       namespace :timelines do
+        get 'channels/:id', to: 'channels#show'
         resource :for_you, only: [:show], controller: 'for_you' do
           get '/me',      to: 'for_you#index'
           put '/me',      to: 'for_you#update'
