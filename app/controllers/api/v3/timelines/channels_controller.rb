@@ -3,13 +3,14 @@
 class Api::V3::Timelines::ChannelsController < Api::BaseController
   before_action :set_channel
 
+  after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
+
   rescue_from Mammoth::Channels::NotFound do |e|
     render json: { error: e.to_s }, status: 404
   end
 
   def show
     @statuses = cached_channel_statuses
-    Rails.logger.info { "STATUSES>>>>> #{@statues}" }
     render json: @statuses,
            each_serializer: REST::StatusSerializer,
            relationships: StatusRelationshipsPresenter.new(@statuses, current_user&.account_id)
@@ -20,7 +21,6 @@ class Api::V3::Timelines::ChannelsController < Api::BaseController
   def set_channel
     @mammoth = Mammoth::Channels.new
     @channel = @mammoth.find(channel_id_param)
-    Rails.logger.info { "CHANNEL:::::: #{@channel}" }
   end
 
   def cached_channel_statuses
@@ -52,11 +52,11 @@ class Api::V3::Timelines::ChannelsController < Api::BaseController
   end
 
   def next_path
-    api_v2_timelines_for_you_url pagination_params(max_id: pagination_max_id)
+    api_v3_timelines_channels_url pagination_params(max_id: pagination_max_id)
   end
 
   def prev_path
-    api_v2_timelines_for_you_url pagination_params(min_id: pagination_since_id)
+    api_v3_timelines_channels_url pagination_params(min_id: pagination_since_id)
   end
 
   def pagination_max_id
