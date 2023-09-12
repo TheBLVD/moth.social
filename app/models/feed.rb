@@ -30,7 +30,7 @@ class Feed
     Rails.logger.info { "STATUS IDS>>>>> #{unhydrated} \n" }
     statuses = Status.where(id: unhydrated).cache_ids
     Rails.logger.info { "STATUS >>>>> #{statuses.inspect}" }
-    statues
+    statuses
   end
 
   def key
