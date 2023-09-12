@@ -8,7 +8,7 @@ class Api::V3::Timelines::ChannelsController < Api::BaseController
   end
 
   def show
-    @statuses = channel_statuses
+    @statuses = cached_channel_statuses
     Rails.logger.info { "STATUSES>>>>> #{@statues}" }
     render json: @statuses,
            each_serializer: REST::StatusSerializer,
@@ -28,7 +28,7 @@ class Api::V3::Timelines::ChannelsController < Api::BaseController
   end
 
   def channel_statuses
-    channel_feed.get(limit_param(1000),
+    channel_feed.get(120,
                      params[:max_id],
                      params[:since_id],
                      params[:min_id])
