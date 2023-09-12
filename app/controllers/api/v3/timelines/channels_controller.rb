@@ -28,7 +28,7 @@ class Api::V3::Timelines::ChannelsController < Api::BaseController
   end
 
   def channel_statuses
-    channel_feed.get(120,
+    channel_feed.get(DEFAULT_STATUSES_LIST_LIMIT,
                      params[:max_id],
                      params[:since_id],
                      params[:min_id])
