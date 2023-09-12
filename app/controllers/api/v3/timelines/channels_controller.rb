@@ -11,7 +11,8 @@ class Api::V3::Timelines::ChannelsController < Api::BaseController
     @statuses = channel_statuses
     Rails.logger.info { "STATUSES>>>>> #{@statues}" }
     render json: @statuses,
-           each_serializer: REST::StatusSerializer
+           each_serializer: REST::StatusSerializer,
+           relationships: StatusRelationshipsPresenter.new(@statuses, current_user&.account_id)
   end
 
   private
