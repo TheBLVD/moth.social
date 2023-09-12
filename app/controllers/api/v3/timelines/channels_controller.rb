@@ -3,7 +3,7 @@
 class Api::V3::Timelines::ChannelsController < Api::BaseController
   before_action :set_channel
 
-  after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
+  # after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
 
   rescue_from Mammoth::Channels::NotFound do |e|
     render json: { error: e.to_s }, status: 404
@@ -43,31 +43,27 @@ class Api::V3::Timelines::ChannelsController < Api::BaseController
   end
 
   # PAGINATION
-  def insert_pagination_headers
-    set_pagination_headers(next_path, prev_path)
-  end
+  # def insert_pagination_headers
+  #   set_pagination_headers(next_path, prev_path)
+  # end
 
-  def insert_pagination_headers
-    set_pagination_headers(next_path, prev_path)
-  end
+  # def pagination_params(core_params)
+  #   params.slice(:limit).permit(:limit).merge(core_params)
+  # end
 
-  def pagination_params(core_params)
-    params.slice(:limit).permit(:limit).merge(core_params)
-  end
+  # def next_path
+  #   api_v3_timelines_channels_url pagination_params(max_id: pagination_max_id)
+  # end
 
-  def next_path
-    api_v3_timelines_channels_url pagination_params(max_id: pagination_max_id)
-  end
+  # def prev_path
+  #   api_v3_timelines_channels_url pagination_params(min_id: pagination_since_id)
+  # end
 
-  def prev_path
-    api_v3_timelines_channels_url pagination_params(min_id: pagination_since_id)
-  end
+  # def pagination_max_id
+  #   @statuses.last.id
+  # end
 
-  def pagination_max_id
-    @statuses.last.id
-  end
-
-  def pagination_since_id
-    @statuses.first.id
-  end
+  # def pagination_since_id
+  #   @statuses.first.id
+  # end
 end
