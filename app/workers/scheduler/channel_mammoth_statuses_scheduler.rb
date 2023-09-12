@@ -5,7 +5,7 @@ require 'json'
 # V1 Channels updating statuses for unique channel feeds
 class Scheduler::ChannelMammothStatusesScheduler
   GO_BACK = 2 # number of hours back to fetch statuses
-  MINIMUM_ENGAGMENT_ACTIONS = 2
+  MINIMUM_ENGAGMENT_ACTIONS = 0
 
   # Get Statuses for the last n hours from all channels
   # Iterate over and task a worker to fetch the status from original source
