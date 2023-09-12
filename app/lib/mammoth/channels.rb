@@ -8,11 +8,11 @@ module Mammoth
 
     # GET all available channels as a list
     # Channel includes id, title, description, owner
-    def list
-      cache_key = 'channels:list'
+    def list(include_accounts: false)
+      cache_key = include_accounts ? 'channels:list:w_accounts' : 'channels:list'
       Rails.cache.fetch(cache_key, expires_in: 60.seconds) do
         response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
-          "https://#{ACCOUNT_RELAY_HOST}/api/v1/channels"
+          "https://#{ACCOUNT_RELAY_HOST}/api/v1/channels?include_accounts=#{include_accounts}"
         )
         JSON.parse(response.body, symbolize_names: true)
       end
