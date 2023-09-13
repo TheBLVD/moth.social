@@ -5,7 +5,7 @@ class Api::BaseController < ApplicationController
   MAX_LIMIT = 500
   DEFAULT_ACCOUNTS_LIMIT = 40
   # Mammoth Constants
-  DEFAULT_STATUSES_LIST_LIMIT = 40
+  DEFAULT_STATUSES_LIST_LIMIT = 40 # used for lists and channels
   FOR_YOU_OWNER_ACCOUNT = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
   LIST_TITLE = 'For You'
 

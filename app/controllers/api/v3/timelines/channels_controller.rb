@@ -27,6 +27,7 @@ class Api::V3::Timelines::ChannelsController < Api::BaseController
     cache_collection channel_statuses, Status
   end
 
+  # LIST_LIMT set in Api::BaseController
   def channel_statuses
     channel_feed.get(DEFAULT_STATUSES_LIST_LIMIT,
                      params[:max_id],
