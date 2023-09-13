@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class MammothChannelFeed < Feed
-  def initialize(type, id)
-    @type = type.to_sym
-    super(@type, id)
+  def initialize(channel)
+    super(:channel, channel[:id])
   end
 end
