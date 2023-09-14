@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 module Mammoth
   class Channels
-    include Async
-    
     class NotFound < StandardError; end
 
     GO_BACK = 2 # number of hours back to fetch statuses
@@ -13,7 +11,7 @@ module Mammoth
     # Get accounts for each channel
     # process: filter by engagment and add cache set with channel_id key
     def channels_with_statuses
-      mammoth_channels.wait.each do |channel|
+      list(include_accounts: true).each do |channel|
         account_ids = account_ids(channel[:accounts])
         channel[:statuses] = statuses_from_channel_accounts(account_ids)
       end
@@ -37,15 +35,6 @@ module Mammoth
       domains = accounts.map { |a| a[:domain] == ENV['LOCAL_DOMAIN'] ? nil : a[:domain] }
 
       Account.where(username: usernames, domain: domains).pluck(:id)
-    end
-
-    # Fetch all accounts of all channels from AcctRelay
-    # Bc we're getting statuses of particular channel accounts,
-    # the channel or channels the accounts need to be associated to their channels
-    def mammoth_channels
-      Async do
-        list(include_accounts: true)
-      end
     end
 
     # HTTP METHODS
