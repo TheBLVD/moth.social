@@ -3,9 +3,50 @@ module Mammoth
   class Channels
     class NotFound < StandardError; end
 
+    GO_BACK = 2 # number of hours back to fetch statuses
     ACCOUNT_RELAY_AUTH = "Bearer #{ENV.fetch('ACCOUNT_RELAY_KEY')}"
     ACCOUNT_RELAY_HOST = 'acctrelay.moth.social'
 
+    # Get all channels
+    # Get accounts for each channel
+    # process: filter by engagment and add cache set with channel_id key
+    def channels_with_statuses
+      mammoth_channels.wait.each do |channel|
+        account_ids = account_ids(channel[:accounts])
+        channel[:statuses] = statuses_from_channel_accounts(account_ids)
+      end
+    end
+
+    def select_channels_with_statuses(channels)
+      channels.each do |channel|
+        account_ids = account_ids(channel[:accounts])
+        channel[:statuses] = statuses_from_channel_accounts(account_ids)
+      end
+    end
+
+    def statuses_from_channel_accounts(account_ids)
+      Status.where(account_id: account_ids,
+                   created_at: (GO_BACK.hours.ago)..Time.current)
+    end
+
+    # Returns an array of account id's
+    def account_ids(accounts)
+      usernames = accounts.pluck(:username)
+      domains = accounts.map { |a| a[:domain] == ENV['LOCAL_DOMAIN'] ? nil : a[:domain] }
+
+      Account.where(username: usernames, domain: domains).pluck(:id)
+    end
+
+    # Fetch all accounts of all channels from AcctRelay
+    # Bc we're getting statuses of particular channel accounts,
+    # the channel or channels the accounts need to be associated to their channels
+    def mammoth_channels
+      Async do
+        list(include_accounts: true)
+      end
+    end
+
+    # HTTP METHODS
     # GET all available channels as a list
     # Channel includes id, title, description, owner
     def list(include_accounts: false)

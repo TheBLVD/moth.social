@@ -2,6 +2,7 @@
 
 class PersonalForYou
   include Redisable
+  include Async
 
   ACCOUNT_RELAY_AUTH = "Bearer #{ENV.fetch('ACCOUNT_RELAY_KEY')}"
   ACCOUNT_RELAY_HOST = 'acctrelay.moth.social'
@@ -106,6 +107,35 @@ class PersonalForYou
     account_ids = Account.where(username: username_query, domain: domain_query).pluck(:id)
     # Get Statuses for those accounts
     Status.where(account_id: account_ids, updated_at: 12.hours.ago..Time.current).limit(200)
+  end
+
+  # Get subscribed channels with full accounts
+  # Fetch statuses for those accounts
+  def statuses_for_subscribed_channels(user)
+    channels = Mammoth::Channels.new
+    subscribed_channels = subscribed_channels(user)
+    channels.select_channels_with_statuses(subscribed_channels)
+  end
+
+  # Only include channels from user subscribed
+  # Return 'mammoth channels' that has the full accounts array
+  # User's subscribed array only has channel summary
+  def subscribed_channels(user)
+    channels = mammoth_channels.wait
+    subscribed_channels = user[:subscribed_channels]
+
+    subscribed_channels.wait.flat_map do |channel|
+      channels.filter do |c|
+        c[:id] == channel[:id]
+      end
+    end
+  end
+
+  def mammoth_channels
+    channels = Mammoth::Channels.new
+    Async do
+      channels.list(include_accounts: true)
+    end
   end
 
   # Remove personal timeline this will remove all entries in user's personal for you feed
