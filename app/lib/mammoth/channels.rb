@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 module Mammoth
   class Channels
+    include Async
+    
     class NotFound < StandardError; end
 
     GO_BACK = 2 # number of hours back to fetch statuses
