@@ -11,6 +11,7 @@ class Api::BaseController < ApplicationController
 
   include RateLimitHeaders
   include AccessTokenTrackingConcern
+  include Async
 
   skip_before_action :store_current_location
   skip_before_action :require_functional!, unless: :whitelist_mode?
