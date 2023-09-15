@@ -43,6 +43,8 @@ class UpdateForYouWorker
     push_indirect_following_status
     # Direct Follows
     push_following_status
+    # Channel Feed
+    push_channels_status
     # Public Feed
   end
 
@@ -84,6 +86,16 @@ class UpdateForYouWorker
              .each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
   end
 
+  # Channels Subscribed too
+  def push_channels_status
+    user_setting = @user[:for_you_settings]
+    return if user_setting[:from_your_channels].zero?
+
+    @personal.statuses_for_subscribed_channels(@user)
+             .filter_map { |s| engagment_threshold(s, user_setting[:from_your_channels], 'channel') }
+             .each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
+  end
+
   # Check status for User's level of engagment
   # Filter out polls and replys
   def engagment_threshold(wrapped_status, user_engagment_setting, type)
@@ -101,6 +113,8 @@ class UpdateForYouWorker
     case type
     when 'following'
       { 1 => 2, 2 => 4, 3 => 6 }
+    when 'channel'
+      { 1 => 0, 2 => 1, 3 => 2 }
     when 'indirect', 'public'
       { 1 => 1, 2 => 2, 3 => 3 }
     end
