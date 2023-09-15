@@ -108,6 +108,34 @@ class PersonalForYou
     Status.where(account_id: account_ids, updated_at: 12.hours.ago..Time.current).limit(200)
   end
 
+  # Get subscribed channels with full accounts
+  # Fetch statuses for those accounts
+  def statuses_for_subscribed_channels(user)
+    channels = Mammoth::Channels.new
+    subscribed_channels = subscribed_channels(user)
+
+    channels.select_channels_with_statuses(subscribed_channels)
+  end
+
+  # Only include channels from user subscribed
+  # Return channels with full account details array
+  # User's subscribed array from `/me` only has channel summary
+  def subscribed_channels(user)
+    channels = mammoth_channels
+    subscribed_channels = user[:subscribed_channels]
+
+    subscribed_channels.flat_map do |channel|
+      channels.filter do |c|
+        c[:id] == channel[:id]
+      end
+    end
+  end
+
+  def mammoth_channels
+    channels = Mammoth::Channels.new
+    channels.list(include_accounts: true)
+  end
+
   # Remove personal timeline this will remove all entries in user's personal for you feed
   # Current behavior is to default to 'public' mammoth curated feed if user's personal feed is blank 8/16/2023
   def reset_feed(account_id)
