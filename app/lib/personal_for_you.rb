@@ -118,8 +118,8 @@ class PersonalForYou
   end
 
   # Only include channels from user subscribed
-  # Return 'mammoth channels' that has the full accounts array
-  # User's subscribed array only has channel summary
+  # Return channels with full account details array
+  # User's subscribed array from `/me` only has channel summary
   def subscribed_channels(user)
     channels = mammoth_channels
     subscribed_channels = user[:subscribed_channels]

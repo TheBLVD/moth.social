@@ -114,7 +114,7 @@ class UpdateForYouWorker
     when 'following'
       { 1 => 2, 2 => 4, 3 => 6 }
     when 'channel'
-      { 1 => 0, 2 => 1, 3 => 1 }
+      { 1 => 0, 2 => 1, 3 => 2 }
     when 'indirect', 'public'
       { 1 => 1, 2 => 2, 3 => 3 }
     end
