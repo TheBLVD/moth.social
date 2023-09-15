@@ -18,9 +18,9 @@ module Mammoth
     end
 
     def select_channels_with_statuses(channels)
-      channels.each do |channel|
+      channels.flat_map do |channel|
         account_ids = account_ids(channel[:accounts])
-        channel[:statuses] = statuses_from_channel_accounts(account_ids)
+        statuses_from_channel_accounts(account_ids)
       end
     end
 

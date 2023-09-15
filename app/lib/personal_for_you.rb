@@ -113,6 +113,7 @@ class PersonalForYou
   def statuses_for_subscribed_channels(user)
     channels = Mammoth::Channels.new
     subscribed_channels = subscribed_channels(user)
+
     channels.select_channels_with_statuses(subscribed_channels)
   end
 
