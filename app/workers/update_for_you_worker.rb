@@ -106,12 +106,8 @@ class UpdateForYouWorker
     user_setting = @user[:for_you_settings]
     return if user_setting[:curated_by_mammoth].zero?
 
-    owner_account = Account.local.where(username: FOR_YOU_OWNER_ACCOUNT)
-    @list = List.where(account: owner_account, title: LIST_TITLE).first!
-
-    mammoth_curated_list_statuses
-      .filter_map { |s| engagment_threshold(s, user_setting[:curated_by_mammoth], 'mammoth') }
-      .each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
+    mammoth_curated_list_statuses.wait.filter_map { |s| engagment_threshold(s, user_setting[:curated_by_mammoth], 'mammoth') }
+                                 .each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
   end
 
   # Check status for User's level of engagment
@@ -139,7 +135,11 @@ class UpdateForYouWorker
   end
 
   def mammoth_curated_list_statuses
-    list_feed.get(1000)
+    Async do
+      owner_account = Account.local.where(username: FOR_YOU_OWNER_ACCOUNT)
+      @list = List.where(account: owner_account, title: LIST_TITLE).first!
+      list_feed.get(1000)
+    end
   end
 
   def list_feed
