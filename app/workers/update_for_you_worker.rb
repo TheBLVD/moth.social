@@ -7,6 +7,10 @@ class UpdateForYouWorker
 
   sidekiq_options retry: 0, queue: 'pull'
 
+  # Mammoth Curated List(OG List)
+  FOR_YOU_OWNER_ACCOUNT = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
+  LIST_TITLE = 'For You'
+
   #  Fetch Acct Config from AcctRelay
   #  Fetch Following from AcctRelay
   #  Then status of those accounts from following locally
@@ -45,7 +49,8 @@ class UpdateForYouWorker
     push_following_status
     # Channel Feed
     push_channels_status
-    # Public Feed
+    # Mammoth Curated OG Feed
+    push_mammoth_curated_status
   end
 
   def update_user_status(status)
@@ -86,7 +91,7 @@ class UpdateForYouWorker
              .each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
   end
 
-  # Channels Subscribed too
+  # Channels Subscribed
   def push_channels_status
     user_setting = @user[:for_you_settings]
     return if user_setting[:from_your_channels].zero?
@@ -94,6 +99,19 @@ class UpdateForYouWorker
     @personal.statuses_for_subscribed_channels(@user)
              .filter_map { |s| engagment_threshold(s, user_setting[:from_your_channels], 'channel') }
              .each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
+  end
+
+  # Mammoth Curated OG List
+  def push_mammoth_curated_status
+    user_setting = @user[:for_you_settings]
+    return if user_setting[:curated_by_mammoth].zero?
+
+    owner_account = Account.local.where(username: FOR_YOU_OWNER_ACCOUNT)
+    @list = List.where(account: owner_account, title: LIST_TITLE).first!
+
+    mammoth_curated_list_statuses
+      .filter_map { |s| engagment_threshold(s, user_setting[:curated_by_mammoth], 'mammoth') }
+      .each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
   end
 
   # Check status for User's level of engagment
@@ -111,12 +129,20 @@ class UpdateForYouWorker
   # 1,2,3 relates to low,med, high and it's respectice value as it relates to engagment
   def engagment_metrics(type)
     case type
-    when 'following'
+    when 'following', 'mammoth'
       { 1 => 2, 2 => 4, 3 => 6 }
     when 'channel'
       { 1 => 0, 2 => 1, 3 => 2 }
-    when 'indirect', 'public'
+    when 'indirect'
       { 1 => 1, 2 => 2, 3 => 3 }
     end
+  end
+
+  def mammoth_curated_list_statuses
+    list_feed.get(1000)
+  end
+
+  def list_feed
+    ListFeed.new(@list)
   end
 end
