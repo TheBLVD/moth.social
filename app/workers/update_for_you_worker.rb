@@ -106,8 +106,6 @@ class UpdateForYouWorker
     curated_list = Mammoth::CuratedList.new
     list_statuses = curated_list.curated_list_statuses
 
-    Rails.logger.info "THE LIST OF STATUSES>>>>> #{list_statuses.inspect}"
-
     list_statuses.filter_map { |s| engagment_threshold(s, user_setting[:curated_by_mammoth], 'mammoth') }
                  .each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
   end
@@ -134,19 +132,5 @@ class UpdateForYouWorker
     when 'indirect'
       { 1 => 1, 2 => 2, 3 => 3 }
     end
-  end
-
-  def mammoth_curated_list_statuses
-    Rails.logger.info "List ForYou>>>>>>>>>>> \n NOW"
-    username = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
-    list_title = 'For You'
-    owner_account = Account.local.where(username: username)
-    @list = List.where(account: owner_account, title: list_title).first!
-    Rails.logger.info "List ForYou>>>>>>>>>>> \n #{@list.inspect}"
-    list_feed.get(1000)
-  end
-
-  def list_feed
-    ListFeed.new(@list)
   end
 end

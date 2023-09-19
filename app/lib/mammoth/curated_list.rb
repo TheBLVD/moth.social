@@ -13,7 +13,6 @@ module Mammoth
     end
 
     def mammoth_curated_accounts
-      Rails.logger.info "List ForYou>>>>>>>>>>> \n NOW"
       owner_account = Account.local.where(username: FOR_YOU_OWNER_ACCOUNT)
       @list = List.where(account: owner_account, title: LIST_TITLE).first!
       @list.list_accounts.pluck(:account_id)
