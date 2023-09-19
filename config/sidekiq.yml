@@ -79,5 +79,5 @@
     class: Scheduler::ForYouStatusesScheduler
   mammoth_for_you_statuses_scheduler:
     queue: scheduler
-    cron: '<%= ENV.fetch('MAMMOTH_FOR_YOU_SCHEDULER', 5) %>''
+    cron: <%= ENV.fetch('MAMMOTH_FOR_YOU_SCHEDULER', 5) %>
     class: Scheduler::ForYouMammothScheduler
