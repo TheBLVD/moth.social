@@ -105,9 +105,14 @@ class UpdateForYouWorker
   def push_mammoth_curated_status
     user_setting = @user[:for_you_settings]
     return if user_setting[:curated_by_mammoth].zero?
+    begin
+      list_statuses = mammoth_curated_list_statuses.wait # Re-raises above exception.
+    rescue StandardError
+      Rails.logger.error 'Failed to fetch list'
+    end
 
-    mammoth_curated_list_statuses.wait.filter_map { |s| engagment_threshold(s, user_setting[:curated_by_mammoth], 'mammoth') }
-                                 .each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
+    list_statuses.filter_map { |s| engagment_threshold(s, user_setting[:curated_by_mammoth], 'mammoth') }
+                 .each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
   end
 
   # Check status for User's level of engagment
@@ -137,8 +142,9 @@ class UpdateForYouWorker
   def mammoth_curated_list_statuses
     Async do
       owner_account = Account.local.where(username: FOR_YOU_OWNER_ACCOUNT)
-      @list = List.where(account: owner_account, title: LIST_TITLE).first!
+      @list = ApplicationRecord::List.where(account: owner_account, title: LIST_TITLE).first!
       list_feed.get(1000)
+      raise 'unable to fetch list'
     end
   end
 
