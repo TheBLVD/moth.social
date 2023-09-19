@@ -7,8 +7,6 @@ class UpdateForYouWorker
   sidekiq_options retry: 0, queue: 'pull'
 
   # Mammoth Curated List(OG List)
-  FOR_YOU_OWNER_ACCOUNT = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
-  LIST_TITLE = 'For You'
 
   #  Fetch Acct Config from AcctRelay
   #  Fetch Following from AcctRelay
@@ -105,7 +103,8 @@ class UpdateForYouWorker
     user_setting = @user[:for_you_settings]
     return if user_setting[:curated_by_mammoth].zero?
 
-    list_statuses = mammoth_curated_list_statuses # Re-raises above exception.
+    curated_list = Mammoth::CuratedList.new
+    list_statuses = curated_list.curated_list_statuses
 
     Rails.logger.info "THE LIST OF STATUSES>>>>> #{list_statuses.inspect}"
 
