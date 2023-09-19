@@ -2,7 +2,6 @@
 
 class UpdateForYouWorker
   include Redisable
-  include Async
   include Sidekiq::Worker
 
   sidekiq_options retry: 0, queue: 'pull'
@@ -105,11 +104,10 @@ class UpdateForYouWorker
   def push_mammoth_curated_status
     user_setting = @user[:for_you_settings]
     return if user_setting[:curated_by_mammoth].zero?
-    begin
-      list_statuses = mammoth_curated_list_statuses # Re-raises above exception.
-    rescue RecordNotFound
-      Rails.logger.error 'Failed to fetch list'
-    end
+
+    list_statuses = mammoth_curated_list_statuses # Re-raises above exception.
+
+    Rails.logger.info "THE LIST OF STATUSES>>>>> #{list_statuses.inspect}"
 
     list_statuses.filter_map { |s| engagment_threshold(s, user_setting[:curated_by_mammoth], 'mammoth') }
                  .each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
@@ -140,11 +138,12 @@ class UpdateForYouWorker
   end
 
   def mammoth_curated_list_statuses
+    Rails.logger.info "List ForYou>>>>>>>>>>> \n NOW"
     username = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
     list_title = 'For You'
     owner_account = Account.local.where(username: username)
     @list = List.where(account: owner_account, title: list_title).first!
-    Rails.info "List ForYou #{@list.inspect}"
+    Rails.logger.info "List ForYou>>>>>>>>>>> \n #{@list.inspect}"
     list_feed.get(1000)
   end
 
