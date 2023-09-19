@@ -107,7 +107,7 @@ class UpdateForYouWorker
     return if user_setting[:curated_by_mammoth].zero?
     begin
       list_statuses = mammoth_curated_list_statuses.wait # Re-raises above exception.
-    rescue StandardError
+    rescue RecordNotFound
       Rails.logger.error 'Failed to fetch list'
     end
 
@@ -142,9 +142,9 @@ class UpdateForYouWorker
   def mammoth_curated_list_statuses
     Async do
       owner_account = Account.local.where(username: FOR_YOU_OWNER_ACCOUNT)
-      @list = ApplicationRecord::List.where(account: owner_account, title: LIST_TITLE).first!
+      @list = List.where(account: owner_account, title: LIST_TITLE).first!
+      Rails.info "List ForYou #{@list.inspect}"
       list_feed.get(1000)
-      raise 'unable to fetch list'
     end
   end
 
