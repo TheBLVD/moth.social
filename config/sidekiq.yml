@@ -67,11 +67,11 @@
     class: Scheduler::StatusStatUpdateScheduler
   channel_status_stat_update_scheduler:
     queue: scheduler
-    interval: '2m'
+    interval: '10m'
     class: Scheduler::ChannelStatusStatUpdateScheduler
   channel_statuses_scheduler:
     queue: scheduler
-    interval: '2m'
+    interval: '10m'
     class: Scheduler::ChannelMammothStatusesScheduler
   for_you_statuses_scheduler:
     queue: scheduler
