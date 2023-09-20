@@ -83,5 +83,5 @@
     class: Scheduler::ForYouStatusesScheduler
   mammoth_for_you_statuses_scheduler:
     queue: scheduler
-    interval: '10m'
+    interval: '5m'
     class: Scheduler::ForYouMammothScheduler
