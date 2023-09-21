@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 describe InstancePresenter do
-  let(:instance_presenter) { InstancePresenter.new }
+  let(:instance_presenter) { described_class.new }
 
   describe '#description' do
     around do |example|
@@ -88,8 +88,28 @@ describe InstancePresenter do
   end
 
   describe '#source_url' do
-    it 'returns "https://github.com/TheBLVD/moth.social"' do
-      expect(instance_presenter.source_url).to eq('https://github.com/TheBLVD/moth.social')
+    context 'with the GITHUB_REPOSITORY env variable set' do
+      around do |example|
+        ClimateControl.modify GITHUB_REPOSITORY: 'other/repo' do
+          example.run
+        end
+      end
+
+      it 'uses the env variable to build a repo URL' do
+        expect(instance_presenter.source_url).to eq('https://github.com/other/repo')
+      end
+    end
+
+    context 'without the GITHUB_REPOSITORY env variable set' do
+      around do |example|
+        ClimateControl.modify GITHUB_REPOSITORY: nil do
+          example.run
+        end
+      end
+
+      it 'defaults to the core mastodon repo URL' do
+        expect(instance_presenter.source_url).to eq('https://github.com/mastodon/mastodon')
+      end
     end
   end
 

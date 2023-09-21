@@ -49,7 +49,7 @@ class RateLimiter
     {
       'X-RateLimit-Limit' => @limit.to_s,
       'X-RateLimit-Remaining' => (@limit - (redis.get(key) || 0).to_i).to_s,
-      'X-RateLimit-Reset' => (now + (@period - now.to_i % @period)).iso8601(6),
+      'X-RateLimit-Reset' => (now + (@period - (now.to_i % @period))).iso8601(6),
     }
   end
   # rubocop:enable Lint/AmbiguousOperatorPrecedence
