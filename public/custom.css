@@ -505,7 +505,8 @@
   background-color: var(--accent);
 }
 
-.react-toggle--checked:is(:hover,:focus-within):not(.react-toggle--disabled) .react-toggle-track {
+.react-toggle--checked:is(:hover, :focus-within):not(.react-toggle--disabled)
+  .react-toggle-track {
   background-color: var(--accent) !important;
 }
 
@@ -553,7 +554,7 @@
 }
 
 .account__header__bio .account__header__fields dl {
-  border-bootom-color: var(--light-dark);
+  border-bottom-color: var(--light-dark);
 }
 
 .account__header__tabs {
@@ -689,7 +690,7 @@ button.icon-button i.fa-retweet:hover {
   border-color: var(--accent);
 }
 
-.poll__option input[type="text"]:focus {
+.poll__option input[type='text']:focus {
   border-color: var(--accent);
 }
 
@@ -767,10 +768,10 @@ button.icon-button i.fa-retweet:hover {
   color: var(--light);
 }
 
-.simple_form input[type="text"]:active,
-.simple_form input[type="text"]:focus,
-.simple_form input[type="password"]:active,
-.simple_form input[type="password"]:focus,
+.simple_form input[type='text']:active,
+.simple_form input[type='text']:focus,
+.simple_form input[type='password']:active,
+.simple_form input[type='password']:focus,
 .simple_form textarea:active,
 .simple_form textarea:focus {
   border-color: var(--accent);
@@ -835,7 +836,7 @@ button.icon-button i.fa-retweet:hover {
   background-size: 100% auto;
 }
 
-@media screen and (max-width: 1174px) {
+@media screen and (width <= 1174px) {
   .layout-single-column .ui__header__logo svg {
     display: none;
   }
