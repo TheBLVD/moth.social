@@ -43,6 +43,10 @@ ignore_missing:
   - 'application_mailer.salutation'
   - 'errors.500'
   - 'auth.providers.*'
+  # Mammoth
+  - 'footer.trending_now'
+  - 'auth.change_password'
+  - 'html_validator.invalid_markup'
 
 ignore_unused:
   - 'activemodel.errors.*'
