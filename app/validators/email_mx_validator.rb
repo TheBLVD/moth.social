@@ -10,8 +10,6 @@ class EmailMxValidator < ActiveModel::Validator
 
     if domain.blank? || domain.include?('..')
       user.errors.add(:email, :invalid)
-    elsif domain.include?('..')
-      user.errors.add(:email, :invalid)
     elsif !on_allowlist?(domain)
       resolved_ips, resolved_domains = resolve_mx(domain)
 

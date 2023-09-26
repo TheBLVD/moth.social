@@ -823,7 +823,7 @@ GEM
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
       semantic_range (>= 2.3.0)
-    websocket (1.2.9)
+    websocket (1.2.10)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -893,6 +893,7 @@ DEPENDENCIES
   json-ld
   json-ld-preloaded (~> 3.2)
   json-schema (~> 4.0)
+  jwt
   kaminari (~> 1.2)
   kt-paperclip (~> 7.2)
   letter_opener (~> 1.8)

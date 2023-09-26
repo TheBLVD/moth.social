@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Layout/LineLength
 class Api::V1::AccountsController < Api::BaseController
   before_action -> { authorize_if_got_token! :read, :'read:accounts' }, except: [:create, :follow, :unfollow, :remove_from_followers, :block, :unblock, :mute, :unmute]
   before_action -> { doorkeeper_authorize! :follow, :write, :'write:follows' }, only: [:follow, :unfollow, :remove_from_followers]
@@ -39,9 +38,7 @@ class Api::V1::AccountsController < Api::BaseController
     follow  = FollowService.new.call(current_user.account, @account, reblogs: params.key?(:reblogs) ? truthy_param?(:reblogs) : nil, notify: params.key?(:notify) ? truthy_param?(:notify) : nil, languages: params.key?(:languages) ? params[:languages] : nil, with_rate_limit: true)
     options = @account.locked? || current_user.account.silenced? ? {} : { following_map: { @account.id => { reblogs: follow.show_reblogs?, notify: follow.notify?, languages: follow.languages } }, requested_map: { @account.id => false } }
 
-    if params[:rebuild]
-      RegenerationWorker.perform_async(current_user.account.id)
-    end
+    RegenerationWorker.perform_async(current_user.account.id) if params[:rebuild]
 
     render json: @account, serializer: REST::RelationshipSerializer, relationships: relationships(**options)
   end
@@ -59,9 +56,7 @@ class Api::V1::AccountsController < Api::BaseController
   def unfollow
     UnfollowService.new.call(current_user.account, @account)
 
-    if params[:rebuild]
-      RegenerationWorker.perform_async(current_user.account.id)
-    end
+    RegenerationWorker.perform_async(current_user.account.id) if params[:rebuild]
 
     render json: @account, serializer: REST::RelationshipSerializer, relationships: relationships
   end
@@ -115,4 +110,3 @@ class Api::V1::AccountsController < Api::BaseController
     ENV['OMNIAUTH_ONLY'] == 'true'
   end
 end
-# rubocop:enable Layout/LineLength

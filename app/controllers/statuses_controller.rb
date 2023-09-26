@@ -59,7 +59,7 @@ class StatusesController < ApplicationController
 
   def set_link_headers
     response.headers['Link'] =
-LinkHeader.new([[ActivityPub::TagManager.instance.uri_for(@status), [%w(rel alternate), %w(type application/activity+json)]]])
+      LinkHeader.new([[ActivityPub::TagManager.instance.uri_for(@status), [%w(rel alternate), %w(type application/activity+json)]]])
   end
 
   def set_status

@@ -29,10 +29,10 @@ class Api::V2::SearchController < Api::BaseController
                     status: 401
     end
 
-    if truthy_param?(:resolve)
-      render json: { error: 'Search queries that resolve remote resources are not supported without authentication' },
-             status: 401
-    end
+    return unless truthy_param?(:resolve)
+
+    render json: { error: 'Search queries that resolve remote resources are not supported without authentication' },
+           status: 401
   end
 
   def search_results

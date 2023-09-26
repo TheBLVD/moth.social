@@ -4,7 +4,7 @@
 # Add accounts per user that it should fetch and relay back to Moth instance
 # This requires an auth Token header to make valid http request to Account Relay Server
 class AccountRelayService < BaseService
-  ACCOUNT_RELAY_AUTH = "Bearer #{ENV.fetch('ACCOUNT_RELAY_KEY')}"
+  ACCOUNT_RELAY_AUTH = "Bearer #{ENV.fetch('ACCOUNT_RELAY_KEY')}".freeze
   ACCOUNT_RELAY_HOST = 'acctrelay.moth.social'
 
   # @param [String] handle - Must be in the format `@username@domain`
@@ -15,7 +15,6 @@ class AccountRelayService < BaseService
   def call(handle, accounts)
     @handle = handle
     @accounts = accounts
-    cache_key = "account_relay_list:#{@handle}"
 
     post_to_acct_relay
   end
@@ -23,7 +22,7 @@ class AccountRelayService < BaseService
   private
 
   def post_to_acct_relay
-    response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).post(
+    HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).post(
       "https://#{ACCOUNT_RELAY_HOST}/api/v1/accounts", json: acct_relay_body
     )
   end
@@ -36,7 +35,7 @@ class AccountRelayService < BaseService
   def acct_relay_body
     {
       owner: @handle,
-    accounts: @accounts,
+      accounts: @accounts,
     }
   end
 end

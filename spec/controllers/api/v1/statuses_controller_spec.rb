@@ -269,4 +269,3 @@ RSpec.describe Api::V1::StatusesController do
     end
   end
 end
-# rubocop:enable Layout/LineLength

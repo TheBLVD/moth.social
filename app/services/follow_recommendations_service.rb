@@ -131,13 +131,14 @@ class FollowRecommendationsService < BaseService
       next_page = get_next_page(response['Link'])
     end
     data
-  rescue StandardError => e
+  rescue => e
     Rails.logger.error("Cannot find handle #{handle}: #{e}")
     []
   end
 
   def get_next_page(link_header)
     return nil unless link_header
+
     # Example header:
     # Link: <https://mastodon.example/api/v1/accounts/1/follows?limit=2&max_id=7628164>; rel="next", <https://mastodon.example/api/v1/accounts/1/follows?limit=2&since_id=7628165>; rel="prev"
     match = link_header.match(/<(.+)>; rel="next"/)
@@ -157,18 +158,16 @@ class FollowRecommendationsService < BaseService
     username, domain = username_and_domain(handle)
     scheme = domain.include?('localhost') ? 'http' : 'https'
     response = fetch("#{scheme}://#{domain}/api/v1/accounts/lookup?acct=#{username}")
-    if response.code.to_i != 200
-      raise StandardError, 'HTTP request failed'
-    end
+    raise StandardError, 'HTTP request failed' if response.code.to_i != 200
+
     id = JSON.parse(response.body).symbolize_keys[:id]
     [id, domain]
   end
 
   def username_and_domain(handle)
     match = handle.match(/^(.+)@(.+)$/)
-    if !match || match.length < 2
-      raise StandardError, "Incorrect handle: #{handle}"
-    end
+    raise StandardError, "Incorrect handle: #{handle}" if !match || match.length < 2
+
     domain = match[2]
     username = match[1]
     [username, domain]

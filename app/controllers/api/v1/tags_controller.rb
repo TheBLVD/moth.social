@@ -14,9 +14,7 @@ class Api::V1::TagsController < Api::BaseController
 
   def follow
     TagFollow.create_with(rate_limit: true).find_or_create_by!(tag: @tag, account: current_account)
-    if params[:rebuild]
-      RegenerationWorker.perform_async(current_account.id)
-    end
+    RegenerationWorker.perform_async(current_account.id) if params[:rebuild]
     render json: @tag, serializer: REST::TagSerializer
   end
 

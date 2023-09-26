@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ddtrace'
 
 if Rails.env.production? || Rails.env.staging?
@@ -13,6 +15,6 @@ if Rails.env.production? || Rails.env.staging?
     c.tracing.instrument :faraday, service_name: 'moth.social'
     c.tracing.instrument :active_support, service_name: 'moth.social'
     c.tracing.instrument :http, service_name: 'moth.social'
-    c.tracing.instrument :rack, service_name: 'moth.social', headers: {response: ['Content-Type', 'X-Request-ID', 'X-RateLimit-Remaining']}
+    c.tracing.instrument :rack, service_name: 'moth.social', headers: { response: %w(Content-Type X-Request-ID X-RateLimit-Remaining) }
   end
 end

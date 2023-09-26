@@ -57,13 +57,25 @@ RSpec.describe FeedManager do
       it 'returns true for post from account who blocked me' do
         status = Fabricate(:status, text: 'Hello, World', account: alice)
         alice.block!(bob)
-        expect(FeedManager.instance.filter?(:home, status, bob)).to be true
+        expect(described_class.instance.filter?(:home, status, bob)).to be true
       end
 
       it 'returns true for post from blocked account' do
         status = Fabricate(:status, text: 'Hello, World', account: alice)
         bob.block!(alice)
-        expect(FeedManager.instance.filter?(:home, status, bob)).to be true
+        expect(described_class.instance.filter?(:home, status, bob)).to be true
+      end
+
+      it 'returns true for post from account who blocked me' do
+        status = Fabricate(:status, text: 'Hello, World', account: alice)
+        alice.block!(bob)
+        expect(described_class.instance.filter?(:home, status, bob)).to be true
+      end
+
+      it 'returns true for post from blocked account' do
+        status = Fabricate(:status, text: 'Hello, World', account: alice)
+        bob.block!(alice)
+        expect(described_class.instance.filter?(:home, status, bob)).to be true
       end
 
       it 'returns true for reblog by followee of blocked account' do
@@ -580,14 +592,37 @@ RSpec.describe FeedManager do
 
     it 'adds statuses from followed accounts' do
       account.follow!(followed_account)
-      FeedManager.instance.populate_home(account)
-      expect(HomeFeed.new(account).get(FeedManager::MAX_ITEMS).to_a.count).to eq 3
+      described_class.instance.populate_home(account)
+      expect(HomeFeed.new(account).get(FeedManager::MAX_ITEMS).to_a.size).to eq 3
     end
 
     it 'adds statuses from followed tags' do
       Fabricate(:tag_follow, account: account, tag: tag)
-      FeedManager.instance.populate_home(account)
-      expect(HomeFeed.new(account).get(FeedManager::MAX_ITEMS).to_a.count).to eq 1
+      described_class.instance.populate_home(account)
+      expect(HomeFeed.new(account).get(FeedManager::MAX_ITEMS).to_a.size).to eq 1
+    end
+  end
+
+  describe '#populate_home' do
+    let!(:account)          { Fabricate(:account) }
+    let!(:followed_account) { Fabricate(:account) }
+    let!(:status_1)         { Fabricate(:status, account: followed_account) }
+    let!(:status_2)         { Fabricate(:status, account: followed_account) }
+    let!(:status_3)         { Fabricate(:status, account: followed_account) }
+
+    let!(:tag) { Fabricate(:tag) }
+    let!(:status_4) { Fabricate(:status, account: Fabricate(:account), tags: [tag]) }
+
+    it 'adds statuses from followed accounts' do
+      account.follow!(followed_account)
+      described_class.instance.populate_home(account)
+      expect(HomeFeed.new(account).get(FeedManager::MAX_ITEMS).to_a.size).to eq 3
+    end
+
+    it 'adds statuses from followed tags' do
+      Fabricate(:tag_follow, account: account, tag: tag)
+      described_class.instance.populate_home(account)
+      expect(HomeFeed.new(account).get(FeedManager::MAX_ITEMS).to_a.size).to eq 1
     end
   end
 end

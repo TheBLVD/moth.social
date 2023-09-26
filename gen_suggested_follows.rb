@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'csv'
 require 'yaml'
 
-csv = CSV.new(STDIN, headers: true)
+csv = CSV.new($stdin, headers: true)
 
 categories = csv.group_by { |row| row['Main Category'] }.map do |category, accounts|
   {

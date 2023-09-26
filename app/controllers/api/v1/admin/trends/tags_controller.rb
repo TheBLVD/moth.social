@@ -32,14 +32,6 @@ class Api::V1::Admin::Trends::TagsController < Api::V1::Trends::TagsController
     render json: tag, serializer: REST::Admin::TagSerializer
   end
 
-  def index
-    if current_user&.can?(:manage_taxonomies)
-      render json: @tags, each_serializer: REST::Admin::TagSerializer
-    else
-      super
-    end
-  end
-
   private
 
   def enabled?

@@ -79,6 +79,7 @@ module SignatureVerification
     return @signed_request_actor if defined?(@signed_request_actor)
 
     raise SignatureVerificationError, 'Request not signed' unless signed_request?
+
     if missing_required_signature_parameters?
       raise SignatureVerificationError,
             'Incompatible request signature. keyId and signature are required'
@@ -160,10 +161,10 @@ module SignatureVerification
       raise SignatureVerificationError,
             'Mastodon requires the Host header to be signed when doing a GET request'
     end
-    if request.post? && !signed_headers.include?('digest')
-      raise SignatureVerificationError,
-            'Mastodon requires the Digest header to be signed when doing a POST request'
-    end
+    return unless request.post? && !signed_headers.include?('digest')
+
+    raise SignatureVerificationError,
+          'Mastodon requires the Digest header to be signed when doing a POST request'
   end
 
   def verify_body_digest!
@@ -207,6 +208,7 @@ module SignatureVerification
         "#{Request::REQUEST_TARGET}: #{request.method.downcase} #{request.path}"
       when '(created)'
         raise SignatureVerificationError, 'Invalid pseudo-header (created) for rsa-sha256' unless signature_algorithm == 'hs2019'
+
         if signature_params['created'].blank?
           raise SignatureVerificationError,
                 'Pseudo-header (created) used but corresponding argument missing'
@@ -215,6 +217,7 @@ module SignatureVerification
         "(created): #{signature_params['created']}"
       when '(expires)'
         raise SignatureVerificationError, 'Invalid pseudo-header (expires) for rsa-sha256' unless signature_algorithm == 'hs2019'
+
         if signature_params['expires'].blank?
           raise SignatureVerificationError,
                 'Pseudo-header (expires) used but corresponding argument missing'

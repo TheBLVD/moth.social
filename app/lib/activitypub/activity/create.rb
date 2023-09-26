@@ -98,10 +98,10 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
     LinkCrawlWorker.perform_in(rand(1..59).seconds, @status.id)
 
     # Distribute into home and list feeds and notify mentioned accounts
-    if @options[:override_timestamps] || @status.within_realtime_window?
-      ::DistributionWorker.perform_async(@status.id,
-                                         { 'silenced_account_ids' => @silenced_account_ids })
-    end
+    return unless @options[:override_timestamps] || @status.within_realtime_window?
+
+    ::DistributionWorker.perform_async(@status.id,
+                                       { 'silenced_account_ids' => @silenced_account_ids })
   end
 
   def find_existing_status
@@ -324,10 +324,10 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
     end
 
     increment_voters_count! unless already_voted
-    unless replied_to_status.preloadable_poll.hide_totals?
-      ActivityPub::DistributePollUpdateWorker.perform_in(3.minutes,
-                                                         replied_to_status.id)
-    end
+    return if replied_to_status.preloadable_poll.hide_totals?
+
+    ActivityPub::DistributePollUpdateWorker.perform_in(3.minutes,
+                                                       replied_to_status.id)
   end
 
   def resolve_thread(status)
@@ -349,6 +349,7 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
 
   def conversation_from_uri(uri)
     return nil if uri.nil?
+
     if OStatus::TagManager.instance.local_id?(uri)
       return Conversation.find_by(id: OStatus::TagManager.instance.unique_tag_to_local_id(uri,
                                                                                           'Conversation'))

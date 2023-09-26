@@ -37,9 +37,7 @@ class ForYouFeedWorker
       add_to_personal_feed(@type, @account_id, @status)
 
     when :foryou
-      if filter_from_feed?(@status)
-        add_to_feed(@type, @list_id, @status)
-      end
+      add_to_feed(@type, @list_id, @status) if filter_from_feed?(@status)
     end
   end
 

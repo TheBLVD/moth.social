@@ -30,7 +30,7 @@ RSpec.describe Api::V2::OnboardingFollowRecommendationsController do
       fields: [],
     }
     get :index
-    expect(response).to have_http_status(:ok)
+    expect(response).to have_http_status(200)
     expected_body = [
       {
         name: 'Tech',

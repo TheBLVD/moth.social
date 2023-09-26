@@ -26,12 +26,13 @@ namespace :db do
   desc 'generate pg backups'
   task backup: :environment do
     return unless Rails.env.production?
+
     db = ActiveRecord::Base.connection_db_config.database
     host = ActiveRecord::Base.connection_db_config.host
     username = ActiveRecord::Base.connection_db_config.configuration_hash[:username] || '""'
     password = ActiveRecord::Base.connection_db_config.configuration_hash[:password]
 
-    backup_dir = "#{Rails.root}/backups"
+    backup_dir = Rails.root.join('backups').to_s
     sh "mkdir -p #{backup_dir}"
     file_name = "#{backup_dir}/#{Time.now.utc.strftime('%Y%m%d%H%M%S')}_#{db}.dump"
     sh "PGPASSWORD=#{password} pg_dump -U #{username} -h #{host} -d #{db} -f #{file_name}"

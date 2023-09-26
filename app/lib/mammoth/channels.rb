@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 module Mammoth
   class Channels
     class NotFound < StandardError; end
 
     GO_BACK = 24 # number of hours back to fetch statuses
-    ACCOUNT_RELAY_AUTH = "Bearer #{ENV.fetch('ACCOUNT_RELAY_KEY')}"
+    ACCOUNT_RELAY_AUTH = "Bearer #{ENV.fetch('ACCOUNT_RELAY_KEY')}".freeze
     ACCOUNT_RELAY_HOST = 'acctrelay.moth.social'
 
     # Get all channels
@@ -78,6 +79,7 @@ module Mammoth
         "https://#{ACCOUNT_RELAY_HOST}/api/v1/channels/#{id}/subscribe?acct=#{acct}"
       )
       raise NotFound, 'channel not found' unless response.code == 200
+
       PersonalForYou.new.clear_user_cache(acct)
 
       JSON.parse(response.body, symbolize_names: true)
@@ -89,6 +91,7 @@ module Mammoth
         "https://#{ACCOUNT_RELAY_HOST}/api/v1/channels/#{id}/unsubscribe?acct=#{acct}"
       )
       raise NotFound, 'channel not found' unless response.code == 200
+
       PersonalForYou.new.clear_user_cache(acct)
 
       JSON.parse(response.body, symbolize_names: true)

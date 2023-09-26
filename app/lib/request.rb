@@ -229,6 +229,7 @@ class Request
 
       contents = truncated_body(limit)
       raise Mastodon::LengthValidationError if contents.bytesize > limit
+
       contents
     end
   end
@@ -299,7 +300,7 @@ class Request
               sock.connect_nonblock(addr_by_socket[sock])
             rescue Errno::EISCONN
               # Do nothing
-            rescue StandardError => e
+            rescue => e
               sock.close
               outer_e = e
               next

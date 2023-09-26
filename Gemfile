@@ -212,3 +212,6 @@ gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
 # Async
 gem 'async', '~> 1.31'
 gem 'async-http'
+
+# Use Json Web Token (JWT) for token based authentication Mammoth
+gem 'jwt'

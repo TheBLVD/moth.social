@@ -27,7 +27,7 @@ class InlineRenderer
     end
 
     serializable_resource = ActiveModelSerializers::SerializableResource.new(@object, serializer: serializer, scope: current_user,
-scope_name: :current_user)
+                                                                                      scope_name: :current_user)
     serializable_resource.as_json
   end
 

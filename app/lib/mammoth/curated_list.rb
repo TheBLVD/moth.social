@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Mammoth
   class CuratedList
     class NotFound < StandardError; end
