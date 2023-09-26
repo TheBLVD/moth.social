@@ -1,20 +1,20 @@
 name: Bundler Audit
-# on:
-#   push:
-#     branches-ignore:
-#       - 'dependabot/**'
-#     paths:
-#       - 'Gemfile*'
-#       - '.ruby-version'
-#       - '.bundler-audit.yml'
-#       - '.github/workflows/bundler-audit.yml'
+on:
+  #   push:
+  #     branches-ignore:
+  #       - 'dependabot/**'
+  #     paths:
+  #       - 'Gemfile*'
+  #       - '.ruby-version'
+  #       - '.bundler-audit.yml'
+  #       - '.github/workflows/bundler-audit.yml'
 
-#   pull_request:
-#     paths:
-#       - 'Gemfile*'
-#       - '.ruby-version'
-#       - '.bundler-audit.yml'
-#       - '.github/workflows/bundler-audit.yml'
+  #   pull_request:
+  #     paths:
+  #       - 'Gemfile*'
+  #       - '.ruby-version'
+  #       - '.bundler-audit.yml'
+  #       - '.github/workflows/bundler-audit.yml'
 
   schedule:
     - cron: '0 5 * * 1'
