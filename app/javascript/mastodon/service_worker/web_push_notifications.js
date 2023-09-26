@@ -1,7 +1,6 @@
 import { IntlMessageFormat } from 'intl-messageformat';
 
 import { unescape } from 'lodash';
-import locales from './web_push_locales';
 
 import locales from './web_push_locales';
 

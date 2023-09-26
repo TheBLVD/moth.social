@@ -9,6 +9,7 @@ import ImmutablePureComponent from 'react-immutable-pure-component';
 import { connect } from 'react-redux';
 
 import { debounce } from 'lodash';
+
 import { fetchFollowRequests, expandFollowRequests } from '../../actions/accounts';
 import ColumnBackButtonSlim from '../../components/column_back_button_slim';
 import ScrollableList from '../../components/scrollable_list';
