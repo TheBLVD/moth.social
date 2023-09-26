@@ -145,6 +145,20 @@ class Api::BaseController < ApplicationController
     end
   end
 
+  # Mammoth client encoded JWT is required as Authorized Bearer header
+  def require_mammoth!
+    header = request.headers['Authorization']
+    header = header.split.last if header
+    begin
+      @decoded = JsonToken.decode(header)
+      # @current_user = User.find(@decoded[:acct])
+    rescue ActiveRecord::RecordNotFound => e
+      render json: { errors: e.message }, status: 404
+    rescue JWT::DecodeError => e
+      render json: { errors: e.message }, status: 422
+    end
+  end
+
   def render_empty
     render json: {}, status: 200
   end
