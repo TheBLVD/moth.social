@@ -118,8 +118,6 @@ jobs:
       fail-fast: false
       matrix:
         ruby-version:
-          - '3.0'
-          - '3.1'
           - '.ruby-version'
         ci_job:
           - 1
@@ -197,8 +195,6 @@ jobs:
       fail-fast: false
       matrix:
         ruby-version:
-          - '3.0'
-          - '3.1'
           - '.ruby-version'
 
     steps:
@@ -310,8 +306,6 @@ jobs:
       fail-fast: false
       matrix:
         ruby-version:
-          - '3.0'
-          - '3.1'
           - '.ruby-version'
 
     steps:
@@ -363,3 +357,19 @@ jobs:
         with:
           name: test-search-screenshots
           path: tmp/screenshots/
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          # ruby-version: 3.0.6 not needed with a .ruby-version file
+          bundler-cache: true
+      - name: Deploy to Production
+        uses: miloserdow/capistrano-deploy@master
+        with:
+          target: production
+          deploy_key: ${{ secrets.DEPLOY_ENC_KEY }}
