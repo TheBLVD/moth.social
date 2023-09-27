@@ -1,10 +1,6 @@
 name: Ruby Testing
 
 on:
-  push:
-    branches-ignore:
-      - 'dependabot/**'
-      - 'renovate/**'
   pull_request:
 
 env:
@@ -357,23 +353,3 @@ jobs:
         with:
           name: test-search-screenshots
           path: tmp/screenshots/
-
-  deploy:
-    needs:
-      - test
-      - test-e2e
-      - test-search
-
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-      - name: Deploy to Production
-        uses: miloserdow/capistrano-deploy@master
-        with:
-          target: production
-          deploy_key: ${{ secrets.DEPLOY_ENC_KEY }}
