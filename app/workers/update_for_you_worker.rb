@@ -89,11 +89,12 @@ class UpdateForYouWorker
   end
 
   # Channels Subscribed
+  # Include ONLY enabled_channels
   def push_channels_status
     user_setting = @user[:for_you_settings]
     return if user_setting[:from_your_channels].zero?
 
-    @personal.statuses_for_subscribed_channels(@user)
+    @personal.statuses_for_enabled_channels(@user)
              .filter_map { |s| engagment_threshold(s, user_setting[:from_your_channels], 'channel') }
              .each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
   end
