@@ -4,7 +4,7 @@ class UpdateForYouWorker
   include Redisable
   include Sidekiq::Worker
 
-  sidekiq_options retry: 0, queue: 'pull'
+  sidekiq_options retry: 0, queue: 'mammoth'
 
   # Mammoth Curated List(OG List)
 
