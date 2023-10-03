@@ -108,13 +108,26 @@ class PersonalForYou
     Status.where(account_id: account_ids, updated_at: 12.hours.ago..Time.current).limit(200)
   end
 
-  # Get subscribed channels with full accounts
+  # Get enabled channels with full accounts
   # Fetch statuses for those accounts
-  def statuses_for_subscribed_channels(user)
+  def statuses_for_enabled_channels(user)
     channels = Mammoth::Channels.new
-    subscribed_channels = subscribed_channels(user)
+    enabled_channels = enabled_channels(user)
 
-    channels.select_channels_with_statuses(subscribed_channels)
+    channels.select_channels_with_statuses(enabled_channels)
+  end
+
+  # Only include channels from user has enabled
+  # Return channels with full account details array
+  # User's subscribed array from `/me` only has channel summary
+  def enabled_channels(user)
+    channels = mammoth_channels
+    for_you_settings = user[:for_you_settings]
+    enabled_channel_ids = for_you_settings[:enabled_channels]
+
+    channels.filter do |channel|
+      enabled_channel_ids.include?(channel[:id])
+    end
   end
 
   # Only include channels from user subscribed

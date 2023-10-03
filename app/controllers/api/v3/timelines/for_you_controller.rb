@@ -138,6 +138,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   def for_you_params
     params.permit(
       :acct,
+      [enabled_channels: []],
       :curated_by_mammoth,
       :friends_of_friends,
       :from_your_channels,
