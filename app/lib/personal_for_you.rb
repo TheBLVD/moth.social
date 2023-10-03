@@ -108,7 +108,7 @@ class PersonalForYou
     Status.where(account_id: account_ids, updated_at: 12.hours.ago..Time.current).limit(200)
   end
 
-  # Get subscribed channels with full accounts
+  # Get enabled channels with full accounts
   # Fetch statuses for those accounts
   def statuses_for_enabled_channels(user)
     channels = Mammoth::Channels.new
