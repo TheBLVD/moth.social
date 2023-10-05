@@ -7,7 +7,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
 
   def index
-    result = PersonalForYou.new.user(acct_param)
+    result = PersonalForYou.new.mammoth_user(acct_param)
     render json: result
   end
 

@@ -6,6 +6,8 @@ class PersonalForYou
   ACCOUNT_RELAY_AUTH = "Bearer #{ENV.fetch('ACCOUNT_RELAY_KEY')}"
   ACCOUNT_RELAY_HOST = 'acctrelay.moth.social'
 
+  FEATURE_HOST = 'feature.moth.social'
+
   # Cache Key for User
   def key(acct)
     "mammoth:user:#{acct}"
@@ -47,6 +49,22 @@ class PersonalForYou
     results unless response.code != 200
   end
 
+  # Aggregate mammoth user from AcctRelay with Feature Api
+  # If the for_you setting is personal return early
+  # If the for_you setting is public, get waitlist feature
+  # and check for enrollment.
+  # for_you_setting type can be 'public' | 'personal' | 'waitlist'
+  def mammoth_user(acct)
+    user = user(acct)
+    return user unless user[:for_you_settings][:type] == 'public'
+    # if for_you is public get the waitlist
+    waitlist = waitlist_status(acct)
+    if waitlist == 'enrolled'
+      user[:for_you_settings][:type] = 'waitlist'
+    end
+    user
+  end
+
   # Get Mammoth user details
   # Includes any settings/preferences/configurations for feeds
   # Not caching user. If it becomes an issue cache it at the source. AcctRelay
@@ -55,6 +73,15 @@ class PersonalForYou
       "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}"
     )
     JSON.parse(response.body, symbolize_names: true)
+  end
+
+  # Get User Waitlist Status
+  # :waitlist will be 'none' | 'enrolled'
+  def waitlist_status(acct)
+    response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
+      "https://#{FEATURE_HOST}/api/v1/personalize?acct=#{acct}"
+    )
+    JSON.parse(response.body, symbolize_names: true)[:waitlist]
   end
 
   # Defined as a 'personalize' user on AccountRelay
