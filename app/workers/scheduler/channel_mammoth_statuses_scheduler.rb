@@ -32,18 +32,6 @@ class Scheduler::ChannelMammothStatusesScheduler
 
   # Filter statuses based on engagment and push to feed.
   def push_statuses(statuses, channel_id)
-    statuses.filter_map { |status| engagment_threshold(status) }
-            .each { |status| ChannelFeedWorker.perform_async(status['id'], channel_id) }
-  end
-
-  # Check status for Channel level of engagment
-  # Filter out polls and replys
-  def engagment_threshold(wrapped_status)
-    # enagagment threshold
-    engagment = MINIMUM_ENGAGMENT_ACTIONS
-    status = wrapped_status.reblog? ? wrapped_status.reblog : wrapped_status
-
-    status_counts = status.reblogs_count + status.replies_count + status.favourites_count
-    status if status_counts >= engagment && status.in_reply_to_id.nil? && status.poll_id.nil?
+    statuses.each { |status| ChannelFeedWorker.perform_async(status['id'], channel_id) }
   end
 end

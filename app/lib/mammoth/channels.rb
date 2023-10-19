@@ -17,16 +17,28 @@ module Mammoth
       end
     end
 
+    # Used in ForYou Feed
+    # Get Statuses from array of channels
+    # filter out based on per channel threshold
     def select_channels_with_statuses(channels)
       channels.flat_map do |channel|
         account_ids = account_ids(channel[:accounts])
-        statuses_from_channel_accounts(account_ids)
+        statuses_from_channel_accounts(account_ids).filter_map { |s| engagment_threshold(s, channel[:fy_engagement_threshold]) }
       end
     end
 
     def statuses_from_channel_accounts(account_ids)
       Status.where(account_id: account_ids,
                    created_at: (GO_BACK.hours.ago)..Time.current)
+    end
+
+    # Check status for Channel's set level of engagment
+    # Filter out polls and replys
+    def engagment_threshold(wrapped_status, channel_engagment_setting)
+      status = wrapped_status.reblog? ? wrapped_status.reblog : wrapped_status
+
+      status_counts = status.reblogs_count + status.replies_count + status.favourites_count
+      status if status_counts >= channel_engagment_setting && status.in_reply_to_id.nil? && status.poll_id.nil?
     end
 
     # Returns an array of account id's
