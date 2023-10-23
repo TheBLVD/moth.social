@@ -21,9 +21,11 @@ module Mammoth
     # Get Statuses from array of channels
     # filter out based on per channel threshold
     def select_channels_with_statuses(channels)
+      origin = Mammoth::StatusOrigin.instance
       channels.flat_map do |channel|
         account_ids = account_ids(channel[:accounts])
         statuses_from_channel_accounts(account_ids).filter_map { |s| engagment_threshold(s, channel[:fy_engagement_threshold]) }
+                                                   .each { |s| origin.add_channel(s, channel) }
       end
     end
 
