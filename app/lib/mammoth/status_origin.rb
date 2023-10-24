@@ -26,8 +26,9 @@ module Mammoth
         add_reason(list_key, reason)
     end 
 
+    # Add reason by key id
+    # Expire Reason in 7 days
     def add_reason(key, reason)
-        # Expire Reason in 7 days
         redis.sadd(key, reason)
         redis.expire(key, 7.day.seconds) 
     end 

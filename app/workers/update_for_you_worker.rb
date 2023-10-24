@@ -104,9 +104,13 @@ class UpdateForYouWorker
 
     curated_list = Mammoth::CuratedList.new
     list_statuses = curated_list.curated_list_statuses
+    origin = Mammoth::StatusOrigin
 
     list_statuses.filter_map { |s| engagment_threshold(s, user_setting[:curated_by_mammoth], 'mammoth') }
-                 .each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
+                 .each do |s|
+      origin.add_mammoth_pick(s)
+      ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal')
+    end
   end
 
   # Check status for User's level of engagment
