@@ -25,7 +25,7 @@ module Mammoth
         results = redis.smembers(list_key).map { |o| 
             payload = Oj.load(o, symbol_keys: true)
             originating_account = Account.create(payload[:originating_account])
-            origin = ::StatusOrigin.new(source: payload[:source], id: payload[:id], title: payload[:title], originating_account:originating_account )
+            origin = ::StatusOrigin.new(source: payload[:source], channel_id: payload[:id], title: payload[:title], originating_account:originating_account )
             Rails.logger.debug "AR:: ACCOUNT  #{originating_account}"
             Rails.logger.debug "AR:: ORIGIN  #{origin}"
             origin
@@ -47,7 +47,7 @@ module Mammoth
     end
 
     def channel_reason(status, channel)
-        Oj.dump({source: "SmartList", id: status[:id], title: channel[:title], originating_account: status.account})
+        Oj.dump({source: "SmartList", channel_id: channel[:id], title: channel[:title], originating_account: status.account})
     end
   end
 end
