@@ -16,7 +16,7 @@ module Mammoth
         reason = channel_reason(status, channel)
         
         # Expire Reason in 7 days
-        redis.sadd(list_key, channel[:id], reason)
+        redis.sadd(list_key, reason)
         redis.expire(list_key, 7.day.seconds) 
     end
 
@@ -25,7 +25,7 @@ module Mammoth
         results = redis.smembers(list_key).map { |o| 
             payload = Oj.load(o, symbol_keys: true)
             originating_account = Account.create(payload[:originating_account])
-            origin = ::StatusOrigin.new(source: payload[:source], title: payload[:title], originating_account:originating_account )
+            origin = ::StatusOrigin.new(source: payload[:source], id: payload[:id], title: payload[:title], originating_account:originating_account )
             Rails.logger.debug "AR:: ACCOUNT  #{originating_account}"
             Rails.logger.debug "AR:: ORIGIN  #{origin}"
             origin
