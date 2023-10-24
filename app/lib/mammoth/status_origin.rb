@@ -15,10 +15,9 @@ module Mammoth
         list_key = key(status[:id])
         reason = channel_reason(status, channel)
         
+        # Expire Reason in 7 days
         redis.sadd(list_key,reason)
-        
-        # Keep the list from growning infinitely
-        # trim(timeline_key, account_id)
+        redis.expire(list_key, 7.day.seconds) 
     end
 
     private 
@@ -29,12 +28,11 @@ module Mammoth
     # @return [String]
     def key(id, subtype = nil)
     return "origin:for_you:#{id}" unless subtype
-
     "origin:for_you:#{id}:#{subtype}"
     end
 
     def channel_reason(status, channel)
-        Oj.dump({source: "SmartList", title: channel[:title], originating_account: status[:account]})
+        Oj.dump({source: "SmartList", title: channel[:title], originating_account: status.account})
     end
   end
 end
