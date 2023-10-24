@@ -34,7 +34,7 @@ module Mammoth
     end
 
     def channel_reason(status, channel)
-        OJ.dump({source: "SmartList", title: channel[:title], originating_account: status[:account]})
+        Oj.dump({source: "SmartList", title: channel[:title], originating_account: status[:account]})
     end
   end
 end
