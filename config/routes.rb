@@ -174,6 +174,7 @@ Rails.application.routes.draw do
 
   get '/admin', to: redirect('/admin/dashboard', status: 302)
 
+
   draw(:api)
 
   web_app_paths.each do |path|

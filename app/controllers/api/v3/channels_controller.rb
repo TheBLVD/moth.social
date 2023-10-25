@@ -25,9 +25,12 @@ class Api::V3::ChannelsController < Api::BaseController
     render json: @user
   end
 
+  # Trigger user rebuild when unsubscribing from channel
+  # this is to clear out unwanted content from FY Feed
   def unsubscribe
     @mammoth = Mammoth::Channels.new
     @user = @mammoth.unsubscribe(channel_id_param, acct_param)
+    UpdateForYouWorker.perform_async({ acct: acct_param, rebuild: true })
     render json: @user
   end
 

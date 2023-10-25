@@ -7,7 +7,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
 
   def index
-    result = PersonalForYou.new.user(acct_param)
+    result = PersonalForYou.new.mammoth_user(acct_param)
     render json: result
   end
 
@@ -135,6 +135,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   def for_you_params
     params.permit(
       :acct,
+      [enabled_channels: []],
       :curated_by_mammoth,
       :friends_of_friends,
       :from_your_channels,

@@ -6,6 +6,8 @@ class PersonalForYou
   ACCOUNT_RELAY_AUTH = "Bearer #{ENV.fetch('ACCOUNT_RELAY_KEY')}".freeze
   ACCOUNT_RELAY_HOST = 'acctrelay.moth.social'
 
+  FEATURE_HOST = 'feature.moth.social'
+
   # Cache Key for User
   def key(acct)
     "mammoth:user:#{acct}"
@@ -48,6 +50,22 @@ class PersonalForYou
     results unless response.code != 200
   end
 
+  # Aggregate mammoth user from AcctRelay with Feature Api
+  # If the for_you setting is personal return early
+  # If the for_you setting is public, get waitlist feature
+  # and check for enrollment.
+  # for_you_setting type can be 'public' | 'personal' | 'waitlist'
+  def mammoth_user(acct)
+    user = user(acct)
+    return user unless user[:for_you_settings][:type] == 'public'
+    # if for_you is public get the waitlist
+    waitlist = waitlist_status(acct)
+    if waitlist == 'enrolled'
+      user[:for_you_settings][:type] = 'waitlist'
+    end
+    user
+  end
+
   # Get Mammoth user details
   # Includes any settings/preferences/configurations for feeds
   # Not caching user. If it becomes an issue cache it at the source. AcctRelay
@@ -56,6 +74,15 @@ class PersonalForYou
       "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}"
     )
     JSON.parse(response.body, symbolize_names: true)
+  end
+
+  # Get User Waitlist Status
+  # :waitlist will be 'none' | 'enrolled'
+  def waitlist_status(acct)
+    response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
+      "https://#{FEATURE_HOST}/api/v1/personalize?acct=#{acct}"
+    )
+    JSON.parse(response.body, symbolize_names: true)[:waitlist]
   end
 
   # Defined as a 'personalize' user on AccountRelay
@@ -109,13 +136,26 @@ class PersonalForYou
     Status.where(account_id: account_ids, updated_at: 12.hours.ago..Time.current).limit(200)
   end
 
-  # Get subscribed channels with full accounts
+  # Get enabled channels with full accounts
   # Fetch statuses for those accounts
-  def statuses_for_subscribed_channels(user)
+  def statuses_for_enabled_channels(user)
     channels = Mammoth::Channels.new
-    subscribed_channels = subscribed_channels(user)
+    enabled_channels = enabled_channels(user)
 
-    channels.select_channels_with_statuses(subscribed_channels)
+    channels.select_channels_with_statuses(enabled_channels)
+  end
+
+  # Only include channels from user has enabled
+  # Return channels with full account details array
+  # User's subscribed array from `/me` only has channel summary
+  def enabled_channels(user)
+    channels = mammoth_channels
+    for_you_settings = user[:for_you_settings]
+    enabled_channel_ids = for_you_settings[:enabled_channels]
+
+    channels.filter do |channel|
+      enabled_channel_ids.include?(channel[:id])
+    end
   end
 
   # Only include channels from user subscribed
