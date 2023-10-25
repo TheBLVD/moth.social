@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Api::V3::Timelines::StatusesController < Api::BaseController
+  before_action :require_mammoth!
+
   rescue_from Mammoth::StatusOrigin::NotFound do |e|
     render json: { error: e.to_s }, status: 404
   end

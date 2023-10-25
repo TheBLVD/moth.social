@@ -1,3 +1,4 @@
+# ActiveModel Only for Serialization
 class StatusOrigin
   include ActiveModel::Model
   include ActiveModel::Serialization
@@ -7,5 +8,4 @@ class StatusOrigin
   def initialize(attributes = {})
     super
   end
-  # belongs_to :originating_account, class_name: 'Account'
 end
