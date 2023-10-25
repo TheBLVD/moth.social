@@ -288,6 +288,8 @@ namespace :api, format: false do
   namespace :v2 do
     get '/search', to: 'search#index', as: :search
 
+    resource :follow_recommendations, only: :show, controller: :follow_recommendations_graph
+
     resources :media, only: [:create]
     resources :suggestions, only: [:index]
     resource :instance, only: [:show]
@@ -304,8 +306,30 @@ namespace :api, format: false do
     namespace :admin do
       resources :accounts, only: [:index]
     end
+
+    resources :onboarding_follow_recommendations, only: :index, controller: 'onboarding_follow_recommendations'
   end
 
+  # V3 Mammoth
+  namespace :v3 do
+    resources :channels, only: [:index, :show] do
+      member do
+        post :subscribe, constraints: { user_acct: %r{[^/]+} }
+        post :unsubscribe, constraints: { user_acct: %r{[^/]+} }
+      end
+    end
+
+    namespace :timelines do
+      resources :channels, only: :show, controller: :channels
+      resource :for_you, only: [:show], controller: 'for_you' do
+        resources :statuses, only: :show, controller: :statuses
+        get '/me',      to: 'for_you#index'
+        put '/me',      to: 'for_you#update'
+      end
+    end
+  end
+
+  # Web
   namespace :web do
     resource :settings, only: [:update]
     resources :embeds, only: [:show]
