@@ -104,7 +104,7 @@ class UpdateForYouWorker
 
     curated_list = Mammoth::CuratedList.new
     list_statuses = curated_list.curated_list_statuses
-    origin = Mammoth::StatusOrigin
+    origin = Mammoth::StatusOrigin.instance
 
     list_statuses.filter_map { |s| engagment_threshold(s, user_setting[:curated_by_mammoth], 'mammoth') }
                  .each do |s|
