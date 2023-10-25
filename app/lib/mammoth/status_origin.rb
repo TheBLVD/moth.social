@@ -43,8 +43,8 @@ module Mammoth
             Rails.logger.debug "AR:: ORIGIN  #{origin}"
             origin
     }
-        Rails.logger.debug "RESULT:: #{results}"
-
+        # Throw Error if array find is empty
+        raise NotFound, 'status not found' unless results.length > 0 
         return results
     end 
 
