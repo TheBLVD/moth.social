@@ -47,6 +47,7 @@ gem 'omniauth-rails_csrf_protection', '~> 1.0'
 gem 'color_diff', '~> 0.1'
 gem 'discard', '~> 1.2'
 gem 'doorkeeper', '~> 5.6'
+gem 'ed25519', '~> 1.3'
 gem 'fast_blank', '~> 1.0'
 gem 'fastimage'
 gem 'hiredis', '~> 0.6'
@@ -205,13 +206,10 @@ gem 'net-http', '~> 0.3.2'
 gem 'rubyzip', '~> 2.3'
 
 gem 'hcaptcha', '~> 7.1'
-# https://github.com/net-ssh/net-ssh/issues/565#issuecomment-491321965
-gem 'ed25519', '>= 1.3', '< 2.0'
-gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
-
 # Async
 gem 'async', '~> 1.31'
 gem 'async-http'
+gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
 
 # Use Json Web Token (JWT) for token based authentication Mammoth
 gem 'jwt'
