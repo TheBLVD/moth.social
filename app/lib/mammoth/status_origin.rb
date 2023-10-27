@@ -84,7 +84,7 @@ module Mammoth
     end
 
     def trending_follow_reason(status)
-        Oj.dump({source: "TrendingFollows", originating_account_id: status.account[:id] })
+        Oj.dump({source: "Follows", originating_account_id: status.account[:id] })
     end
 
     def trending_fof_reason(status)
