@@ -49,11 +49,8 @@ module Mammoth
     end 
 
     def find(status_id, acct = nil)
-        Rails.logger.debug "STATUS_ID & ACCT:  #{status_id}  #{acct}"
         public_list_key = key(status_id)
         personal_list_key = key(acct, status_id)
-        Rails.logger.debug "PUBLIC KEY #{public_list_key}"
-        Rails.logger.debug "PERSONAL KEY #{personal_list_key}"
         results = redis.sunion([public_list_key, personal_list_key]).map { |o| 
             payload = Oj.load(o, symbol_keys: true)
 
@@ -62,7 +59,6 @@ module Mammoth
             ::StatusOrigin.new(source: payload[:source], channel_id: payload[:channel_id], title: payload[:title], originating_account:originating_account )
         }
 
-        Rails.logger.debug "MEMBER RESULTS:: #{results}"
         # Throw Error if array find is empty
         raise NotFound, 'status not found' unless results.length > 0 
         return results
