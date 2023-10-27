@@ -49,9 +49,9 @@ module Mammoth
     end 
 
     def find(status_id, acct = nil)
-        group_list_key = key(status_id)
+        public_list_key = key(status_id)
         personal_list_key = key(status_id, acct)
-        results = redis.smembers(group_list_key).map { |o| 
+        results = redis.smembers(public_list_key).map { |o| 
             payload = Oj.load(o, symbol_keys: true)
             originating_account = Account.find(payload[:originating_account_id])
             # StatusOrigin Active Model for serialization
@@ -68,8 +68,7 @@ module Mammoth
     # @param [Integer] status id
     # @param [Symbol] subtype
     # @return [String]
-    def key(id, subtype = nil)
-    return "origin:for_you:#{id}" unless subtype
+    def key(id, subtype = 'public')
     "origin:for_you:#{id}:#{subtype}"
     end
 
