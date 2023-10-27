@@ -9,7 +9,22 @@ module Mammoth
         include Redisable
     class NotFound < StandardError; end
 
-    
+    # Add Trending Follows and Reason
+    def add_trending_follows(status, user)
+        list_key = key(user[:acct])
+        reason = trending_follow_reason(status)
+
+        add_reason(list_key, reason)
+    end 
+
+    # Add FOF and Reason to list
+    def add_friends_of_friends(status, user)
+        list_key = key(user[:acct])
+        reason = trending_fof_reason(status)
+
+        add_reason(list_key, reason)
+    end
+
     # Add Status and Reason to list
     def add_channel(status, channel)
         list_key = key(status[:id])
@@ -18,6 +33,7 @@ module Mammoth
         add_reason(list_key, reason)
     end
 
+    # Add MammothPick and Reason to list
     def add_mammoth_pick(status)
         list_key = key(status[:id])
         reason = mammoth_pick_reason(status)
@@ -62,6 +78,14 @@ module Mammoth
 
     def mammoth_pick_reason(status)
         Oj.dump({source: "MammothPick", originating_account_id: status.account[:id] })
+    end
+
+    def trending_follow_reason(status)
+        Oj.dump({source: "TrendingFollows", originating_account_id: status.account[:id] })
+    end
+
+    def trending_fof_reason(status)
+        Oj.dump({source: "FriendsOfFriends", originating_account_id: status.account[:id] })
     end
   end
 end
