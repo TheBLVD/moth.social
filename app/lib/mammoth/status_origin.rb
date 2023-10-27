@@ -11,7 +11,7 @@ module Mammoth
 
     # Add Trending Follows and Reason
     def add_trending_follows(status, user)
-        list_key = key(user[:acct])
+        list_key = key(status[:id], user[:acct])
         reason = trending_follow_reason(status)
 
         add_reason(list_key, reason)
@@ -19,7 +19,7 @@ module Mammoth
 
     # Add FOF and Reason to list
     def add_friends_of_friends(status, user)
-        list_key = key(user[:acct])
+        list_key = key(status[:id], user[:acct])
         reason = trending_fof_reason(status)
 
         add_reason(list_key, reason)
