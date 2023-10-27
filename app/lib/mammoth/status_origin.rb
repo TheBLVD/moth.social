@@ -36,7 +36,7 @@ module Mammoth
         list_key = key(status_id)
         results = redis.smembers(list_key).map { |o| 
             payload = Oj.load(o, symbol_keys: true)
-            originating_account = Account.create(payload[:originating_account])
+            originating_account = Account.find(payload[:originating_account_id])
             # StatusOrigin Active Model for serialization
             ::StatusOrigin.new(source: payload[:source], channel_id: payload[:channel_id], title: payload[:title], originating_account:originating_account )
     }
@@ -61,7 +61,7 @@ module Mammoth
     end
 
     def mammoth_pick_reason(status)
-        Oj.dump({source: "MammothPick", originating_account: status.account })
+        Oj.dump({source: "MammothPick", originating_account_id: status.account[:id] })
     end
   end
 end
