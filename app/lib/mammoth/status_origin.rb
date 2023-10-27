@@ -49,8 +49,11 @@ module Mammoth
     end 
 
     def find(status_id, acct = nil)
+        Rails.logger.info "STATUS_ID & ACCT:  #{status_id}  #{acct}"
         public_list_key = key(status_id)
         personal_list_key = key(acct, status_id)
+        Rails.logger.info "PUBLIC KEY #{public_list_key}"
+        Rails.logger.info "PERSONAL KEY #{personal_list_key}"
         results = redis.smembers(public_list_key).map { |o| 
             payload = Oj.load(o, symbol_keys: true)
             originating_account = Account.find(payload[:originating_account_id])
