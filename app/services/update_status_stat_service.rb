@@ -21,6 +21,7 @@ class UpdateStatusStatService < BaseService
   def get_status(url, id)
     Request.new(:get, url).perform do |response|
       break if response.code != 200
+
       body = response.body_with_limit
       status = body_to_json(body)
 

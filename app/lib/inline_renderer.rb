@@ -27,7 +27,7 @@ class InlineRenderer
     end
 
     serializable_resource = ActiveModelSerializers::SerializableResource.new(@object, serializer: serializer, scope: current_user,
-scope_name: :current_user)
+                                                                                      scope_name: :current_user)
     serializable_resource.as_json
   end
 
@@ -38,7 +38,7 @@ scope_name: :current_user)
   private
 
   def preload_associations_for_status
-    ActiveRecord::Associations::Preloader.new.preload(@object, {
+    ActiveRecord::Associations::Preloader.new(records: @object, associations: {
       active_mentions: :account,
 
       reblog: {

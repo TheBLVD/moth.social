@@ -21,7 +21,7 @@ RSpec.describe Api::V1::Accounts::FollowRecommendationsController do
       get :index, params: { account_id: account.id }
 
       serializer = REST::AccountSerializer.new(remote_account)
-      expect(response).to have_http_status(:ok)
+      expect(response).to have_http_status(200)
       expect(body_as_json).to eq([JSON.parse(serializer.to_json, symbolize_names: true)])
     end
 
@@ -31,7 +31,7 @@ RSpec.describe Api::V1::Accounts::FollowRecommendationsController do
       get :index, params: { account_id: account.id }
 
       serializer = REST::AccountSerializer.new(remote_account)
-      expect(response).to have_http_status(:ok)
+      expect(response).to have_http_status(200)
       expect(body_as_json).to eq([JSON.parse(serializer.to_json, symbolize_names: true)])
     end
   end

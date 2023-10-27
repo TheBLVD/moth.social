@@ -24,15 +24,15 @@ describe Scheduler::Trends::TrendsUpdateScheduler do
         1.upto(20).map do |i|
           {
             '@context': 'https://www.w3.org/ns/activitystreams',
-           id: "https://example.com/@foo/#{i}",
-           url: "https://example.com/@foo/#{i}",
-           uri: "https://example.com/@foo/#{i}",
-           type: 'Note',
-           content: 'Lorem ipsum',
-           attributedTo: ActivityPub::TagManager.instance.uri_for(account),
-           replies_count: 1,
-           favourites_count: 1,
-           reblogs_count: 1,
+            id: "https://example.com/@foo/#{i}",
+            url: "https://example.com/@foo/#{i}",
+            uri: "https://example.com/@foo/#{i}",
+            type: 'Note',
+            content: 'Lorem ipsum',
+            attributedTo: ActivityPub::TagManager.instance.uri_for(account),
+            replies_count: 1,
+            favourites_count: 1,
+            reblogs_count: 1,
           }
         end
       end
@@ -55,6 +55,7 @@ describe Scheduler::Trends::TrendsUpdateScheduler do
 
     context 'when history only has one' do
       let(:history) { [{ 'accounts' => 4 }, { 'accounts' => 0 }] }
+
       it 'returns 0' do
         expect(subject.calculate_max_score(history)).to eq(0)
       end
@@ -81,7 +82,7 @@ describe Scheduler::Trends::TrendsUpdateScheduler do
     let(:links) { [REST::PreviewCardSerializer.new(card).as_json.merge({ history: [] })] }
 
     it 'handles a missing max_score' do
-      expect { subject.get_links(url) }.not_to raise_error
+      expect { subject.get_links(url) }.to_not raise_error
     end
   end
 end

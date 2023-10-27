@@ -3,7 +3,7 @@
 class PersonalForYou
   include Redisable
 
-  ACCOUNT_RELAY_AUTH = "Bearer #{ENV.fetch('ACCOUNT_RELAY_KEY')}"
+  ACCOUNT_RELAY_AUTH = "Bearer #{ENV.fetch('ACCOUNT_RELAY_KEY')}".freeze
   ACCOUNT_RELAY_HOST = 'acctrelay.moth.social'
 
   FEATURE_HOST = 'feature.moth.social'
@@ -22,6 +22,7 @@ class PersonalForYou
     Rails.logger.debug { "INDIRECT FOLLOW RECOMMENDATIONS HANDLES\n #{fedi_account_handles}" }
     # Early return if no fedi account handles found
     return [] if fedi_account_handles.nil?
+
     # Parse handles into username & domain array for batch account query
     username_query = []
     domain_query = []

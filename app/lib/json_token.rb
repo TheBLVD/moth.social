@@ -7,6 +7,7 @@ class JsonToken
 
   def self.decode(token)
     return unless SECRET_KEY
+
     decoded = JWT.decode(token, SECRET_KEY)[0]
     ActiveSupport::HashWithIndifferentAccess.new decoded
   end

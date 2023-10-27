@@ -28,7 +28,7 @@ Sidekiq.configure_client do |config|
   end
 end
 
-Sidekiq.logger.level = ::Logger.const_get(ENV.fetch('RAILS_LOG_LEVEL', 'info').upcase.to_s)
+Sidekiq.logger.level = ::Logger.const_get(ENV.fetch('RAILS_LOG_LEVEL', 'warn').upcase.to_s)
 
 SidekiqUniqueJobs.configure do |config|
   config.reaper          = :ruby

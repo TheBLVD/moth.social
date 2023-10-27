@@ -43,6 +43,10 @@ ignore_missing:
   - 'application_mailer.salutation'
   - 'errors.500'
   - 'auth.providers.*'
+  # Mammoth
+  - 'footer.trending_now'
+  - 'auth.change_password'
+  - 'html_validator.invalid_markup'
 
 ignore_unused:
   - 'activemodel.errors.*'
@@ -50,7 +54,7 @@ ignore_unused:
   - 'activerecord.errors.*'
   - '{devise,pagination,doorkeeper}.*'
   - '{date,datetime,time,number}.*'
-  - 'simple_form.{yes,no,recommended,not_recommended}'
+  - 'simple_form.{yes,no,recommended,not_recommended,overridden}'
   - 'simple_form.{placeholders,hints,labels}.*'
   - 'simple_form.{error_notification,required}.:'
   - 'errors.messages.*'
@@ -63,8 +67,17 @@ ignore_unused:
   - 'admin_mailer.new_appeal.actions.*'
   - 'statuses.attached.*'
   - 'move_handler.carry_{mutes,blocks}_over_text'
+  - 'admin_mailer.*.subject'
   - 'notification_mailer.*'
+  - 'imports.overwrite_preambles.{following,blocking,muting,domain_blocking,bookmarks,lists}_html'
+  - 'imports.preambles.{following,blocking,muting,domain_blocking,bookmarks,lists}_html'
+  - 'mail_subscriptions.unsubscribe.emails.*'
+  - 'preferences.other' # some locales are missing other keys, therefore leading i18n-tasks to detect `preferences` as plural and not finding use
+  # Mammoth
   - 'user_mailer.welcome.edit_profile_action'
+  - 'footer.trending_now'
+  - 'auth.change_password'
+  - 'html_validator.invalid_markup'
 
 ignore_inconsistent_interpolations:
   - '*.one'

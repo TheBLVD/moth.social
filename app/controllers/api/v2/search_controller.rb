@@ -29,10 +29,10 @@ class Api::V2::SearchController < Api::BaseController
                     status: 401
     end
 
-    if truthy_param?(:resolve)
-      render json: { error: 'Search queries that resolve remote resources are not supported without authentication' },
-             status: 401
-    end
+    return unless truthy_param?(:resolve)
+
+    render json: { error: 'Search queries that resolve remote resources are not supported without authentication' },
+           status: 401
   end
 
   def search_results
@@ -40,11 +40,11 @@ class Api::V2::SearchController < Api::BaseController
       params[:q],
       current_account,
       limit_param(RESULTS_LIMIT),
-      search_params.merge(resolve: truthy_param?(:resolve), exclude_unreviewed: truthy_param?(:exclude_unreviewed))
+      search_params.merge(resolve: truthy_param?(:resolve), exclude_unreviewed: truthy_param?(:exclude_unreviewed), following: truthy_param?(:following))
     )
   end
 
   def search_params
-    params.permit(:type, :offset, :min_id, :max_id, :account_id)
+    params.permit(:type, :offset, :min_id, :max_id, :account_id, :following)
   end
 end

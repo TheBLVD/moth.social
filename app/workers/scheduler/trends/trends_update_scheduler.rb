@@ -38,6 +38,7 @@ class Scheduler::Trends::TrendsUpdateScheduler
   def get_statuses(url)
     Request.new(:get, url).perform do |response|
       break if response.code != 200
+
       body = response.body_with_limit
       statuses = body_to_json(body)
 
@@ -50,6 +51,7 @@ class Scheduler::Trends::TrendsUpdateScheduler
         )
 
         next unless new_status
+
         FetchLinkCardService.new.call(new_status)
         Trends::Statuses.new.register(new_status)
 
@@ -61,6 +63,7 @@ class Scheduler::Trends::TrendsUpdateScheduler
   def get_tags(url)
     Request.new(:get, url).perform do |response|
       break if response.code != 200
+
       body = response.body_with_limit
       tags = body_to_json(body)
 
@@ -79,25 +82,27 @@ class Scheduler::Trends::TrendsUpdateScheduler
     # they're scored appropriately.
     Request.new(:get, url).perform do |response|
       break if response.code != 200
+
       body = response.body_with_limit
       links = body_to_json(body)
 
       links.each do |link|
         card = PreviewCard.find_by(url: link['url'])
         next unless card
+
         max_score = calculate_max_score(link['history'])
-        if max_score >= card.max_score.to_i
-          card.update(max_score: max_score, max_score_at: Time.now.utc)
-        end
+        card.update(max_score: max_score, max_score_at: Time.now.utc) if max_score >= card.max_score.to_i
       end
     end
   end
 
   def calculate_max_score(history)
     return 0 if history.length < 2
+
     expected = history[1]['accounts'].to_f
     observed = history[0]['accounts'].to_f
     return 0 if expected.zero?
+
     ((observed - expected)**2) / expected
   end
 end

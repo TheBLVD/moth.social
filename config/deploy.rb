@@ -12,9 +12,12 @@ set :migration_role, :app
 
 append :linked_dirs, 'vendor/bundle', 'public/system'
 
+SYSTEMD_SERVICES = %i[sidekiq streaming web].freeze
+SERVICE_ACTIONS = %i[reload restart status].freeze
+
 namespace :systemd do
-  %i[sidekiq streaming web].each do |service|
-    %i[reload restart status].each do |action|
+  SYSTEMD_SERVICES.each do |service|
+    SERVICE_ACTIONS.each do |action|
       desc "Perform a #{action} on #{service} service"
       task "#{service}:#{action}".to_sym do
         on roles(:web) do

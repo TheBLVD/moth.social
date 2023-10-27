@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -23,7 +25,7 @@ Rails.application.configure do
   # Apache or NGINX already handles this.
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
-  ActiveSupport::Logger.new(STDOUT).tap do |logger|
+  ActiveSupport::Logger.new($stdout).tap do |logger|
     logger.formatter = config.log_formatter
     config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
@@ -47,13 +49,13 @@ Rails.application.configure do
   config.force_ssl = true
   config.ssl_options = {
     redirect: {
-      exclude: -> request { request.path.start_with?('/health') || request.headers["Host"].end_with?('.onion') || request.headers["Host"].end_with?('.i2p') }
-    }
+      exclude: ->(request) { request.path.start_with?('/health') || request.headers['Host'].end_with?('.onion') || request.headers['Host'].end_with?('.i2p') },
+    },
   }
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
-  config.log_level = ENV.fetch('RAILS_LOG_LEVEL', 'info').to_sym
+  config.log_level = ENV.fetch('RAILS_LOG_LEVEL', 'warn').to_sym
 
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
@@ -73,15 +75,13 @@ Rails.application.configure do
   config.active_support.deprecation = :notify
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
+  config.log_formatter = Logger::Formatter.new
 
   # Better log formatting
   config.lograge.enabled = true
 
   config.lograge.custom_payload do |controller|
-    if controller.respond_to?(:signed_request?) && controller.signed_request?
-      { key: controller.signature_key_id }
-    end
+    { key: controller.signature_key_id } if controller.respond_to?(:signed_request?) && controller.signed_request?
   end
 
   # Do not dump schema after migrations.
@@ -104,7 +104,7 @@ Rails.application.configure do
   enable_starttls = nil
   enable_starttls_auto = nil
 
-  case ENV['SMTP_ENABLE_STARTTLS']
+  case ENV.fetch('SMTP_ENABLE_STARTTLS', nil)
   when 'always'
     enable_starttls = true
   when 'never'
@@ -116,14 +116,14 @@ Rails.application.configure do
   end
 
   config.action_mailer.smtp_settings = {
-    port: ENV['SMTP_PORT'],
-    address: ENV['SMTP_SERVER'],
+    port: ENV.fetch('SMTP_PORT', nil),
+    address: ENV.fetch('SMTP_SERVER', nil),
     user_name: ENV['SMTP_LOGIN'].presence,
     password: ENV['SMTP_PASSWORD'].presence,
-    domain: ENV['SMTP_DOMAIN'] || ENV['LOCAL_DOMAIN'],
+    domain: ENV['SMTP_DOMAIN'] || ENV.fetch('LOCAL_DOMAIN', nil),
     authentication: ENV['SMTP_AUTH_METHOD'] == 'none' ? nil : ENV['SMTP_AUTH_METHOD'] || :plain,
     ca_file: ENV['SMTP_CA_FILE'].presence || '/etc/ssl/certs/ca-certificates.crt',
-    openssl_verify_mode: ENV['SMTP_OPENSSL_VERIFY_MODE'],
+    openssl_verify_mode: ENV.fetch('SMTP_OPENSSL_VERIFY_MODE', nil),
     enable_starttls: enable_starttls,
     enable_starttls_auto: enable_starttls_auto,
     tls: ENV['SMTP_TLS'].presence && ENV['SMTP_TLS'] == 'true',
@@ -133,11 +133,11 @@ Rails.application.configure do
   config.action_mailer.delivery_method = ENV.fetch('SMTP_DELIVERY_METHOD', 'smtp').to_sym
 
   config.action_dispatch.default_headers = {
-    'Server'                 => 'Mastodon',
-    'X-Frame-Options'        => 'DENY',
+    'Server' => 'Mastodon',
+    'X-Frame-Options' => 'DENY',
     'X-Content-Type-Options' => 'nosniff',
-    'X-XSS-Protection'       => '0',
-    'Permissions-Policy'     => 'interest-cohort=()',
+    'X-XSS-Protection' => '0',
+    'Permissions-Policy' => 'interest-cohort=()',
   }
 
   config.x.otp_secret = ENV.fetch('OTP_SECRET')

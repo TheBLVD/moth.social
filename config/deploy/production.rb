@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 # server-based syntax
 # ======================
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-server 'moth.social', user: 'mastodon', roles: %w[web], port: 2101
+server 'moth.social', user: 'mastodon', roles: %w(web), port: 2101
 
 append :linked_files, '.env.production', 'public/robots.txt'
 
@@ -37,9 +38,9 @@ append :linked_files, '.env.production', 'public/robots.txt'
 # Global options
 # --------------
 set :ssh_options, {
-  keys: %w[~/.ssh/mbpro.pem ~/.ssh/id_rsa],
+  keys: %w(~/.ssh/mbpro.pem ~/.ssh/id_rsa),
   forward_agent: true,
-  auth_methods: %w[publickey]
+  auth_methods: %w(publickey),
 }
 #
 # The server-based syntax can be used to override options:

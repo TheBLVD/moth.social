@@ -79,6 +79,7 @@ module SignatureVerification
     return @signed_request_actor if defined?(@signed_request_actor)
 
     raise SignatureVerificationError, 'Request not signed' unless signed_request?
+
     if missing_required_signature_parameters?
       raise SignatureVerificationError,
             'Incompatible request signature. keyId and signature are required'
@@ -105,8 +106,7 @@ module SignatureVerification
 
     return actor unless verify_signature(actor, signature, compare_signed_string).nil?
 
-    fail_with! "Verification failed for #{actor.to_log_human_identifier} #{actor.uri} using rsa-sha256 (RSASSA-PKCS1-v1_5 with SHA-256)",
-               signed_string: compare_signed_string, signature: signature_params['signature']
+    fail_with! "Verification failed for #{actor.to_log_human_identifier} #{actor.uri} using rsa-sha256 (RSASSA-PKCS1-v1_5 with SHA-256)", signed_string: compare_signed_string, signature: signature_params['signature']
   rescue SignatureVerificationError => e
     fail_with! e.message
   rescue HTTP::Error, OpenSSL::SSL::SSLError => e
@@ -124,6 +124,8 @@ module SignatureVerification
   private
 
   def fail_with!(message, **options)
+    Rails.logger.debug { "Signature verification failed: #{message}" }
+
     @signature_verification_failure_reason = { error: message }.merge(options)
     @signed_request_actor = nil
   end
@@ -143,7 +145,7 @@ module SignatureVerification
   end
 
   def signed_headers
-    signature_params.fetch('headers', signature_algorithm == 'hs2019' ? '(created)' : 'date').downcase.split(' ')
+    signature_params.fetch('headers', signature_algorithm == 'hs2019' ? '(created)' : 'date').downcase.split
   end
 
   def verify_signature_strength!
@@ -159,10 +161,10 @@ module SignatureVerification
       raise SignatureVerificationError,
             'Mastodon requires the Host header to be signed when doing a GET request'
     end
-    if request.post? && !signed_headers.include?('digest')
-      raise SignatureVerificationError,
-            'Mastodon requires the Digest header to be signed when doing a POST request'
-    end
+    return unless request.post? && !signed_headers.include?('digest')
+
+    raise SignatureVerificationError,
+          'Mastodon requires the Digest header to be signed when doing a POST request'
   end
 
   def verify_body_digest!
@@ -185,10 +187,8 @@ module SignatureVerification
             "Invalid Digest value. The provided Digest value is not a valid base64 string. Given digest: #{sha256[1]}"
     end
 
-    if digest_size != 32
-      raise SignatureVerificationError,
-            "Invalid Digest value. The provided Digest value is not a SHA-256 digest. Given digest: #{sha256[1]}"
-    end
+    raise SignatureVerificationError, "Invalid Digest value. The provided Digest value is not a SHA-256 digest. Given digest: #{sha256[1]}" if digest_size != 32
+
     raise SignatureVerificationError, "Invalid Digest value. Computed SHA-256 digest: #{body_digest}; given: #{sha256[1]}"
   end
 
@@ -203,18 +203,21 @@ module SignatureVerification
 
   def build_signed_string
     signed_headers.map do |signed_header|
-      if signed_header == Request::REQUEST_TARGET
+      case signed_header
+      when Request::REQUEST_TARGET
         "#{Request::REQUEST_TARGET}: #{request.method.downcase} #{request.path}"
-      elsif signed_header == '(created)'
+      when '(created)'
         raise SignatureVerificationError, 'Invalid pseudo-header (created) for rsa-sha256' unless signature_algorithm == 'hs2019'
+
         if signature_params['created'].blank?
           raise SignatureVerificationError,
                 'Pseudo-header (created) used but corresponding argument missing'
         end
 
         "(created): #{signature_params['created']}"
-      elsif signed_header == '(expires)'
+      when '(expires)'
         raise SignatureVerificationError, 'Invalid pseudo-header (expires) for rsa-sha256' unless signature_algorithm == 'hs2019'
+
         if signature_params['expires'].blank?
           raise SignatureVerificationError,
                 'Pseudo-header (expires) used but corresponding argument missing'
@@ -273,7 +276,7 @@ module SignatureVerification
     end
 
     if key_id.start_with?('acct:')
-      stoplight_wrap_request { ResolveAccountService.new.call(key_id.gsub(/\Aacct:/, ''), suppress_errors: false) }
+      stoplight_wrap_request { ResolveAccountService.new.call(key_id.delete_prefix('acct:'), suppress_errors: false) }
     elsif !ActivityPub::TagManager.instance.local_uri?(key_id)
       account   = ActivityPub::TagManager.instance.uri_to_actor(key_id)
       account ||= stoplight_wrap_request { ActivityPub::FetchRemoteKeyService.new.call(key_id, id: false, suppress_errors: false) }

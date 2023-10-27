@@ -8,22 +8,19 @@ class Api::V1::TagsController < Api::BaseController
   override_rate_limit_headers :follow, family: :follows
 
   def show
+    cache_if_unauthenticated!
     render json: @tag, serializer: REST::TagSerializer
   end
 
   def follow
     TagFollow.create_with(rate_limit: true).find_or_create_by!(tag: @tag, account: current_account)
-    if params[:rebuild]
-      RegenerationWorker.perform_async(current_account.id)
-    end
+    RegenerationWorker.perform_async(current_account.id) if params[:rebuild]
     render json: @tag, serializer: REST::TagSerializer
   end
 
   def unfollow
     TagFollow.find_by(account: current_account, tag: @tag)&.destroy!
-    if params[:rebuild]
-      RegenerationWorker.perform_async(current_account.id)
-    end
+    TagUnmergeWorker.perform_async(@tag.id, current_account.id)
     render json: @tag, serializer: REST::TagSerializer
   end
 
@@ -31,6 +28,7 @@ class Api::V1::TagsController < Api::BaseController
 
   def set_or_create_tag
     return not_found unless Tag::HASHTAG_NAME_RE.match?(params[:id])
+
     @tag = Tag.find_normalized(params[:id]) || Tag.new(name: Tag.normalize(params[:id]), display_name: params[:id])
   end
 end

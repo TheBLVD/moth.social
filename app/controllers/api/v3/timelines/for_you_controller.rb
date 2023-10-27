@@ -53,9 +53,8 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   # Check the For You Beta Personal List
   # @return [Boolean]
   def validate_mammoth_account
-    if @account.nil?
-      return false
-    end
+    return false if @account.nil?
+
     PersonalForYou.new.personalized_mammoth_user?(acct_param)
   end
 
@@ -63,11 +62,11 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   # After we've validated the acct is NOT on the beta list
   # So if you're already on the beta list we're not going add them
   def enroll_beta
-    if @is_beta_program
-      # Add to beta enrollment list
-      for_you = ForYouBeta.new
-      for_you.add_to_enrollment(acct_param)
-    end
+    return unless @is_beta_program
+
+    # Add to beta enrollment list
+    for_you = ForYouBeta.new
+    for_you.add_to_enrollment(acct_param)
   end
 
   # Will not return an empty list
@@ -124,9 +123,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     resource_user    = acct_param
     username, domain = resource_user.split('@')
 
-    if domain == Rails.configuration.x.local_domain
-      domain = nil
-    end
+    domain = nil if domain == Rails.configuration.x.local_domain
 
     Account.where(username: username, domain: domain).first
   end
@@ -149,9 +146,9 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   # Used to indicate beta group
   # for testflight
   def beta_param
-    unless params[:beta].nil?
-      params[:beta].casecmp('true').zero?
-    end
+    return if params[:beta].nil?
+
+    params[:beta].casecmp('true').zero?
   end
 
   # Pagination

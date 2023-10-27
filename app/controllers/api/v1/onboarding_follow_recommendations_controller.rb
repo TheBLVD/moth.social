@@ -36,6 +36,6 @@ class Api::V1::OnboardingFollowRecommendationsController < Api::BaseController
   end
 
   def yaml_file_location
-    "#{Rails.root}/app/lib/onboarding/onboarding_categories_#{Rails.env}.yml"
+    Rails.root.join("app/lib/onboarding/onboarding_categories_#{Rails.env}.yml").to_s
   end
 end

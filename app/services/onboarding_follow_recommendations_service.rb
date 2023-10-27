@@ -19,6 +19,7 @@ class OnboardingFollowRecommendationsService < BaseService
           if item['type'] == 'account'
             account = find_account(item)
             next if account.nil?
+
             { name: account,
               type: :account,
               summary: item['summary'] }
@@ -48,6 +49,6 @@ class OnboardingFollowRecommendationsService < BaseService
   end
 
   def yaml_file_location
-    "#{Rails.root}/app/lib/onboarding/v2/onboarding_categories_#{Rails.env}.yml"
+    Rails.root.join("app/lib/onboarding/v2/onboarding_categories_#{Rails.env}.yml").to_s
   end
 end
