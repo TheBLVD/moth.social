@@ -48,9 +48,10 @@ module Mammoth
         redis.expire(key, 7.day.seconds) 
     end 
 
-    def find(status_id)
-        list_key = key(status_id)
-        results = redis.smembers(list_key).map { |o| 
+    def find(status_id, acct = nil)
+        group_list_key = key(status_id)
+        personal_list_key = key(status_id, acct)
+        results = redis.smembers(group_list_key).map { |o| 
             payload = Oj.load(o, symbol_keys: true)
             originating_account = Account.find(payload[:originating_account_id])
             # StatusOrigin Active Model for serialization
