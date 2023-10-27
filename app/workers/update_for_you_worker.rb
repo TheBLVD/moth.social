@@ -30,8 +30,9 @@ class UpdateForYouWorker
     # If rebuild is true, Zero Out User's for you feed
     @personal.reset_feed(@account.id) if opts['rebuild']
 
-    push_status!
+    @statuses = filter_statuses!
 
+    foryou_manager.batch_to_feed(@account.id, @statuses)
     # Final Step:
     # Set user's status to 'idle'
     update_user_status('idle').wait
@@ -39,15 +40,12 @@ class UpdateForYouWorker
 
   private
 
-  def push_status!
-    # Indirect Follow
-    push_indirect_following_status
-    # Direct Follows
-    push_following_status
-    # Channel Feed
-    push_channels_status
-    # Mammoth Curated OG Feed
-    push_mammoth_curated_status
+  # Indirect Follow
+  # Direct Follows
+  # Channel Feed
+  # Mammoth Curated OG Feed
+  def filter_statuses!
+    [*indirect_following_status, *following_status, *channels_status, *mammoth_curated_status]
   end
 
   def update_user_status(status)
@@ -69,36 +67,36 @@ class UpdateForYouWorker
 
   # TODO: update account.id to user.acct
   # Return early if user setting is Zero, meaning 'off' from the iOS perspective
-  def push_following_status
+  def following_status
     user_setting = @user[:for_you_settings]
     return if user_setting[:your_follows].zero?
 
     @personal.statuses_for_direct_follows(@acct)
              .filter_map { |s| engagment_threshold(s, user_setting[:your_follows], 'following') }
-             .each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
+             .pluck('id')
   end
 
   # Indirect Follows
-  def push_indirect_following_status
+  def indirect_following_status
     user_setting = @user[:for_you_settings]
     return if user_setting[:friends_of_friends].zero?
 
     @personal.statuses_for_indirect_follows(@account)
              .filter_map { |s| engagment_threshold(s, user_setting[:friends_of_friends], 'indirect') }
-             .each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
+             .pluck('id')
   end
 
   # Channels Subscribed
   # Include ONLY enabled_channels
-  def push_channels_status
+  def channels_status
     user_setting = @user[:for_you_settings]
     return if user_setting[:from_your_channels].zero?
 
-    @personal.statuses_for_enabled_channels(@user).each { |s| ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal') }
+    @personal.statuses_for_enabled_channels(@user).pluck('id')
   end
 
   # Mammoth Curated OG List
-  def push_mammoth_curated_status
+  def mammoth_curated_status
     user_setting = @user[:for_you_settings]
     return if user_setting[:curated_by_mammoth].zero?
 
@@ -107,9 +105,9 @@ class UpdateForYouWorker
     origin = Mammoth::StatusOrigin.instance
 
     list_statuses.filter_map { |s| engagment_threshold(s, user_setting[:curated_by_mammoth], 'mammoth') }
-                 .each do |s|
+                 .map do |s|
       origin.add_mammoth_pick(s)
-      ForYouFeedWorker.perform_async(s['id'], @account.id, 'personal')
+      s['id']
     end
   end
 
@@ -135,5 +133,9 @@ class UpdateForYouWorker
     when 'indirect'
       { 1 => 1, 2 => 2, 3 => 3 }
     end
+  end
+
+  def foryou_manager
+    ForYouFeedManager.instance
   end
 end
