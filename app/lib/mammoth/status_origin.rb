@@ -54,7 +54,7 @@ module Mammoth
         personal_list_key = key(acct, status_id)
         Rails.logger.debug "PUBLIC KEY #{public_list_key}"
         Rails.logger.debug "PERSONAL KEY #{personal_list_key}"
-        results = redis.smembers(public_list_key).map { |o| 
+        results = redis.sunion([public_list_key, personal_list_key]).map { |o| 
             payload = Oj.load(o, symbol_keys: true)
 
             originating_account = Account.find(payload[:originating_account_id])
