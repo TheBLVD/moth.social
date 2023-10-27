@@ -11,7 +11,7 @@ module Mammoth
 
     # Add Trending Follows and Reason
     def add_trending_follows(status, user)
-        list_key = key(status[:id], user[:acct])
+        list_key = key(user[:acct], status[:id])
         reason = trending_follow_reason(status)
 
         add_reason(list_key, reason)
@@ -19,7 +19,7 @@ module Mammoth
 
     # Add FOF and Reason to list
     def add_friends_of_friends(status, user)
-        list_key = key(status[:id], user[:acct])
+        list_key = key(user[:acct], status[:id])
         reason = trending_fof_reason(status)
 
         add_reason(list_key, reason)
@@ -50,7 +50,7 @@ module Mammoth
 
     def find(status_id, acct = nil)
         public_list_key = key(status_id)
-        personal_list_key = key(status_id, acct)
+        personal_list_key = key(acct, status_id)
         results = redis.smembers(public_list_key).map { |o| 
             payload = Oj.load(o, symbol_keys: true)
             originating_account = Account.find(payload[:originating_account_id])
@@ -68,7 +68,8 @@ module Mammoth
     # @param [Integer] status id
     # @param [Symbol] subtype
     # @return [String]
-    def key(id, subtype = 'public')
+    def key(id, subtype = nil)
+    return "origin:for_you:#{id}" unless subtype
     "origin:for_you:#{id}:#{subtype}"
     end
 
