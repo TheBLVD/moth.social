@@ -71,9 +71,13 @@ class UpdateForYouWorker
     user_setting = @user[:for_you_settings]
     return if user_setting[:your_follows].zero?
 
+    origin = Mammoth::StatusOrigin.instance
     @personal.statuses_for_direct_follows(@acct)
              .filter_map { |s| engagment_threshold(s, user_setting[:your_follows], 'following') }
-             .pluck('id')
+             .map do |s|
+      origin.add_trending_follows(s, @user)
+      s['id']
+    end
   end
 
   # Indirect Follows
@@ -81,9 +85,13 @@ class UpdateForYouWorker
     user_setting = @user[:for_you_settings]
     return if user_setting[:friends_of_friends].zero?
 
+    origin = Mammoth::StatusOrigin.instance
     @personal.statuses_for_indirect_follows(@account)
              .filter_map { |s| engagment_threshold(s, user_setting[:friends_of_friends], 'indirect') }
-             .pluck('id')
+             .map do |s|
+      origin.add_friends_of_friends(s, @user)
+      s['id']
+    end
   end
 
   # Channels Subscribed

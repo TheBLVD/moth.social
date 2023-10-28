@@ -9,7 +9,9 @@ class Api::V3::Timelines::StatusesController < Api::BaseController
 
   def show
     origin = Mammoth::StatusOrigin.instance
-    @origins = origin.find(status_id_param)
+    user_account = @decoded['sub']
+    Rails.logger.debug { "ACCT: #{user_account}" }
+    @origins = origin.find(status_id_param, user_account)
     render json: @origins, each_serializer: StatusOriginSerializer
   end
 

@@ -58,6 +58,10 @@ class Api::BaseController < ApplicationController
     render json: { error: 'Record not found' }, status: 404
   end
 
+  rescue_from JWT::DecodeError do
+    render json: { errors: 'Unable to decode JWT' }, status: 422
+  end
+
   rescue_from HTTP::Error, Mastodon::UnexpectedResponseError do
     render json: { error: 'Remote data could not be fetched' }, status: 503
   end
@@ -150,14 +154,9 @@ class Api::BaseController < ApplicationController
   def require_mammoth!
     header = request.headers['Authorization']
     header = header.split.last if header
-    begin
-      @decoded = JsonToken.decode(header)
-      # @current_user = User.find(@decoded[:acct])
-    rescue ActiveRecord::RecordNotFound => e
-      render json: { errors: e.message }, status: 404
-    rescue JWT::DecodeError => e
-      render json: { errors: e.message }, status: 422
-    end
+    @decoded = JsonToken.decode(header)
+    Rails.logger.info { "DECODE #{@decode}" }
+    @decoded
   end
 
   def render_empty
