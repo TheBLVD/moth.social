@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class Api::V3::Timelines::ForYouController < Api::BaseController
-  before_action :require_mammoth!
+  # TODO: Re-enable with fix
+  # before_action :require_mammoth!
   before_action :set_for_you_default, only: [:show]
 
   after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
