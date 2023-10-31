@@ -176,11 +176,16 @@ class PersonalForYou
     channels.list(include_accounts: true)
   end
 
+  def reset(username)
+    reset_feed(username)
+    StatusOrigin.instance.reset(username)
+  end 
+
   # Remove personal timeline this will remove all entries in user's personal for you feed
   # Current behavior is to default to 'public' mammoth curated feed if user's personal feed is blank 8/16/2023
-  def reset_feed(account_id)
-    Rails.logger.debug { "RESETTING THE FEED>>>>>>>>>> \n #{account_id} \n" }
-    timeline_key = FeedManager.instance.key('personal', account_id)
+  def reset_feed(username)
+    Rails.logger.debug { "RESETTING THE FEED>>>>>>>>>> \n #{username} \n" }
+    timeline_key = FeedManager.instance.key('personal', username)
     redis.del(timeline_key)
   end
 end

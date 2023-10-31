@@ -19,6 +19,11 @@ class UpdateForYouWorker
     # This is temperary
     @account = local_account
 
+    if @user[:acct].nil?
+      update_user_status('error').wait
+      return nil
+    end
+
     # Unable to resolve account
     # Set Status to 'error'
     if @account.nil?
@@ -28,11 +33,11 @@ class UpdateForYouWorker
     end
 
     # If rebuild is true, Zero Out User's for you feed
-    @personal.reset_feed(@account.id) if opts['rebuild']
+    @personal.reset_feed(@user[:acct]) if opts['rebuild']
 
     @statuses = filter_statuses!
 
-    foryou_manager.batch_to_feed(@account.id, @statuses)
+    foryou_manager.batch_to_feed(@user[:acct], @statuses)
     # Final Step:
     # Set user's status to 'idle'
     update_user_status('idle').wait

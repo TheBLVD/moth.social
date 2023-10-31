@@ -64,6 +64,12 @@ module Mammoth
         return results
     end 
 
+    # Delete All Status Origins by username
+    def reset(username)
+        list_key = key(username)
+        redis.keys("#{list_key}*").each { |key| redis.del(key) }
+    end 
+
     private 
 
     # Redis key of a status

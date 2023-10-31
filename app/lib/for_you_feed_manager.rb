@@ -13,16 +13,16 @@ class ForYouFeedManager
   # Adds to Account's For You Feed
   # We zip the statuses using the id for both the score of zadd and the value
   # Creating an array of array elements [["111296866514987736", "111296866514987736"]...
-  def batch_to_feed(account_id, status_ids)
+  def batch_to_feed(username, status_ids)
     statuses = status_ids.zip(status_ids)
 
-    perform_push_to_feed(account_id, statuses)
+    perform_push_to_feed(username, statuses)
   end
 
   private
 
-  def perform_push_to_feed(account_id, statuses)
-    foryou_key = key(account_id)
+  def perform_push_to_feed(username, statuses)
+    foryou_key = key(username)
     redis.zadd(foryou_key, statuses)
 
     # Keep the list from growning infinitely
@@ -37,7 +37,7 @@ class ForYouFeedManager
     redis.zremrangebyrank(foryou_key, 0, -(MAX_ITEMS + 1))
   end
 
-  def key(account_id)
-    FeedManager.instance.key('personal', account_id)
+  def key(username)
+    FeedManager.instance.key('personal', username)
   end
 end
