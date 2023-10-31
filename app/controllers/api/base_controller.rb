@@ -154,8 +154,11 @@ class Api::BaseController < ApplicationController
   def require_mammoth!
     header = request.headers['Authorization']
     header = header.split.last if header
+    unless header
+      Rails.logger.warn { "NO HEADER PROVIDED DECODE #{request}" }
+      render json: { error: 'This method requires an authenticated user' }, status: 422
+    end
     @decoded = JsonToken.decode(header)
-    Rails.logger.info { "DECODE #{@decode}" }
     @decoded
   end
 
