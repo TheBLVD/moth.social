@@ -86,7 +86,7 @@ class UpdateForYouWorker
     return if user_setting[:friends_of_friends].zero?
 
     origin = Mammoth::StatusOrigin.instance
-    @personal.statuses_for_indirect_follows(@account)
+    @personal.statuses_for_indirect_follows(@account.local_username_and_domain)
              .filter_map { |s| engagment_threshold(s, user_setting[:friends_of_friends], 'indirect') }
              .map do |s|
       origin.add_friends_of_friends(s, @user)
