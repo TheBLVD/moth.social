@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V3::ChannelsController < Api::BaseController
-  before_action :require_mammoth!, only: [:subscribe, :unsubscribe]
+  before_action :require_mammoth!
 
   rescue_from Mammoth::Channels::NotFound do |e|
     render json: { error: e.to_s }, status: 404
