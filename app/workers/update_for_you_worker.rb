@@ -114,7 +114,7 @@ class UpdateForYouWorker
 
     list_statuses.filter_map { |s| engagment_threshold(s, user_setting[:curated_by_mammoth], 'mammoth') }
                  .map do |s|
-      origin.add_mammoth_pick(s)
+      origin.add_mammoth_pick(s, @user)
       s['id']
     end
   end

@@ -26,16 +26,16 @@ module Mammoth
     end
 
     # Add Status and Reason to list
-    def add_channel(status, channel)
-        list_key = key(status[:id])
+    def add_channel(status, user, channel)
+        list_key = key(user[:acct], status[:id])
         reason = channel_reason(status, channel)
         
         add_reason(list_key, reason)
     end
 
     # Add MammothPick and Reason to list
-    def add_mammoth_pick(status)
-        list_key = key(status[:id])
+    def add_mammoth_pick(status, user)
+        list_key = key(user[:acct], status[:id])
         reason = mammoth_pick_reason(status)
 
         add_reason(list_key, reason)

@@ -21,12 +21,14 @@ module Mammoth
     # Used in ForYou Feed
     # Get Statuses from array of channels
     # filter out based on per channel threshold
-    def select_channels_with_statuses(channels)
+    # User is passed all the way down to be able
+    # to add specific origin per user, per channel for a status. 
+    def select_channels_with_statuses(channels, user)
       origin = Mammoth::StatusOrigin.instance
       channels.flat_map do |channel|
         account_ids = account_ids(channel[:accounts])
         statuses_with_accounts_from_channels(account_ids).filter_map { |s| engagment_threshold(s, channel[:fy_engagement_threshold]) }
-                                                         .each { |s| origin.add_channel(s, channel) }
+                                                         .each { |s| origin.add_channel(s, user, channel) }
       end
     end
 
