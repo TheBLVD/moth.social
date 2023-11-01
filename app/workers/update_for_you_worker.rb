@@ -19,6 +19,11 @@ class UpdateForYouWorker
     # This is temperary
     @account = local_account
 
+    if @user[:acct].nil?
+      update_user_status('error').wait
+      return nil
+    end
+
     # Unable to resolve account
     # Set Status to 'error'
     if @account.nil?
@@ -28,11 +33,11 @@ class UpdateForYouWorker
     end
 
     # If rebuild is true, Zero Out User's for you feed
-    @personal.reset_feed(@account.id) if opts['rebuild']
+    @personal.reset(@user[:acct]) if opts['rebuild']
 
     @statuses = filter_statuses!
 
-    foryou_manager.batch_to_feed(@account.id, @statuses)
+    foryou_manager.batch_to_feed(@user[:acct], @statuses)
     # Final Step:
     # Set user's status to 'idle'
     update_user_status('idle').wait
@@ -72,7 +77,7 @@ class UpdateForYouWorker
     return if user_setting[:your_follows].zero?
 
     origin = Mammoth::StatusOrigin.instance
-    @personal.statuses_for_direct_follows(@acct)
+    @personal.statuses_for_direct_follows(@user[:acct])
              .filter_map { |s| engagment_threshold(s, user_setting[:your_follows], 'following') }
              .map do |s|
       origin.add_trending_follows(s, @user)
@@ -86,7 +91,7 @@ class UpdateForYouWorker
     return if user_setting[:friends_of_friends].zero?
 
     origin = Mammoth::StatusOrigin.instance
-    @personal.statuses_for_indirect_follows(@account)
+    @personal.statuses_for_indirect_follows(@user[:acct])
              .filter_map { |s| engagment_threshold(s, user_setting[:friends_of_friends], 'indirect') }
              .map do |s|
       origin.add_friends_of_friends(s, @user)
@@ -114,7 +119,7 @@ class UpdateForYouWorker
 
     list_statuses.filter_map { |s| engagment_threshold(s, user_setting[:curated_by_mammoth], 'mammoth') }
                  .map do |s|
-      origin.add_mammoth_pick(s)
+      origin.add_mammoth_pick(s, @user)
       s['id']
     end
   end

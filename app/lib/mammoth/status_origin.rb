@@ -26,16 +26,16 @@ module Mammoth
     end
 
     # Add Status and Reason to list
-    def add_channel(status, channel)
-        list_key = key(status[:id])
+    def add_channel(status, user, channel)
+        list_key = key(user[:acct], status[:id])
         reason = channel_reason(status, channel)
         
         add_reason(list_key, reason)
     end
 
     # Add MammothPick and Reason to list
-    def add_mammoth_pick(status)
-        list_key = key(status[:id])
+    def add_mammoth_pick(status, user)
+        list_key = key(user[:acct], status[:id])
         reason = mammoth_pick_reason(status)
 
         add_reason(list_key, reason)
@@ -62,6 +62,16 @@ module Mammoth
         # Throw Error if array find is empty
         raise NotFound, 'status not found' unless results.length > 0 
         return results
+    end 
+
+    # Delete All Status Origins by username
+    # ALERT: extra check to ensure a valid acct handle is passed.  
+    def reset(acct)
+        username, domain = acct.strip.gsub(/\A@/, '').split('@')
+        return nil unless username && domain
+
+        list_key = key("#{username}@#{domain}")
+        redis.keys("#{list_key}*").each { |key| redis.del(key) }
     end 
 
     private 

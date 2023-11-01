@@ -58,11 +58,10 @@ class PersonalForYou
   def mammoth_user(acct)
     user = user(acct)
     return user unless user[:for_you_settings][:type] == 'public'
+
     # if for_you is public get the waitlist
     waitlist = waitlist_status(acct)
-    if waitlist == 'enrolled'
-      user[:for_you_settings][:type] = 'waitlist'
-    end
+    user[:for_you_settings][:type] = 'waitlist' if waitlist == 'enrolled'
     user
   end
 
@@ -142,7 +141,7 @@ class PersonalForYou
     channels = Mammoth::Channels.new
     enabled_channels = enabled_channels(user)
 
-    channels.select_channels_with_statuses(enabled_channels)
+    channels.select_channels_with_statuses(enabled_channels, user)
   end
 
   # Only include channels from user has enabled
@@ -177,11 +176,16 @@ class PersonalForYou
     channels.list(include_accounts: true)
   end
 
+  def reset(username)
+    reset_feed(username)
+    Mammoth::StatusOrigin.instance.reset(username)
+  end
+
   # Remove personal timeline this will remove all entries in user's personal for you feed
   # Current behavior is to default to 'public' mammoth curated feed if user's personal feed is blank 8/16/2023
-  def reset_feed(account_id)
-    Rails.logger.debug { "RESETTING THE FEED>>>>>>>>>> \n #{account_id} \n" }
-    timeline_key = FeedManager.instance.key('personal', account_id)
+  def reset_feed(username)
+    Rails.logger.debug { "RESETTING THE FEED>>>>>>>>>> \n #{username} \n" }
+    timeline_key = FeedManager.instance.key('personal', username)
     redis.del(timeline_key)
   end
 end

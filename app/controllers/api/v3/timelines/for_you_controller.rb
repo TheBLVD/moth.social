@@ -35,6 +35,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   def set_for_you_default
     @default_owner_account = Account.local.where(username: FOR_YOU_OWNER_ACCOUNT).first!
     @account = account_from_acct
+    @user = user_from_param
     @is_beta_program = beta_param
   end
 
@@ -109,7 +110,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   end
 
   def personalzied_feed
-    ForYouFeed.new('personal', @account.id)
+    ForYouFeed.new('personal', @user[:acct])
   end
 
   def default_list
@@ -127,6 +128,10 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     domain = nil if domain == Rails.configuration.x.local_domain
 
     Account.where(username: username, domain: domain).first
+  end
+
+  def user_from_param
+    PersonalForYou.new.user(acct_param)
   end
 
   def acct_param
