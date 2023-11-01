@@ -178,7 +178,7 @@ class PersonalForYou
 
   def reset(username)
     reset_feed(username)
-    StatusOrigin.instance.reset(username)
+    Mammoth::StatusOrigin.instance.reset(username)
   end
 
   # Remove personal timeline this will remove all entries in user's personal for you feed
