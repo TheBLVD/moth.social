@@ -65,8 +65,12 @@ module Mammoth
     end 
 
     # Delete All Status Origins by username
-    def reset(username)
-        list_key = key(username)
+    # ALERT: extra check to ensure a valid acct handle is passed.  
+    def reset(acct)
+        username, domain = acct.strip.gsub(/\A@/, '').split('@')
+        return nil unless username && domain
+
+        list_key = key("#{username}@#{domain}")
         redis.keys("#{list_key}*").each { |key| redis.del(key) }
     end 
 
