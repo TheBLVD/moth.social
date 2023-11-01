@@ -58,11 +58,10 @@ class PersonalForYou
   def mammoth_user(acct)
     user = user(acct)
     return user unless user[:for_you_settings][:type] == 'public'
+
     # if for_you is public get the waitlist
     waitlist = waitlist_status(acct)
-    if waitlist == 'enrolled'
-      user[:for_you_settings][:type] = 'waitlist'
-    end
+    user[:for_you_settings][:type] = 'waitlist' if waitlist == 'enrolled'
     user
   end
 
@@ -82,7 +81,7 @@ class PersonalForYou
     response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
       "https://#{FEATURE_HOST}/api/v1/personalize?acct=#{acct}"
     )
-    JSON.parse(response.body, symbolize_names: true)[:waitlist]
+    JSON.parse(response.body, symbolize_names: true)[:status]
   end
 
   # Defined as a 'personalize' user on AccountRelay
