@@ -71,7 +71,6 @@ module Mammoth
         return nil unless username && domain
 
         list_key = key("#{username}@#{domain}")
-        Rails.logger.info "DELETEING KEY>>>>>> \n\n\n\n #{list_key}"
         redis.keys("#{list_key}*").each { |key| redis.del(key) }
     end 
 

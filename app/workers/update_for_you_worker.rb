@@ -33,7 +33,7 @@ class UpdateForYouWorker
     end
 
     # If rebuild is true, Zero Out User's for you feed
-    @personal.reset_feed(@user[:acct]) if opts['rebuild']
+    @personal.reset(@user[:acct]) if opts['rebuild']
 
     @statuses = filter_statuses!
 

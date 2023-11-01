@@ -179,7 +179,7 @@ class PersonalForYou
   def reset(username)
     reset_feed(username)
     StatusOrigin.instance.reset(username)
-  end 
+  end
 
   # Remove personal timeline this will remove all entries in user's personal for you feed
   # Current behavior is to default to 'public' mammoth curated feed if user's personal feed is blank 8/16/2023
