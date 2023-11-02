@@ -27,18 +27,10 @@ class Api::V2::FollowRecommendationsGraphController < Api::BaseController
   # return account if personalized
   # return onboarding account suggestions of acct type is 'public'
   def set_account
-    if acct_is_personalized?
-      username, domain = username_and_domain(params[:acct])
+    username, domain = username_and_domain(params[:acct])
+    return not_found unless TagManager.instance.local_domain?(domain)
 
-      @account = if TagManager.instance.local_domain?(domain)
-                   Account.find_local(username)
-                 else
-                   Account.find_remote(username, domain)
-                 end
-    else
-      onboarding_accounts = OnboardingAccountRecommendationsService.new
-      render json: onboarding_accounts.call, each_serializer: REST::AccountSerializer
-    end
+    @account = Account.find_local(username)
   end
 
   def acct_is_personalized?
