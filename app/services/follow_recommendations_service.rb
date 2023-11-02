@@ -3,6 +3,9 @@
 # Returns an array of string user handles (eg: johndoe@mastodon.server) with follow recommendations
 # for the provided user, according to other users that are the most followed by their existing follows.
 class FollowRecommendationsService < BaseService
+  # We're making the assumption that these 3 accounts below exist in the local server and they
+  # represent the moth.social staff. Please keep this list up to date!
+  DEFAULT_FOLLOW_LIST = %w(mark bart misspurple).freeze
   MAX_RESULTS = 50
   DEFAULT_FOLLOW_LIMIT = 200
 
@@ -22,8 +25,8 @@ class FollowRecommendationsService < BaseService
     Rails.cache.fetch(cache_key, expires_in: 6.months, force: force) do
       direct_follows = account_follows(@handle).map(&:symbolize_keys)
       if direct_follows.empty?
-        Rails.logger.info("No follows found for #{@handle}, defaulting to `Onboarding recommendations accounts list`")
-        return generate_default_follows.map(&:symbolize_keys).pluck(:acct)
+        Rails.logger.info("No follows found for #{@handle}, defaulting to `DEFAULT_FOLLOW_LIST`")
+        direct_follows = generate_default_follows.map(&:symbolize_keys)
       end
       direct_follow_ids = Set.new(direct_follows.pluck(:acct))
       direct_follow_ids.add(@handle.sub(/^@/, ''))
@@ -81,10 +84,9 @@ class FollowRecommendationsService < BaseService
   end
 
   # Returns an array of default follows in the same JSON format as the public API using AccountSerializer
-  #
   def generate_default_follows
     # domain: nil makes sure we're looking for local accounts
-    accounts = OnboardingAccountRecommendationsService.new.call
+    accounts = Account.where(username: DEFAULT_FOLLOW_LIST, domain: nil)
     serializer = ActiveModel::Serializer::CollectionSerializer.new(
       accounts, serializer: REST::AccountSerializer
     )
