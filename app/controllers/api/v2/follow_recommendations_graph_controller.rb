@@ -24,13 +24,22 @@ class Api::V2::FollowRecommendationsGraphController < Api::BaseController
   private
 
   # Parse acct parameter
-  # return account if local user
-  # return 404 if not a local user
+  # return account if personalized
+  # return onboarding account suggestions of acct type is 'public'
   def set_account
-    username, domain = username_and_domain(params[:acct])
-    return not_found unless TagManager.instance.local_domain?(domain)
+    if acct_is_personalized?
+      username, domain = username_and_domain(params[:acct])
+      return not_found unless TagManager.instance.local_domain?(domain)
 
-    @account = Account.find_local(username)
+      @account = Account.find_local(username) || Account.find_remote(handle_to_account_remote)
+    else
+      onboarding_accounts = OnboardingAccountRecommendationsService.new
+      render json: onboarding_accounts.call, each_serializer: REST::AccountSerializer
+    end
+  end
+
+  def acct_is_personalized?
+    PersonalForYou.new.personalized_mammoth_user?(params[:acct])
   end
 
   def handle_to_account_remote(handle)
