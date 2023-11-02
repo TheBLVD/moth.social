@@ -10,4 +10,9 @@ class Api::V2::OnboardingFollowRecommendationsController < Api::BaseController
     onboarding_follows = OnboardingFollowRecommendationsService.new
     render json: onboarding_follows.call, each_serializer: REST::V2::FollowRecommendationCategorySerializer
   end
+
+  def accounts
+    onboarding_accounts = OnboardingAccountRecommendationsService.new
+    render json: onboarding_accounts.call, each_serializer: REST::AccountSerializer
+  end
 end

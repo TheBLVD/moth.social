@@ -307,7 +307,10 @@ namespace :api, format: false do
       resources :accounts, only: [:index]
     end
 
-    resources :onboarding_follow_recommendations, only: :index, controller: 'onboarding_follow_recommendations'
+    resource :onboarding_follow_recommendations, only: :index, controller: 'onboarding_follow_recommendations' do
+      get '/', to: 'onboarding_follow_recommendations#index'
+      get '/accounts', to: 'onboarding_follow_recommendations#accounts'
+    end
   end
 
   # V3 Mammoth
