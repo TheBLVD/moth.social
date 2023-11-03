@@ -4,9 +4,6 @@
     - account: '@mammoth@moth.social'
       type: account
       summary: The official Mammoth account.
-    - account: '@daily@moth.social'
-      type: account
-      summary: Light-hearted and wholesome content.
 - name: Celebrities & Pop Culture
   items:
     - account: '@elonjet@mastodon.social'

@@ -10,4 +10,11 @@ class Api::V2::OnboardingFollowRecommendationsController < Api::BaseController
     onboarding_follows = OnboardingFollowRecommendationsService.new
     render json: onboarding_follows.call, each_serializer: REST::V2::FollowRecommendationCategorySerializer
   end
+
+  # OnboardingAccountRecommendationsService returns the same YAML list
+  # but only accounts, no hashtags. only grouped accounts.
+  def accounts
+    onboarding_accounts = OnboardingAccountRecommendationsService.new
+    render json: onboarding_accounts.call, each_serializer: REST::V2::FollowRecommendationCategorySerializer
+  end
 end
