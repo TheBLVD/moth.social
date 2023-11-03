@@ -8,7 +8,7 @@ class Api::V2::FollowRecommendationsGraphController < Api::BaseController
   before_action :set_account
 
   def show
-    handle = @account.local_username_and_domain
+    handle = @account.acct
     service = FollowRecommendationsService.new
     recommendation_handles = service.call(handle: handle)
     follows = Follow.where(account: @account).map { |f| f.target_account.acct }
