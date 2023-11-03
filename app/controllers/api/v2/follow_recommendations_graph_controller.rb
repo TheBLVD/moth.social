@@ -33,7 +33,7 @@ class Api::V2::FollowRecommendationsGraphController < Api::BaseController
   end
 
   def personalized?
-    PersonalForYou.new.is_personalized(params[:acct])
+    PersonalForYou.new.personalized_mammoth_user?(params[:acct])
   end
 
   def handle_to_account_remote(handle)
