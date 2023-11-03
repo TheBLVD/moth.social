@@ -14,8 +14,8 @@ class OnboardingAccountRecommendationsService < BaseService
       Onboarding::V2::FollowRecommendationCategory.new(
         name: category['name'],
         # If any of YML accounts are invalid or not found in the database, we'll omit them from the response
-        # Skip hashtags
         items: category['items'].filter_map do |item|
+          # Skip hashtags
           if item['type'] == 'hashtag'
             next
           elsif item['type'] == 'account'
