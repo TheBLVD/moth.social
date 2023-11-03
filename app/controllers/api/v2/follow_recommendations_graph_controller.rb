@@ -32,10 +32,6 @@ class Api::V2::FollowRecommendationsGraphController < Api::BaseController
     @account = Account.find_local(username)
   end
 
-  def acct_is_personalized?
-    PersonalForYou.new.personalized_mammoth_user?(params[:acct])
-  end
-
   def handle_to_account_remote(handle)
     username, domain = username_and_domain(handle)
     Account.find_remote(username, domain)
