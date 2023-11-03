@@ -29,7 +29,8 @@ class Api::V2::FollowRecommendationsGraphController < Api::BaseController
     username, domain = username_and_domain(params[:acct])
     return not_found unless TagManager.instance.local_domain?(domain) || personalized?
 
-    @account = Account.find_local(username)
+    domain = nil if domain == Rails.configuration.x.local_domain
+    @account = Account.where(username: username, domain: domain).first
   end
 
   def personalized?
