@@ -24,7 +24,7 @@ class FollowRecommendationsService < BaseService
     Rails.cache.fetch(cache_key, expires_in: 6.months, force: force) do
       direct_follows = account_follows(@handle).map(&:symbolize_keys)
       if direct_follows.empty?
-        Rails.logger.info("No follows found for #{@handle}, defaulting to `DEFAULT_FOLLOW_LIST`")
+        Rails.logger.info("No follows found for #{@handle}, defaulting to `SUGGESTIONS API V2`")
         generate_default_follows.map(&:symbolize_keys)
       end
       direct_follow_ids = Set.new(direct_follows.pluck(:acct))
@@ -82,21 +82,15 @@ class FollowRecommendationsService < BaseService
     indirect_follow_map
   end
 
-  def generate_default_follows
-    suggestions
-  end
-
-  # Returns an array of default follows in the same JSON format as the public API using AccountSerializer
+  # Returns an array of default follows from V2 Suggestions API
   def generate_default_follows
     account = account_from_handle
-    AccountSuggestions.get(account, limit_param(80)).map(&:account).pluck(:acct)
+    AccountSuggestions.get(account, MAX_RESULTS).map { |suggest| suggest.account.acct }
   end
 
   def account_from_handle
     username, domain = @handle.split('@')
-
     domain = nil if domain == Rails.configuration.x.local_domain
-
     Account.where(username: username, domain: domain).first
   end
 
