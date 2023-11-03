@@ -24,12 +24,16 @@ class Api::V2::FollowRecommendationsGraphController < Api::BaseController
   private
 
   # return account if local user
-  # return 404 if not a local user
+  # return 404 if not a local user or personalized
   def set_account
     username, domain = username_and_domain(params[:acct])
-    return not_found unless TagManager.instance.local_domain?(domain)
+    return not_found unless TagManager.instance.local_domain?(domain) || personalized?
 
     @account = Account.find_local(username)
+  end
+
+  def personalized?
+    PersonalForYou.new.is_personalized(params[:acct])
   end
 
   def handle_to_account_remote(handle)
