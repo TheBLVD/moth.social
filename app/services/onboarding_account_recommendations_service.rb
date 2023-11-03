@@ -8,20 +8,26 @@ class OnboardingAccountRecommendationsService < BaseService
 
   private
 
-  def generate_onboarding_account_recommendations
+  def generate_onboarding_follow_recommendations
     categories = YAML.load_file(yaml_file_location)
-    categories.flat_map do |category|
-      # If any of YML accounts are invalid or not found in the database, we'll omit them from the response
-      category['items'].filter_map do |item|
-        if item['type'] == 'hashtag'
-          next
-        elsif item['type'] == 'account'
-          account = find_account(item)
-          next if account.nil?
+    categories.map do |category|
+      Onboarding::V2::FollowRecommendationCategory.new(
+        name: category['name'],
+        # If any of YML accounts are invalid or not found in the database, we'll omit them from the response
+        # Skip hashtags
+        items: category['items'].filter_map do |item|
+          if item['type'] == 'hashtag'
+            next
+          elsif item['type'] == 'account'
+            account = find_account(item)
+            next if account.nil?
 
-          account
+            { name: account,
+              type: :account,
+              summary: item['summary'] }
+          end
         end
-      end
+      )
     end
   end
 
