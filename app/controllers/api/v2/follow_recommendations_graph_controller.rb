@@ -8,9 +8,8 @@ class Api::V2::FollowRecommendationsGraphController < Api::BaseController
   before_action :set_account
 
   def show
-    handle = @account.acct
     service = FollowRecommendationsService.new
-    recommendation_handles = service.call(handle: handle)
+    recommendation_handles = service.call(handle: @handle)
     follows = Follow.where(account: @account).map { |f| f.target_account.acct }
     recommendations = recommendation_handles
                       .reject { |recommendation| follows.include?(recommendation) }
@@ -31,6 +30,7 @@ class Api::V2::FollowRecommendationsGraphController < Api::BaseController
 
     domain = nil if domain == Rails.configuration.x.local_domain
     @account = Account.where(username: username, domain: domain).first
+    @handle = params[:acct]
   end
 
   def personalized?
