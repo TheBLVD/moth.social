@@ -5,7 +5,6 @@
 class FollowRecommendationsService < BaseService
   # We're making the assumption that these 3 accounts below exist in the local server and they
   # represent the moth.social staff. Please keep this list up to date!
-  DEFAULT_FOLLOW_LIST = %w(mark bart misspurple).freeze
   MAX_RESULTS = 50
   DEFAULT_FOLLOW_LIMIT = 200
 
@@ -25,8 +24,8 @@ class FollowRecommendationsService < BaseService
     Rails.cache.fetch(cache_key, expires_in: 6.months, force: force) do
       direct_follows = account_follows(@handle).map(&:symbolize_keys)
       if direct_follows.empty?
-        Rails.logger.info("No follows found for #{@handle}, defaulting to `DEFAULT_FOLLOW_LIST`")
-        direct_follows = generate_default_follows.map(&:symbolize_keys)
+        Rails.logger.info("No follows found for #{@handle}, defaulting to `SUGGESTIONS API V2`")
+        generate_default_follows.map(&:symbolize_keys)
       end
       direct_follow_ids = Set.new(direct_follows.pluck(:acct))
       direct_follow_ids.add(@handle.sub(/^@/, ''))
@@ -83,14 +82,16 @@ class FollowRecommendationsService < BaseService
     indirect_follow_map
   end
 
-  # Returns an array of default follows in the same JSON format as the public API using AccountSerializer
+  # Returns an array of default follows from V2 Suggestions API
   def generate_default_follows
-    # domain: nil makes sure we're looking for local accounts
-    accounts = Account.where(username: DEFAULT_FOLLOW_LIST, domain: nil)
-    serializer = ActiveModel::Serializer::CollectionSerializer.new(
-      accounts, serializer: REST::AccountSerializer
-    )
-    JSON.parse(serializer.to_json)
+    account = account_from_handle
+    AccountSuggestions.get(account, MAX_RESULTS).map { |suggest| suggest.account.acct }
+  end
+
+  def account_from_handle
+    username, domain = @handle.split('@')
+    domain = nil if domain == Rails.configuration.x.local_domain
+    Account.where(username: username, domain: domain).first
   end
 
   # returns an array of hashes containing all the accounts details followed by `@handle`:

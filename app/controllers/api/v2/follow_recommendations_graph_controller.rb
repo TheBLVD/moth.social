@@ -8,9 +8,8 @@ class Api::V2::FollowRecommendationsGraphController < Api::BaseController
   before_action :set_account
 
   def show
-    handle = @account.local_username_and_domain
     service = FollowRecommendationsService.new
-    recommendation_handles = service.call(handle: handle)
+    recommendation_handles = service.call(handle: @handle)
     follows = Follow.where(account: @account).map { |f| f.target_account.acct }
     recommendations = recommendation_handles
                       .reject { |recommendation| follows.include?(recommendation) }
@@ -24,12 +23,18 @@ class Api::V2::FollowRecommendationsGraphController < Api::BaseController
   private
 
   # return account if local user
-  # return 404 if not a local user
+  # return 404 if not a local user or personalized
   def set_account
     username, domain = username_and_domain(params[:acct])
-    return not_found unless TagManager.instance.local_domain?(domain)
+    return not_found unless TagManager.instance.local_domain?(domain) || personalized?
 
-    @account = Account.find_local(username)
+    domain = nil if domain == Rails.configuration.x.local_domain
+    @account = Account.where(username: username, domain: domain).first
+    @handle = params[:acct]
+  end
+
+  def personalized?
+    PersonalForYou.new.personalized_mammoth_user?(params[:acct])
   end
 
   def handle_to_account_remote(handle)
