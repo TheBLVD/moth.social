@@ -8,7 +8,7 @@ class OnboardingAccountRecommendationsService < BaseService
 
   private
 
-  def generate_onboarding_follow_recommendations
+  def generate_onboarding_account_recommendations
     categories = YAML.load_file(yaml_file_location)
     categories.map do |category|
       Onboarding::V2::FollowRecommendationCategory.new(
