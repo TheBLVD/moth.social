@@ -1,10 +1,9 @@
-default: &defaults
-  # Your push api key, it is possible to set this dynamically using ERB:
-  # push_api_key: "<%= ENV['APPSIGNAL_PUSH_API_KEY'] %>"
-  push_api_key: '572aaf65-e265-4287-b52c-7f19834e4f84'
+default:
+  &defaults # Your push api key, it is possible to set this dynamically using ERB:
+  push_api_key: "<%= ENV['APPSIGNAL_PUSH_API_KEY'] %>"
 
   # Your app's name
-  name: 'Moth.Social'
+  name: "<%= ENV['LOCAL_DOMAIN'] %>"
 
   # Actions that should not be monitored by AppSignal
   # ignore_actions:
@@ -48,7 +47,7 @@ production:
 
 staging:
   <<: *defaults
-  active: true
+  active: false
 
 test: # Testing app environment
   <<: *defaults
