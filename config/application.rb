@@ -218,5 +218,7 @@ module Mastodon
       Devise::FailureApp.include AbstractController::Callbacks
       Devise::FailureApp.include Localized
     end
+    # Appsignal
+    config.log_tags = [:request_id]
   end
 end
