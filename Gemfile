@@ -213,5 +213,5 @@ gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
 # Use Json Web Token (JWT) for token based authentication Mammoth
 gem 'jwt'
 
-# NewRelic
-gem 'newrelic_rpm'
+# Appsignal
+gem 'appsignal'

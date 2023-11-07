@@ -118,6 +118,8 @@ GEM
     annotate (3.2.0)
       activerecord (>= 3.2, < 8.0)
       rake (>= 10.4, < 14.0)
+    appsignal (3.4.14)
+      rack
     ast (2.4.2)
     async (1.31.0)
       console (~> 1.10)
@@ -501,8 +503,6 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     net-ssh (7.1.0)
-    newrelic_rpm (9.6.0)
-      base64
     nio4r (2.5.9)
     nokogiri (1.15.4)
       mini_portile2 (~> 2.8.2)
@@ -855,6 +855,7 @@ DEPENDENCIES
   active_model_serializers (~> 0.10)
   addressable (~> 2.8)
   annotate (~> 3.2)
+  appsignal
   async (~> 1.31)
   async-http
   aws-sdk-s3 (~> 1.123)
@@ -920,7 +921,6 @@ DEPENDENCIES
   mime-types (~> 3.5.0)
   net-http (~> 0.3.2)
   net-ldap (~> 0.18)
-  newrelic_rpm
   nokogiri (~> 1.15)
   nsa!
   oj (~> 3.14)
