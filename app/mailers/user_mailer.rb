@@ -12,16 +12,18 @@ class UserMailer < Devise::Mailer
   helper RoutingHelper
 
   def confirmation_instructions(user, token, *, **)
-    @resource = user
-    @token    = token
-    @instance = Rails.configuration.x.local_domain
+    Appsignal.instrument('action.confirmation_instructions') do
+      @resource = user
+      @token    = token
+      @instance = Rails.configuration.x.local_domain
 
-    return unless @resource.active_for_authentication?
+      return unless @resource.active_for_authentication?
 
-    I18n.with_locale(locale) do
-      mail to: @resource.unconfirmed_email.presence || @resource.email,
-           subject: I18n.t(@resource.pending_reconfirmation? ? 'devise.mailer.reconfirmation_instructions.subject' : 'devise.mailer.confirmation_instructions.subject', instance: @instance),
-           template_name: @resource.pending_reconfirmation? ? 'reconfirmation_instructions' : 'confirmation_instructions'
+      I18n.with_locale(locale) do
+        mail to: @resource.unconfirmed_email.presence || @resource.email,
+             subject: I18n.t(@resource.pending_reconfirmation? ? 'devise.mailer.reconfirmation_instructions.subject' : 'devise.mailer.confirmation_instructions.subject', instance: @instance),
+             template_name: @resource.pending_reconfirmation? ? 'reconfirmation_instructions' : 'confirmation_instructions'
+      end
     end
   end
 
