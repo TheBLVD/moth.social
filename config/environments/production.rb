@@ -52,7 +52,7 @@ Rails.application.configure do
   # information to avoid inadvertent exposure of personally identifiable information (PII).
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
-  config.log_level = ENV.fetch('RAILS_LOG_LEVEL', 'warn').to_sym
+  config.log_level = ENV.fetch('RAILS_LOG_LEVEL', 'debug').to_sym
 
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
