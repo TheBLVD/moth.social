@@ -5,7 +5,6 @@ default: &defaults
 
   # Your app's name
   name: 'moth.social'
-  log: stdout
 
   # Actions that should not be monitored by AppSignal
   # ignore_actions:
