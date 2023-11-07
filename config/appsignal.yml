@@ -1,7 +1,7 @@
-default:
-  &defaults # Your push api key, it is possible to set this dynamically using ERB:
-  push_api_key: "<%= ENV['APPSIGNAL_PUSH_API_KEY'] %>"
-  # push_api_key: "572aaf65-e265-4287-b52c-7f19834e4f84"
+default: &defaults
+  # Your push api key, it is possible to set this dynamically using ERB:
+  # push_api_key: "<%= ENV['APPSIGNAL_PUSH_API_KEY'] %>"
+  push_api_key: '3b609e5e-0d91-4e53-834c-6e82604e7801'
 
   # Your app's name
   name: 'moth.social'
