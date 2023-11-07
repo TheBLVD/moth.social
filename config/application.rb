@@ -19,6 +19,11 @@ require 'sprockets/railtie'
 # Used to be implicitly required in action_mailbox/engine
 require 'mail'
 
+# Appsignal Run
+require 'appsignal'
+# Start the logger and the Agent
+Appsignal.start_logger
+Appsignal.start
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
