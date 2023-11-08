@@ -193,7 +193,6 @@ end
 
 group :production, :staging do
   gem 'lograge', '~> 0.12'
-  gem 'ddtrace', require: 'ddtrace/auto_instrument'
   gem 'google-protobuf', '~> 3.0'
 end
 
@@ -213,3 +212,6 @@ gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
 
 # Use Json Web Token (JWT) for token based authentication Mammoth
 gem 'jwt'
+
+# Appsignal
+gem 'appsignal'

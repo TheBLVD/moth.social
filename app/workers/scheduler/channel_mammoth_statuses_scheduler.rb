@@ -25,7 +25,7 @@ class Scheduler::ChannelMammothStatusesScheduler
   def update_channel_feeds!
     @channels = Mammoth::Channels.new.channels_with_statuses
     @channels.each do |channel|
-      Rails.logger.info { "CHANNEL::  #{channel} \n" }
+      Rails.logger.debug { "CHANNEL::  #{channel} \n" }
       push_statuses(channel[:statuses], channel[:id])
     end
   end

@@ -9,6 +9,7 @@ set :application, 'mastodon'
 set :rbenv_type, :user
 set :rbenv_ruby, File.read('.ruby-version').strip
 set :migration_role, :app
+set :appsignal_config, name: 'moth.social'
 
 append :linked_dirs, 'vendor/bundle', 'public/system'
 

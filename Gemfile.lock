@@ -118,6 +118,8 @@ GEM
     annotate (3.2.0)
       activerecord (>= 3.2, < 8.0)
       rake (>= 10.4, < 14.0)
+    appsignal (3.4.14)
+      rack
     ast (2.4.2)
     async (1.31.0)
       console (~> 1.10)
@@ -245,16 +247,7 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
-    datadog-ci (0.2.0)
-      msgpack
     date (3.3.3)
-    ddtrace (1.15.0)
-      datadog-ci (~> 0.2.0)
-      debase-ruby_core_source (= 3.2.2)
-      libdatadog (~> 5.0.0.1.0)
-      libddwaf (~> 1.14.0.0.0)
-      msgpack
-    debase-ruby_core_source (3.2.2)
     debug_inspector (1.1.0)
     devise (4.9.2)
       bcrypt (~> 3.0)
@@ -457,9 +450,6 @@ GEM
       letter_opener (~> 1.7)
       railties (>= 5.2)
       rexml
-    libdatadog (5.0.0.1.0)
-    libddwaf (1.14.0.0.0)
-      ffi (~> 1.0)
     link_header (0.0.8)
     llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
@@ -865,6 +855,7 @@ DEPENDENCIES
   active_model_serializers (~> 0.10)
   addressable (~> 2.8)
   annotate (~> 3.2)
+  appsignal
   async (~> 1.31)
   async-http
   aws-sdk-s3 (~> 1.123)
@@ -889,7 +880,6 @@ DEPENDENCIES
   concurrent-ruby
   connection_pool
   database_cleaner-active_record
-  ddtrace
   devise (~> 4.9)
   devise-two-factor (~> 4.1)
   devise_pam_authenticatable2 (~> 9.2)
