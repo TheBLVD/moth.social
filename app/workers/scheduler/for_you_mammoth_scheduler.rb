@@ -11,9 +11,11 @@ class Scheduler::ForYouMammothScheduler
 
   sidekiq_options retry: 0
 
+  LOAD_TEST_MULTIPLIER = ENV['FOR_YOU_LOAD_TEST_MULTIPLIER'] || 1
+
   def perform
     users = mammoth_users.wait
-    users.each do |acct|
+    ([users] * LOAD_TEST_MULTIPLIER).inject(&:zip).flatten.each do |acct|
       UpdateForYouWorker.perform_async({ acct: acct, rebuild: false })
     end
   end
