@@ -15,7 +15,8 @@ class Scheduler::ForYouMammothScheduler
 
   def perform
     users = mammoth_users.wait
-    ([users] * LOAD_TEST_MULTIPLIER).inject(&:zip).flatten.each do |acct|
+    users.flat_map { |u| [u] * LOAD_TEST_MULTIPLIER }
+         .each do |acct|
       UpdateForYouWorker.perform_async({ acct: acct, rebuild: false })
     end
   end
