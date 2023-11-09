@@ -13,7 +13,7 @@ class Scheduler::ForYouStatusesScheduler
   include Sidekiq::Worker
   include JsonLdHelper
 
-  sidekiq_options retry: 0, queue: 'mammoth'
+  sidekiq_options retry: 0, queue: 'mammoth_default'
 
   def perform
     owner_account = Account.local.where(username: FOR_YOU_OWNER_ACCOUNT)

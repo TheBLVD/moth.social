@@ -1,0 +1,20 @@
+# /etc/default/mastodon-sidekiq
+# Mastodon sidekiq environment variables
+
+# Reduce memory pressure on Linux.
+# This setting halves the amount of memory needed compared to default
+MALLOC_ARENA_MAX=2
+
+# Use the libjemalloc library on Linux
+LD_PRELOAD=libjemalloc.so
+
+# Sidekiq service thread counts
+# The number of threads needs to match the DB_POOL/MAX_THREADS environment
+# setting or we'll run out of database connections.
+# If DB_POOL is set, it takes precedence over MAX_THREADS. If neither are
+# set, mastodon defaults to 5 threads.
+DB_POOL=10
+
+# Default queueset config
+# 
+#QUEUESET="-q default,5 -q scheduler,10 -q mailers,2 -q ingress,5 -q push,5 -q pull,5"
