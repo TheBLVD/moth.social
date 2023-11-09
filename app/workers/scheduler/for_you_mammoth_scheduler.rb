@@ -13,7 +13,7 @@ class Scheduler::ForYouMammothScheduler
 
   LOAD_TEST_MULTIPLIER = ENV['FOR_YOU_LOAD_TEST_MULTIPLIER'].to_i || 1
 
-  Rails.logger.warn "ForYouMammothScheduler LOAD TEST:: x#{LOAD_TEST_MULTIPLIER}" if LOAD_TEST_MULTIPLIER >= 1
+  Rails.logger.warn "ForYouMammothScheduler LOAD TEST:: x#{LOAD_TEST_MULTIPLIER}" if LOAD_TEST_MULTIPLIER > 1
 
   def perform
     users = mammoth_users.wait
