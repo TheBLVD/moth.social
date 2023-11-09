@@ -1,0 +1,59 @@
+[Unit]
+# Set up a mastodon-sidekiq-<queuename>@.service unit for each queue
+# Configure at least one instance of each queue type to run
+# If we need more processing for a given queue type, enable
+# a second, third, etc. service and start it. Then stop it/disable it
+# if it's no longer needed once the load spike has passed.
+Description=Mastodon Sidekiq %j processor %i
+After=network.target
+
+[Service]
+Type=simple
+User=mastodon
+WorkingDirectory=/home/mastodon/live
+EnvironmentFile=/etc/default/mastodon-sidekiq
+# Queue specific configuration overrides defaults
+EnvironmentFile=-/etc/default/mastodon-sidekiq-%j
+Environment="RAILS_ENV=production"
+
+ExecStart=/usr/bin/bash -l -c '/home/mastodon/.rbenv/shims/bundle exec sidekiq -e production -c $DB_POOL $QUEUESET'
+TimeoutSec=15
+Restart=always
+# Proc filesystem
+ProcSubset=pid
+ProtectProc=invisible
+# Capabilities
+CapabilityBoundingSet=
+# Security
+NoNewPrivileges=true
+# Sandboxing
+ProtectSystem=strict
+PrivateTmp=true
+PrivateDevices=true
+PrivateUsers=true
+ProtectHostname=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET
+RestrictAddressFamilies=AF_INET6
+RestrictAddressFamilies=AF_NETLINK
+RestrictAddressFamilies=AF_UNIX
+RestrictNamespaces=true
+LockPersonality=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+RemoveIPC=true
+PrivateMounts=true
+ProtectClock=true
+# System Call Filtering
+SystemCallArchitectures=native
+SystemCallFilter=~@cpu-emulation @debug @keyring @ipc @mount @obsolete @privileged @setuid
+SystemCallFilter=@chown
+SystemCallFilter=pipe
+SystemCallFilter=pipe2
+ReadWritePaths=/home/mastodon/live
+
+[Install]
+WantedBy=multi-user.target

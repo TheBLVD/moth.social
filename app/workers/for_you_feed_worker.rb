@@ -7,7 +7,7 @@ class ForYouFeedWorker
   include Redisable
   include Sidekiq::Worker
 
-  sidekiq_options queue: 'mammoth', retry: 0
+  sidekiq_options queue: 'mammoth_default', retry: 0
 
   MAX_ITEMS = 1000
   MINIMUM_ENGAGMENT_ACTIONS = 2

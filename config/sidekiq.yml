@@ -7,7 +7,8 @@
   - [mailers, 2]
   - [pull]
   - [scheduler]
-  - [mammoth]
+  - [mammoth_critial]
+  - [mammoth_default]
 :scheduler:
   :listened_queues_only: true
   :schedule:
