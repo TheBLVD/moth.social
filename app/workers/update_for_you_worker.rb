@@ -16,19 +16,9 @@ class UpdateForYouWorker
     @personal = PersonalForYou.new
     @acct = opts['acct']
     @user = mammoth_user(@acct).wait
-    # This is temperary
-    @account = local_account
 
     if @user[:acct].nil?
       update_user_status('error').wait
-      return nil
-    end
-
-    # Unable to resolve account
-    # Set Status to 'error'
-    if @account.nil?
-      update_user_status('error').wait
-      ResolveAccountWorker.perform_async(@acct)
       return nil
     end
 
@@ -57,11 +47,6 @@ class UpdateForYouWorker
     Async do
       @personal.update_user(@acct, { status: status })
     end
-  end
-
-  def local_account
-    domain = @user[:domain] == ENV['LOCAL_DOMAIN'] ? nil : @user[:domain]
-    Account.where(username: @user[:username], domain: domain).first
   end
 
   def mammoth_user(acct)

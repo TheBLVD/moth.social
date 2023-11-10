@@ -8,7 +8,10 @@ Description=Mastodon Sidekiq %j processor %i
 After=network.target
 
 [Service]
-Type=simple
+Type=notify
+# If your Sidekiq process locks up, systemd's watchdog will restart it within seconds.
+WatchdogSec=10
+
 User=mastodon
 WorkingDirectory=/home/mastodon/live
 EnvironmentFile=/etc/default/mastodon-sidekiq
