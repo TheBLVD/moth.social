@@ -125,9 +125,7 @@ class UpdateForYouWorker
   def engagment_metrics(type)
     case type
     when 'following', 'mammoth'
-      { 1 => 2, 2 => 4, 3 => 6 }
-    when 'channel'
-      { 1 => 0, 2 => 1, 3 => 2 }
+      { 1 => 4, 2 => 6, 3 => 8 }
     when 'indirect'
       { 1 => 1, 2 => 2, 3 => 3 }
     end
