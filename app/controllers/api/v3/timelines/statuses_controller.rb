@@ -4,15 +4,13 @@ class Api::V3::Timelines::StatusesController < Api::BaseController
   before_action :require_mammoth!
   before_action do
     user_account = @decoded['sub']
-    Appsignal.set_namespace('foryou_status')
-    Appsignal.set_action('Api::V3::Timelines::StatusesController#show')
     Appsignal.tag_request(time: Time.now.utc, status_id: status_id_param, user_account: user_account)
   end
 
   rescue_from Mammoth::StatusOrigin::NotFound do |e|
     # Report error
     Rails.error.handle do
-      raise e.to_s
+      e.to_s
     end
     render json: { error: e.to_s }, status: 404
   end
