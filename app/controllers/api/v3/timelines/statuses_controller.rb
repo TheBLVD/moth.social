@@ -4,6 +4,7 @@ class Api::V3::Timelines::StatusesController < Api::BaseController
   before_action :require_mammoth!
 
   rescue_from Mammoth::StatusOrigin::NotFound do |e|
+    user_account = @decoded['sub']
     Appsignal.send_error(e) do |transaction|
       transaction.set_action('foryou')
       transaction.set_namespace('for_you_statuses')
