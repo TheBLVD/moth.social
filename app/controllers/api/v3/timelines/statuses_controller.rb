@@ -4,6 +4,11 @@ class Api::V3::Timelines::StatusesController < Api::BaseController
   before_action :require_mammoth!
 
   rescue_from Mammoth::StatusOrigin::NotFound do |e|
+    Appsignal.send_error(e) do |transaction|
+      transaction.set_action('foryou')
+      transaction.set_namespace('for_you_statuses')
+      transaction.params = { time: Time.now.utc, status_id: status_id_param, user_account: user_account }
+    end
     render json: { error: e.to_s }, status: 404
   end
 
