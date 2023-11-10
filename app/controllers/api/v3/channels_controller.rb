@@ -30,7 +30,8 @@ class Api::V3::ChannelsController < Api::BaseController
   def unsubscribe
     @mammoth = Mammoth::Channels.new
     @user = @mammoth.unsubscribe(channel_id_param, acct_param)
-    UpdateForYouWorker.perform_async({ acct: acct_param, rebuild: true })
+    # Set Queue specificlly for 'rebuild'
+    UpdateForYouWorker.set(queue: 'mammoth_critial').perform_async({ acct: acct_param, rebuild: true })
     render json: @user
   end
 
