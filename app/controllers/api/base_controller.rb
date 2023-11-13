@@ -58,7 +58,7 @@ class Api::BaseController < ApplicationController
     render json: { error: 'Record not found' }, status: 404
   end
 
-  rescue_from JWT::DecodeError do
+  rescue_from JWT::DecodeError do |e|
     Appsignal.send_error(e) do |transaction|
       transaction.set_action('require_mammoth')
       transaction.set_namespace('for_you')
@@ -160,7 +160,7 @@ class Api::BaseController < ApplicationController
     header = request.headers['Authorization']
     header = header.split.last if header
     unless header
-      Appsignal.send_error(e) do |transaction|
+      Appsignal.send_error do |transaction|
         transaction.set_action('require_mammoth')
         transaction.set_namespace('for_you')
         transaction.params = { time: Time.now.utc, header: header }
