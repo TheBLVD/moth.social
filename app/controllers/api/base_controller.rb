@@ -67,6 +67,15 @@ class Api::BaseController < ApplicationController
     render json: { errors: 'Unable to decode JWT' }, status: 422
   end
 
+  rescue_from JWT::InvalidParameterError do |e|
+    Appsignal.send_error(request) do |transaction|
+      transaction.set_action('require_mammoth')
+      transaction.set_namespace('for_you')
+      transaction.params = { time: Time.now.utc, error: e }
+    end
+    render json: { error: 'This method requires an authenticated user' }, status: 422
+  end
+
   rescue_from HTTP::Error, Mastodon::UnexpectedResponseError do
     render json: { error: 'Remote data could not be fetched' }, status: 503
   end
@@ -159,17 +168,8 @@ class Api::BaseController < ApplicationController
   def require_mammoth!
     header = request.headers['Authorization']
     header = header.split.last if header
-    unless header
-      Appsignal.send_error do |transaction|
-        transaction.set_action('require_mammoth')
-        transaction.set_namespace('for_you')
-        transaction.params = { time: Time.now.utc, header: header }
-      end
-      Rails.logger.warn { "NO HEADER PROVIDED DECODE #{request}" }
-      render json: { error: 'This method requires an authenticated user' }, status: 422
-    end
+    throw JWT::InvalidParameterError unless header
     @decoded = JsonToken.decode(header)
-    @decoded
   end
 
   def render_empty
