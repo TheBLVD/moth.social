@@ -42,6 +42,8 @@ class Api::BaseController < ApplicationController
     p.worker_src false
   end
 
+  class InvalidPayload < StandardError; end
+
   rescue_from ActiveRecord::RecordInvalid, Mastodon::ValidationError do |e|
     render json: { error: e.to_s }, status: 422
   end
@@ -67,7 +69,7 @@ class Api::BaseController < ApplicationController
     render json: { errors: 'Unable to decode JWT' }, status: 422
   end
 
-  rescue_from JWT::InvalidPayload do |e|
+  rescue_from InvalidPayload do |e|
     Appsignal.send_error(request) do |transaction|
       transaction.set_action('require_mammoth')
       transaction.set_namespace('for_you')
@@ -168,7 +170,8 @@ class Api::BaseController < ApplicationController
   def require_mammoth!
     header = request.headers['Authorization']
     header = header.split.last if header
-    throw JWT::InvalidPayload unless header
+    raise  InvalidPayload unless header
+
     @decoded = JsonToken.decode(header)
   end
 
