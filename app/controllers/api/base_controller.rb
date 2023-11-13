@@ -67,7 +67,7 @@ class Api::BaseController < ApplicationController
     render json: { errors: 'Unable to decode JWT' }, status: 422
   end
 
-  rescue_from JWT::InvalidParameterError do |e|
+  rescue_from JWT::InvalidPayload do |e|
     Appsignal.send_error(request) do |transaction|
       transaction.set_action('require_mammoth')
       transaction.set_namespace('for_you')
@@ -168,7 +168,7 @@ class Api::BaseController < ApplicationController
   def require_mammoth!
     header = request.headers['Authorization']
     header = header.split.last if header
-    throw JWT::InvalidParameterError unless header
+    throw JWT::InvalidPayload unless header
     @decoded = JsonToken.decode(header)
   end
 
