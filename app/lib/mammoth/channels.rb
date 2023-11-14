@@ -36,8 +36,8 @@ module Mammoth
     # Ensure we are checking statues as far back at 48 hours
     def filter_statuses_with_threshold
       channels_with_statuses.map do |channel|
-        account_ids = account_ids(channel[:accounts])
-        statuses_with_accounts_from_channels(account_ids).filter_map { |s| engagment_threshold(s, channel[:fy_engagement_threshold]) }
+        channel[:statuses] = channel[:statuses].filter_map { |s| engagment_threshold(s, channel[:fy_engagement_threshold]) }
+        channel
       end
     end
 
