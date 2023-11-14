@@ -20,10 +20,13 @@ class ChannelFeedManager
 
   # Adds to Channels Feed, but only those filtered
   # by the channels threshold
-  def batch_to_threshold(channel_id, status_ids)
-    statuses = status_ids.zip(status_ids)
+  # keeping both id and account_id of each status for breadcrumbs
+  # we serialize it to json to store
+  def batch_to_threshold(channel_id, statuses)
+    # statuses = status_ids.zip(status_ids)
+    batch_statuses = statuses.map { |s| [s[:id], s.to_json] }
 
-    perform_push_to_threshold(channel_id, statuses)
+    perform_push_to_threshold(channel_id, batch_statuses)
   end
 
   private
@@ -40,8 +43,6 @@ class ChannelFeedManager
 
   # Do the acutal adding to redis
   def push(channel_key, statuses)
-    Rails.logger.debug { "PUSH TO REDIS: #{channel_key}" }
-    Rails.logger.debug { "PUSH TO REDIS: #{statuses.inspect}" }
     redis.zadd(channel_key, statuses)
     # Keep the list from growning infinitely
     trim(channel_key)
