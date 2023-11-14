@@ -26,7 +26,7 @@ class Scheduler::ChannelMammothStatusesScheduler
     channels = Mammoth::Channels.new.channels_with_statuses
     channels.each do |channel|
       Rails.logger.debug { "CHANNEL::  #{channel} \n" }
-      channel_feed_manager.batch_to_feed(channel[:id], channel[:statuses])
+      channel_feed_manager.batch_to_feed(channel[:id], channel[:statuses].pluck('id'))
     end
   end
 
@@ -34,7 +34,7 @@ class Scheduler::ChannelMammothStatusesScheduler
     filtered_channels = Mammoth::Channels.new.filter_statuses_with_threshold
     filtered_channels.each do |channel|
       Rails.logger.debug { "FILTER CHANNEL::  #{channel} \n" }
-      channel_feed_manager.batch_to_threshold(channel[:id], channel[:statuses])
+      channel_feed_manager.batch_to_threshold(channel[:id], channel[:statuses].pluck('id'))
     end
   end
 
