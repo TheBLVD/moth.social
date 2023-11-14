@@ -38,6 +38,13 @@ class Scheduler::ChannelMammothStatusesScheduler
     end
   end
 
+  def channel_status_account_ids(channel)
+    {
+      id: channel[:id],
+      statuses: channel[:statuses].pluck(:id, :account_id).map { |id, account_id| { id: id, account_id: account_id } },
+    }
+  end
+
   def channel_feed_manager
     ChannelFeedManager.instance
   end
