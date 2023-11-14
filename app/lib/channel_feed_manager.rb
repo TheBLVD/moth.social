@@ -40,6 +40,8 @@ class ChannelFeedManager
 
   # Do the acutal adding to redis
   def push(channel_key, statuses)
+    Rails.logger.debug { "PUSH TO REDIS: #{channel_key}" }
+    Rails.logger.debug { "PUSH TO REDIS: #{statuses.inspect}" }
     redis.zadd(channel_key, statuses)
     # Keep the list from growning infinitely
     trim(channel_key)
