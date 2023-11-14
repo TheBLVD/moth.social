@@ -15,19 +15,23 @@ class Scheduler::ChannelMammothStatusesScheduler
   sidekiq_options retry: 0
 
   def perform
+    @channels = Mammoth::Channels.new.channels_with_statuses
     update_channel_feeds!
   end
 
   private
 
   # Get statuses for accounts of each channel
-  # FeedWorker w/ status_id & channel_id will add status
+  # ChannelManagerFeed status_id & channel_id will add status in a batch
   def update_channel_feeds!
-    @channels = Mammoth::Channels.new.channels_with_statuses
     @channels.each do |channel|
       Rails.logger.debug { "CHANNEL::  #{channel} \n" }
-      push_statuses(channel[:statuses], channel[:id])
+      channel_feed_manager.batch_to_feed(channle[:id], channel[:statuses])
     end
+  end
+
+  def channel_feed_manager
+    ChannelFeedManager.instance
   end
 
   # Filter statuses based on engagment and push to feed.
