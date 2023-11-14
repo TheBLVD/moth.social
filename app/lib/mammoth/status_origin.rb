@@ -86,7 +86,7 @@ module Mammoth
     end
 
     def channel_reason(status, channel)
-        Oj.dump({source: "SmartList", channel_id: channel[:id], title: channel[:title], originating_account_id: status.account[:id]})
+        Oj.dump({source: "SmartList", channel_id: channel[:id], title: channel[:title], originating_account_id: status[:account_id]})
     end
 
     def mammoth_pick_reason(status)
