@@ -23,7 +23,7 @@ class ChannelFeedManager
   # keeping both id and account_id of each status for breadcrumbs
   # we serialize it to json to store
   def batch_to_threshold(channel_id, statuses)
-    # statuses = status_ids.zip(status_ids)
+    Rails.logger.debug { "CHANNEL Statuses:: #{statues.inspect}" }
     batch_statuses = statuses.map { |s| [s[:id], s.to_json] }
 
     perform_push_to_threshold(channel_id, batch_statuses)
