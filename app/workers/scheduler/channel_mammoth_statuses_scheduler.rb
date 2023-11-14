@@ -26,16 +26,11 @@ class Scheduler::ChannelMammothStatusesScheduler
   def update_channel_feeds!
     @channels.each do |channel|
       Rails.logger.debug { "CHANNEL::  #{channel} \n" }
-      channel_feed_manager.batch_to_feed(channle[:id], channel[:statuses])
+      channel_feed_manager.batch_to_feed(channel[:id], channel[:statuses])
     end
   end
 
   def channel_feed_manager
     ChannelFeedManager.instance
-  end
-
-  # Filter statuses based on engagment and push to feed.
-  def push_statuses(statuses, channel_id)
-    statuses.each { |status| ChannelFeedWorker.perform_async(status['id'], channel_id) }
   end
 end
