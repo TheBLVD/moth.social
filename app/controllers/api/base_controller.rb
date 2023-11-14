@@ -42,6 +42,8 @@ class Api::BaseController < ApplicationController
     p.worker_src false
   end
 
+  class InvalidPayload < StandardError; end
+
   rescue_from ActiveRecord::RecordInvalid, Mastodon::ValidationError do |e|
     render json: { error: e.to_s }, status: 422
   end
@@ -58,8 +60,22 @@ class Api::BaseController < ApplicationController
     render json: { error: 'Record not found' }, status: 404
   end
 
-  rescue_from JWT::DecodeError do
+  rescue_from JWT::DecodeError do |e|
+    Appsignal.send_error(e) do |transaction|
+      transaction.set_action('require_mammoth')
+      transaction.set_namespace('for_you')
+      transaction.params = { time: Time.now.utc, error: e }
+    end
     render json: { errors: 'Unable to decode JWT' }, status: 422
+  end
+
+  rescue_from InvalidPayload do |e|
+    Appsignal.send_error(request) do |transaction|
+      transaction.set_action('require_mammoth')
+      transaction.set_namespace('for_you')
+      transaction.params = { time: Time.now.utc, error: e }
+    end
+    render json: { error: 'This method requires an authenticated user' }, status: 422
   end
 
   rescue_from HTTP::Error, Mastodon::UnexpectedResponseError do
@@ -154,12 +170,9 @@ class Api::BaseController < ApplicationController
   def require_mammoth!
     header = request.headers['Authorization']
     header = header.split.last if header
-    unless header
-      Rails.logger.warn { "NO HEADER PROVIDED DECODE #{request}" }
-      render json: { error: 'This method requires an authenticated user' }, status: 422
-    end
+    raise  InvalidPayload unless header
+
     @decoded = JsonToken.decode(header)
-    @decoded
   end
 
   def render_empty
