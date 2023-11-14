@@ -22,7 +22,7 @@ module Mammoth
     # Get Statuses from array of channels
     # filter out based on per channel threshold
     # User is passed all the way down to be able
-    # to add specific origin per user, per channel for a status. 
+    # to add specific origin per user, per channel for a status.
     def select_channels_with_statuses(channels, user)
       origin = Mammoth::StatusOrigin.instance
       channels.flat_map do |channel|
@@ -32,11 +32,21 @@ module Mammoth
       end
     end
 
+    # Return statuses for each channel that meets it's respective engagement threshold
+    # Ensure we are checking statues as far back at 48 hours
+    def filter_statuses_with_threshold
+      channels_with_statuses.map do |channel|
+        account_ids = account_ids(channel[:accounts])
+        statuses_with_accounts_from_channels(account_ids).filter_map { |s| engagment_threshold(s, channel[:fy_engagement_threshold]) }
+      end
+    end
+
     def statuses_from_channels(account_ids)
       Status.where(account_id: account_ids,
                    created_at: (GO_BACK.hours.ago)..Time.current)
     end
 
+    # Not entirely sure why we're including `:account`
     def statuses_with_accounts_from_channels(account_ids)
       Status.includes([:account]).where(account_id: account_ids,
                                         created_at: (GO_BACK.hours.ago)..Time.current)

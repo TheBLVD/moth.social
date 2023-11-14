@@ -18,25 +18,44 @@ class ChannelFeedManager
     perform_push_to_feed(channel_id, statuses)
   end
 
+  # Adds to Channels Feed, but only those filtered
+  # by the channels threshold
+  def batch_to_threshold(channel_id, status_ids)
+    statuses = status_ids.zip(status_ids)
+
+    perform_push_to_threshold(channel_id, statuses)
+  end
+
   private
 
   def perform_push_to_feed(channel_id, statuses)
     channel_key = key(channel_id)
-    redis.zadd(channel_key, statuses)
+    push(channel_key, statuses)
+  end
 
+  def perform_push_to_threshold(channel_id, statuses)
+    channel_key = key(channel_id, true)
+    push(channel_key, statuses)
+  end
+
+  # Do the acutal adding to redis
+  def push(channel_key, statuses)
+    redis.zadd(channel_key, statuses)
     # Keep the list from growning infinitely
     trim(channel_key)
   end
 
   # Trim a feed to maximum size by removing older items
-  # @param [Integer] foryou_key
+  # @param [Integer] channel_key
   # @return [void]
   def trim(channel_key)
     # Remove any items past the MAX_ITEMS'th entry in our feed
     redis.zremrangebyrank(channel_key, 0, -(MAX_ITEMS + 1))
   end
 
-  def key(_username)
-    FeedManager.instance.key(:channel, channel_id)
+  def key(channel_id, threshold = nil)
+    return "feed:channel:#{channel_id}" unless threshold
+
+    "feed:channel:threshold:#{channel_id}"
   end
 end
