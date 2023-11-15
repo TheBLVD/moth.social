@@ -90,7 +90,7 @@ module Mammoth
     end
 
     def mammoth_pick_reason(status)
-        Oj.dump({source: "MammothPick", originating_account_id: status.account[:id] })
+        Oj.dump({source: "MammothPick", originating_account_id: status[:account_id] })
     end
 
     def trending_follow_reason(status)

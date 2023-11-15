@@ -7,6 +7,7 @@ module Mammoth
     GO_BACK = 24 # number of hours back to fetch statuses
     FOR_YOU_OWNER_ACCOUNT = ENV['FOR_YOU_OWNER_ACCOUNT'] || 'admin'
     LIST_TITLE = 'For You'
+    ENGAGMENT_THRESHOLD = 4
 
     def curated_list_statuses
       account_ids = mammoth_curated_accounts
@@ -15,9 +16,11 @@ module Mammoth
 
     def statuses_from_list(account_ids)
       cache_key = 'mammoth_picks:statuses'
-      Rails.cache.fetch(cache_key, expires_in: 60.seconds) do
-        Status.where(account_id: account_ids,
-                     created_at: (GO_BACK.hours.ago)..Time.current).to_a
+      Rails.cache.fetch(cache_key, expires_in: 120.seconds) do
+        statuses = Status.where(account_id: account_ids,
+                                created_at: (GO_BACK.hours.ago)..Time.current).to_a
+
+        statuses.filter_map(&:engagment_threshold).pluck(:id, :account_id).map { |id, account_id| { id: id, account_id: account_id } }
       end
     end
 
@@ -28,6 +31,18 @@ module Mammoth
         @list = List.where(account: owner_account, title: LIST_TITLE).first!
         @list.list_accounts.pluck(:account_id).to_a
       end
+    end
+
+    private
+
+    # Check status for User's level of engagment
+    # Filter out polls and replys
+    def engagment_threshold(wrapped_status)
+      # enagagment threshold
+      status = wrapped_status.reblog? ? wrapped_status.reblog : wrapped_status
+
+      status_counts = status.reblogs_count + status.replies_count + status.favourites_count
+      status if status_counts >= ENGAGMENT_THRESHOLD && status.in_reply_to_id.nil? && status.poll_id.nil?
     end
   end
 end
