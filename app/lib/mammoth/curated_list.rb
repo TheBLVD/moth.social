@@ -20,7 +20,7 @@ module Mammoth
         statuses = Status.where(account_id: account_ids,
                                 created_at: (GO_BACK.hours.ago)..Time.current).to_a
 
-        statuses.filter_map(&:engagment_threshold).pluck(:id, :account_id).map { |id, account_id| { id: id, account_id: account_id } }
+        statuses.filter_map { |s| engagment_threshold(s) }.pluck(:id, :account_id).map { |id, account_id| { id: id, account_id: account_id } }
       end
     end
 
