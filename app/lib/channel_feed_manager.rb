@@ -34,8 +34,10 @@ class ChannelFeedManager
   # Return Array of Statuses [{:id:111409563649339301,:account_id:110481724616652677}...]
   def fetch_threshold_statuses(channel_id)
     channel_key = key(channel_id, true)
-
-    redis.zrange(channel_key, 0, -1).map { |s| Oj.load(s, symbol_keys: true) }
+    Rails.logger.debug { "CHANNEL KEY \n\n #{channel_key}" }
+    result = redis.zrange(channel_key, 0, -1).map { |s| Oj.load(s, symbol_keys: true) }
+    Rails.logger.debug { "THRESHOLD RESULT \n\n\n\n\n  #{result}" }
+    result
   end
 
   private
