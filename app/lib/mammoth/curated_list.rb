@@ -14,6 +14,10 @@ module Mammoth
       statuses_from_list(account_ids)
     end
 
+    # Get Statuses from Mammoth Pick's list
+    # Filter using engagment threshold
+    # only return id and account_id for breadcrumbs
+    # This is constantly updating, cache for only a couple minutes
     def statuses_from_list(account_ids)
       cache_key = 'mammoth_picks:statuses'
       Rails.cache.fetch(cache_key, expires_in: 120.seconds) do
@@ -24,6 +28,8 @@ module Mammoth
       end
     end
 
+    # Accounts on the Mammoth Pick's List
+    # These are rarely chanaged
     def mammoth_curated_accounts
       cache_key = 'mammoth_picks:accounts'
       Rails.cache.fetch(cache_key, expires_in: 1.day) do
@@ -35,7 +41,7 @@ module Mammoth
 
     private
 
-    # Check status for User's level of engagment
+    # Check status for Set Engagment
     # Filter out polls and replys
     def engagment_threshold(wrapped_status)
       # enagagment threshold

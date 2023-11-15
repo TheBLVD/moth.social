@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-# V1 of adding personalize statuses to a user's For You Feed
-# Done by indiviual statuses and filtered. :foryou is the
-# Mammoth curated list
+# Batch and maintain 2 sources of truth
+# Statuses by id for each and every channel
+# Statuses by id for each channel, **that meets it's specific threshold**
 class ChannelFeedManager
   include Singleton
   include Redisable

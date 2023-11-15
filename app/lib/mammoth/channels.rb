@@ -46,12 +46,6 @@ module Mammoth
                    created_at: (GO_BACK.hours.ago)..Time.current)
     end
 
-    # Not entirely sure why we're including `:account`
-    def statuses_with_accounts_from_channels(account_ids)
-      Status.includes([:account]).where(account_id: account_ids,
-                                        created_at: (GO_BACK.hours.ago)..Time.current)
-    end
-
     # Check status for Channel's set level of engagment
     # Filter out polls and replys
     def engagment_threshold(wrapped_status, channel_engagment_setting)
@@ -74,7 +68,7 @@ module Mammoth
     # Channel includes id, title, description, owner
     def list(include_accounts: false)
       cache_key = include_accounts ? 'channels:list:w_accounts' : 'channels:list'
-      Rails.cache.fetch(cache_key, expires_in: 1.day) do
+      Rails.cache.fetch(cache_key, expires_in: 1.hour) do
         response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
           "https://#{ACCOUNT_RELAY_HOST}/api/v1/channels?include_accounts=#{include_accounts}"
         )
@@ -85,7 +79,7 @@ module Mammoth
     # GET channel by id and return all details
     def find(id)
       cache_key = "channels:list:#{id}"
-      Rails.cache.fetch(cache_key, expires_in: 1.day) do
+      Rails.cache.fetch(cache_key, expires_in: 1.hour) do
         response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
           "https://#{ACCOUNT_RELAY_HOST}/api/v1/channels/#{id}"
         )
