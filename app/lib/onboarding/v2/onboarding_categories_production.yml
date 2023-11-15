@@ -116,7 +116,7 @@
       type: hashtag
       bio: Discussion related to the Apple company, products, services, and software.
       summary: Apple-related discussion.
-    - account: '@donmelton@mstdn.social'
+    - account: '@lisamelton@mastodon.social'
       type: account
       summary: Mastodon’s “Store Welcome Greeter”.
     - account: '@caseynewton@mastodon.social'
