@@ -90,7 +90,7 @@ class UpdateForYouWorker
     user_setting = @user[:for_you_settings]
     return if user_setting[:from_your_channels].zero?
 
-    @personal.statuses_for_enabled_channels(@user).pluck('id')
+    @personal.statuses_for_enabled_channels(@user).pluck(:id)
   end
 
   # Mammoth Curated OG List

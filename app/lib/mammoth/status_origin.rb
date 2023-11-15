@@ -27,7 +27,6 @@ module Mammoth
 
     # Add Status and Reason to list
     def add_channel(status, user, channel)
-        Rails.logger.debug "ADD CHANNEL REASON \n\n\n #{status}  #{channel.inspect}"
         list_key = key(user[:acct], status[:id])
         reason = channel_reason(status, channel)
         
@@ -87,7 +86,6 @@ module Mammoth
     end
 
     def channel_reason(status, channel)
-        Rails.logger.debug "CHANNEL REASON \n\n\n #{status}"
         Oj.dump({source: "SmartList", channel_id: channel[:id], title: channel[:title], originating_account_id: status[:account_id]})
     end
 
