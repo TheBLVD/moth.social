@@ -9,29 +9,43 @@ class Scheduler::ChannelMammothStatusesScheduler
   # Get Statuses for the last n hours from all channels
   # Iterate over and task a worker to fetch the status from original source
   include Sidekiq::Worker
-  include JsonLdHelper
   include Async
 
   sidekiq_options retry: 0
 
   def perform
     update_channel_feeds!
+    update_engagement_threshold_channel_feeds!
   end
 
   private
 
   # Get statuses for accounts of each channel
-  # FeedWorker w/ status_id & channel_id will add status
+  # ChannelManagerFeed status_id & channel_id will add status in a batch
   def update_channel_feeds!
-    @channels = Mammoth::Channels.new.channels_with_statuses
-    @channels.each do |channel|
+    channels = Mammoth::Channels.new.channels_with_statuses
+    channels.each do |channel|
       Rails.logger.debug { "CHANNEL::  #{channel} \n" }
-      push_statuses(channel[:statuses], channel[:id])
+      channel_feed_manager.batch_to_feed(channel[:id], channel[:statuses].pluck('id'))
     end
   end
 
-  # Filter statuses based on engagment and push to feed.
-  def push_statuses(statuses, channel_id)
-    statuses.each { |status| ChannelFeedWorker.perform_async(status['id'], channel_id) }
+  def update_engagement_threshold_channel_feeds!
+    filtered_channels = Mammoth::Channels.new.filter_statuses_with_threshold
+    filtered_channels.each do |channel|
+      Rails.logger.debug { "FILTER CHANNEL::  #{channel} \n" }
+      channel_feed_manager.batch_to_threshold(channel[:id], channel[:statuses].pluck(:id, :account_id).map { |id, account_id| { id: id, account_id: account_id } })
+    end
+  end
+
+  def channel_status_account_ids(channel)
+    {
+      id: channel[:id],
+      statuses: channel[:statuses].pluck(:id, :account_id).map { |id, account_id| { id: id, account_id: account_id } },
+    }
+  end
+
+  def channel_feed_manager
+    ChannelFeedManager.instance
   end
 end

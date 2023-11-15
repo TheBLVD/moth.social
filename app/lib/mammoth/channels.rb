@@ -20,26 +20,30 @@ module Mammoth
 
     # Used in ForYou Feed
     # Get Statuses from array of channels
-    # filter out based on per channel threshold
     # User is passed all the way down to be able
-    # to add specific origin per user, per channel for a status. 
+    # to add specific origin per user, per channel for a status.
+    # Get all Statuses from channel_feed_manager matching channel_id
+    # Array of statuses [{"id":111409563649339301,"account_id":110481724616652677}...]
     def select_channels_with_statuses(channels, user)
       origin = Mammoth::StatusOrigin.instance
+      channel_feed_manager = ChannelFeedManager.instance
       channels.flat_map do |channel|
-        account_ids = account_ids(channel[:accounts])
-        statuses_with_accounts_from_channels(account_ids).filter_map { |s| engagment_threshold(s, channel[:fy_engagement_threshold]) }
-                                                         .each { |s| origin.add_channel(s, user, channel) }
+        channel_feed_manager.fetch_threshold_statuses(channel[:id]).each { |s| origin.add_channel(s, user, channel) }
+      end
+    end
+
+    # Return statuses for each channel that meets it's respective engagement threshold
+    # Ensure we are checking statues as far back at 48 hours
+    def filter_statuses_with_threshold
+      channels_with_statuses.map do |channel|
+        channel[:statuses] = channel[:statuses].filter_map { |s| engagment_threshold(s, channel[:fy_engagement_threshold]) }
+        channel
       end
     end
 
     def statuses_from_channels(account_ids)
       Status.where(account_id: account_ids,
                    created_at: (GO_BACK.hours.ago)..Time.current)
-    end
-
-    def statuses_with_accounts_from_channels(account_ids)
-      Status.includes([:account]).where(account_id: account_ids,
-                                        created_at: (GO_BACK.hours.ago)..Time.current)
     end
 
     # Check status for Channel's set level of engagment
@@ -64,7 +68,7 @@ module Mammoth
     # Channel includes id, title, description, owner
     def list(include_accounts: false)
       cache_key = include_accounts ? 'channels:list:w_accounts' : 'channels:list'
-      Rails.cache.fetch(cache_key, expires_in: 60.seconds) do
+      Rails.cache.fetch(cache_key, expires_in: 1.hour) do
         response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
           "https://#{ACCOUNT_RELAY_HOST}/api/v1/channels?include_accounts=#{include_accounts}"
         )
@@ -75,7 +79,7 @@ module Mammoth
     # GET channel by id and return all details
     def find(id)
       cache_key = "channels:list:#{id}"
-      Rails.cache.fetch(cache_key, expires_in: 60.seconds) do
+      Rails.cache.fetch(cache_key, expires_in: 1.hour) do
         response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
           "https://#{ACCOUNT_RELAY_HOST}/api/v1/channels/#{id}"
         )

@@ -90,7 +90,7 @@ class UpdateForYouWorker
     user_setting = @user[:for_you_settings]
     return if user_setting[:from_your_channels].zero?
 
-    @personal.statuses_for_enabled_channels(@user).pluck('id')
+    @personal.statuses_for_enabled_channels(@user).pluck(:id)
   end
 
   # Mammoth Curated OG List
@@ -102,10 +102,9 @@ class UpdateForYouWorker
     list_statuses = curated_list.curated_list_statuses
     origin = Mammoth::StatusOrigin.instance
 
-    list_statuses.filter_map { |s| engagment_threshold(s, user_setting[:curated_by_mammoth], 'mammoth') }
-                 .map do |s|
+    list_statuses.map do |s|
       origin.add_mammoth_pick(s, @user)
-      s['id']
+      s[:id]
     end
   end
 
