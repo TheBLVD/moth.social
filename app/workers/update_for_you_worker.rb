@@ -3,6 +3,7 @@
 class UpdateForYouWorker
   include Redisable
   include Sidekiq::Worker
+  LOAD_TEST_MULTIPLIER = ENV['FOR_YOU_LOAD_TEST_MULTIPLIER'].to_i || 1
 
   sidekiq_options retry: 0, queue: 'mammoth_default'
 
@@ -35,12 +36,19 @@ class UpdateForYouWorker
 
   private
 
-  # Indirect Follow
-  # Direct Follows
-  # Channel Feed
-  # Mammoth Curated OG Feed
+  # Channel Feeds Enabled
+  # Mammoth Curated OG Feed (Mammoth Picks)
+  # Indirect Follow (Personalization)
+  # Direct Follows Trending (Personalization)
   def filter_statuses!
-    [*indirect_following_status, *following_status, *channels_status, *mammoth_curated_status]
+    Rails.logger.warn "UPDATEFORYOUWORKER LOAD TEST:: x#{LOAD_TEST_MULTIPLIER}" if LOAD_TEST_MULTIPLIER > 1
+    # For load testing. Only run Publicly available filters.
+    # Indirect & Following are in closed beta not enabled to the public. Yet.
+    if LOAD_TEST_MULTIPLIER > 1
+      [*channels_status, *mammoth_curated_status]
+    else
+      [*indirect_following_status, *following_status, *channels_status, *mammoth_curated_status]
+    end
   end
 
   def update_user_status(status)
