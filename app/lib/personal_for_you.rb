@@ -55,7 +55,7 @@ class PersonalForYou
   # If the for_you setting is public, get waitlist feature
   # and check for enrollment.
   # for_you_setting type can be 'public' | 'personal' | 'waitlist'
-  def mammoth_user(acct)
+  def mammoth_user_profile(acct)
     user = user(acct)
     return user unless user[:for_you_settings][:type] == 'public'
 
@@ -63,6 +63,15 @@ class PersonalForYou
     waitlist = waitlist_status(acct)
     user[:for_you_settings][:type] = 'waitlist' if waitlist == 'enrolled'
     user
+  end
+
+  # Check AcctRelay if the user is a Mammoth User
+  # Could be personalized or not. either way.
+  def fetch_mammoth_user?(acct)
+    response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
+      "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}/mammoth"
+    )
+    JSON.parse(response.body, symbolize_names: true)
   end
 
   # Get Mammoth user details
@@ -89,6 +98,10 @@ class PersonalForYou
   # The default foryou settings type is 'public
   def personalized_mammoth_user?(acct)
     user(acct).dig(:for_you_settings, :type) == 'personal'
+  end
+
+  def mammoth_user?(acct)
+    fetch_mammoth_user?(acct)[:mammoth_user]
   end
 
   # PUT Mammoth user for you settings / preferences / status

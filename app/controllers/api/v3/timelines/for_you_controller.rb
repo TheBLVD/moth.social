@@ -8,7 +8,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
 
   def index
-    result = PersonalForYou.new.mammoth_user(acct_param)
+    result = PersonalForYou.new.mammoth_user_profile(acct_param)
     render json: result
   end
 
@@ -40,11 +40,14 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     @is_beta_program = beta_param
   end
 
+  # Check and see if they're a Mammoth User
+  # If they are get their foryou feed
+  # Otherwise send them MammothPicks
   def set_for_you_feed
     should_personalize = validate_mammoth_account
     if should_personalize
       # Getting personalized
-      fufill_personalized_statuses
+      fufill_foryou_statuses
     else
       # Getting the public feed
       enroll_beta
@@ -53,12 +56,12 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   end
 
   # Check account_from_acct finds an account
-  # Check the For You Beta Personal List
+  # Check AccountRelay that they are a Mammoth 2.0 User
   # @return [Boolean]
   def validate_mammoth_account
     return false if @account.nil?
 
-    PersonalForYou.new.personalized_mammoth_user?(acct_param)
+    PersonalForYou.new.mammoth_user?(acct_param)
   end
 
   # Only checking for beta parameter
@@ -75,7 +78,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   # Will not return an empty list
   # If no statuses are found for the user,
   # but they are on the beta list then we return the default Public Feed
-  def fufill_personalized_statuses
+  def fufill_foryou_statuses
     statuses = cached_personalized_statuses
     if statuses.empty?
       cached_list_statuses
