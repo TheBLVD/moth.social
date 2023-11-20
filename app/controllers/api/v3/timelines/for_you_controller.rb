@@ -75,16 +75,10 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     for_you.add_to_enrollment(acct_param)
   end
 
-  # Will not return an empty list
-  # If no statuses are found for the user,
-  # but they are on the beta list then we return the default Public Feed
+  # Determined to be a Mammoth 2.0 user
+  # Return Personalized ForYou Feed
   def fufill_foryou_statuses
-    statuses = cached_personalized_statuses
-    if statuses.empty?
-      cached_list_statuses
-    else
-      statuses
-    end
+    cached_personalized_statuses
   end
 
   def cached_personalized_statuses
