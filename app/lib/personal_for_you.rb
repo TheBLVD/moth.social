@@ -5,8 +5,9 @@ class PersonalForYou
 
   ACCOUNT_RELAY_AUTH = "Bearer #{ENV.fetch('ACCOUNT_RELAY_KEY')}".freeze
   ACCOUNT_RELAY_HOST = 'acctrelay.moth.social'
-
   FEATURE_HOST = 'feature.moth.social'
+
+  class Error < StandardError; end
 
   # Cache Key for User
   def key(acct)
@@ -46,8 +47,9 @@ class PersonalForYou
     response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
       "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users"
     )
-    results = JSON.parse(response.body).map(&:symbolize_keys).pluck(:acct)
-    results unless response.code != 200
+    raise PersonalForYou::Error, "Request for users returned HTTP #{res.code}" unless res.code == 200
+
+    JSON.parse(response.body).map(&:symbolize_keys).pluck(:acct)
   end
 
   # Aggregate mammoth user from AcctRelay with Feature Api
@@ -81,6 +83,8 @@ class PersonalForYou
     response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
       "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}"
     )
+    raise PersonalForYou::Error, "Request for #{acct} returned HTTP #{response.code}" unless response.code == 200
+
     JSON.parse(response.body, symbolize_names: true)
   end
 
