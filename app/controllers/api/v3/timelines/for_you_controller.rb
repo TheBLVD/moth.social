@@ -4,8 +4,11 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   # TODO: Re-enable with fix
   # before_action :require_mammoth!
   before_action :set_for_you_default, only: [:show]
-
   after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
+
+  rescue_from PersonalForYou::Error do |exception|
+    render json: { error: exception }, status: 404
+  end
 
   def index
     result = PersonalForYou.new.mammoth_user_profile(acct_param)
