@@ -2,7 +2,7 @@
 
 # Checks to see if UpdateForYouWokers are still running jobs from last
 # scheduled batch.
-class ForYouMammothService < BaseService
+class ForYouMammothServiceCheck < BaseService
   def call
     update_worker_in_process?
   end

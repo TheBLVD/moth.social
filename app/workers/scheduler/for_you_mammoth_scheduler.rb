@@ -17,7 +17,7 @@ class Scheduler::ForYouMammothScheduler
 
   def perform
     # Check for existing UpdateForYou Workers first
-    return if ForYouMammothService.new.call
+    return if ForYouMammothServiceCheck.new.call
 
     users = mammoth_users.wait
     users.flat_map { |u| [u] * LOAD_TEST_MULTIPLIER }
