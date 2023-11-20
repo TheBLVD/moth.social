@@ -81,10 +81,6 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   # Determined to be a Mammoth 2.0 user
   # Return Personalized ForYou Feed
   def fufill_foryou_statuses
-    cached_personalized_statuses
-  end
-
-  def cached_personalized_statuses
     cache_collection personalized_for_you_list_statuses, Status
   end
 
