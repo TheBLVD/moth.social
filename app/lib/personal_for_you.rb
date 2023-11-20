@@ -83,7 +83,7 @@ class PersonalForYou
     response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
       "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users/#{acct}"
     )
-    raise PersonalForYou::Error, "Request for #{acct} returned HTTP #{res.code}" unless res.code == 200
+    raise PersonalForYou::Error, "Request for #{acct} returned HTTP #{response.code}" unless response.code == 200
 
     JSON.parse(response.body, symbolize_names: true)
   end
