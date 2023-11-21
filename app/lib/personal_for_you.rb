@@ -46,8 +46,9 @@ class PersonalForYou
     response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
       "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users"
     )
-    results = JSON.parse(response.body).map(&:symbolize_keys).pluck(:acct)
-    results unless response.code != 200
+    raise PersonalForYou::Error, "Request for users returned HTTP #{response.code}" unless response.code == 200
+
+    JSON.parse(response.body).map(&:symbolize_keys).pluck(:acct)
   end
 
   # Aggregate mammoth user from AcctRelay with Feature Api
