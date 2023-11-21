@@ -16,6 +16,9 @@ class Scheduler::ForYouMammothScheduler
   Rails.logger.warn "ForYouMammothScheduler LOAD TEST:: x#{LOAD_TEST_MULTIPLIER}" if LOAD_TEST_MULTIPLIER > 1
 
   def perform
+    # Check for existing UpdateForYou Workers first
+    ForYouMammothServiceCheck.new.call
+
     users = mammoth_users.wait
     users.flat_map { |u| [u] * LOAD_TEST_MULTIPLIER }
          .each do |acct|

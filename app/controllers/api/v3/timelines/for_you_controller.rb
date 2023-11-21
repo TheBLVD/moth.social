@@ -4,8 +4,11 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   # TODO: Re-enable with fix
   # before_action :require_mammoth!
   before_action :set_for_you_default, only: [:show]
-
   after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
+
+  rescue_from PersonalForYou::Error do |exception|
+    render json: { error: exception }, status: 404
+  end
 
   def index
     result = PersonalForYou.new.mammoth_user_profile(acct_param)
@@ -75,19 +78,9 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     for_you.add_to_enrollment(acct_param)
   end
 
-  # Will not return an empty list
-  # If no statuses are found for the user,
-  # but they are on the beta list then we return the default Public Feed
+  # Determined to be a Mammoth 2.0 user
+  # Return Personalized ForYou Feed
   def fufill_foryou_statuses
-    statuses = cached_personalized_statuses
-    if statuses.empty?
-      cached_list_statuses
-    else
-      statuses
-    end
-  end
-
-  def cached_personalized_statuses
     cache_collection personalized_for_you_list_statuses, Status
   end
 
