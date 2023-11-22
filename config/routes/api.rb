@@ -332,6 +332,16 @@ namespace :api, format: false do
     end
   end
 
+  namespace :v4 do
+    namespace :timelines do
+      resource :for_you, only: [:show], controller: 'for_you' do
+        resources :statuses, only: :show, controller: :statuses
+        get '/me',      to: 'for_you#index'
+        put '/me',      to: 'for_you#update'
+      end
+    end
+  end
+
   # Web
   namespace :web do
     resource :settings, only: [:update]
