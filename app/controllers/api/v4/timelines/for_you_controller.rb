@@ -47,9 +47,10 @@ class Api::V4::Timelines::ForYouController < Api::BaseController
     @user = user_from_param
   end
 
-  # Check and see if they're a Mammoth User
+  # Check user is personalzied
   # If they are get their foryou feed
   # Otherwise send them MammothPicks
+  # TODO: overload foryou tasks, fallback to MammothPicks here.
   def set_for_you_feed
     if personalized_feed?
       # Getting personalized
