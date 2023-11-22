@@ -16,6 +16,10 @@ class ForYouFeed < Feed
   # If there is an foryou feed
   # redis returns 1 for true, 0 for false
   def exists?
-    redis.exists(@id) == 1
+    redis.exists(key) == 1
+  end
+
+  def key
+    FeedManager.instance.key(@type, @id)
   end
 end
