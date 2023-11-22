@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-class Api::V3::Timelines::ForYouController < Api::BaseController
+# Serving Mammoth 2.0
+class Api::V4::Timelines::ForYouController < Api::BaseController
   # TODO: Re-enable with fix
   # before_action :require_mammoth!
   before_action :set_for_you_default, only: [:show]
@@ -10,11 +11,15 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     render json: { error: exception }, status: 404
   end
 
+  # Return Mammoth User Profile w/ foryou settings
+  # api/v4/foryou/users/me/:acct
   def index
     result = PersonalForYou.new.mammoth_user_profile(acct_param)
     render json: result
   end
 
+  # Return Mammoth User ForYou Feed
+  # api/v4/foryou/users/:acct
   def show
     @statuses = set_for_you_feed
     render json: @statuses,
@@ -40,58 +45,33 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     @default_owner_account = Account.local.where(username: FOR_YOU_OWNER_ACCOUNT).first!
     @account = account_from_acct
     @user = user_from_param
-    @is_beta_program = beta_param
   end
 
   # Check and see if they're a Mammoth User
   # If they are get their foryou feed
   # Otherwise send them MammothPicks
   def set_for_you_feed
-    should_personalize = validate_mammoth_account
-    if should_personalize
+    if personalized_feed?
       # Getting personalized
       fufill_foryou_statuses
     else
-      # Getting the public feed
-      enroll_beta
       cached_list_statuses
     end
   end
 
   # Check account_from_acct finds an account
   # Check AccountRelay that they are a Mammoth 2.0 User
+  # Check that there is personalized feed generated for them
   # @return [Boolean]
-  def validate_mammoth_account
-    return false if @account.nil?
+  def personalized_feed?
+    return false if @account.nil? || !personalzied_feed.exists?
 
     PersonalForYou.new.mammoth_user?(acct_param)
   end
 
-  # Only checking for beta parameter
-  # After we've validated the acct is NOT on the beta list
-  # So if you're already on the beta list we're not going add them
-  def enroll_beta
-    return unless @is_beta_program
-
-    # Add to beta enrollment list
-    for_you = ForYouBeta.new
-    for_you.add_to_enrollment(acct_param)
-  end
-
   # Determined to be a Mammoth 2.0 user
   # Return Personalized ForYou Feed
-  # TODO: Revert once v4 is out for testflight users
-  # Always return Mammoth Picks at that point
   def fufill_foryou_statuses
-    statuses = cached_personalized_statuses
-    if statuses.empty?
-      cached_list_statuses
-    else
-      statuses
-    end
-  end
-
-  def cached_personalized_statuses
     cache_collection personalized_for_you_list_statuses, Status
   end
 
@@ -155,14 +135,6 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
       :from_your_channels,
       :your_follows
     ).except('acct')
-  end
-
-  # Used to indicate beta group
-  # for testflight
-  def beta_param
-    return if params[:beta].nil?
-
-    params[:beta].casecmp('true').zero?
   end
 
   # Pagination
