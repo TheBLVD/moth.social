@@ -6,6 +6,8 @@ class Api::V4::Timelines::ForYouController < Api::BaseController
   before_action :set_for_you_default, only: [:show]
   after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
 
+  MAMMOTH_OVERLOAD_ENABLE = ENV['MAMMOTH_OVERLOAD_ENABLE'] == 'true'
+
   rescue_from PersonalForYou::Error do |exception|
     render json: { error: exception }, status: 404
   end
@@ -59,14 +61,21 @@ class Api::V4::Timelines::ForYouController < Api::BaseController
     end
   end
 
+  # Check Mammoth Overload
   # Check account_from_acct finds an account
-  # Check AccountRelay that they are a Mammoth 2.0 User
   # Check that there is personalized feed generated for them
+  # Finally -> Check AccountRelay that they are a Mammoth 2.0 User
   # @return [Boolean]
   def personalized_feed?
-    return false if @account.nil? || !personalzied_feed.exists?
+    return false if mammoth_overload? || @account.nil? || !personalzied_feed.exists?
 
     PersonalForYou.new.mammoth_user?(acct_param)
+  end
+
+  # Overload backpressure release value
+  def mammoth_overload?
+    Rails.logger.warn 'ForYouMammothScheduler MAMMOTH_OVERLOAD_ENABLED' if MAMMOTH_OVERLOAD_ENABLE
+    MAMMOTH_OVERLOAD_ENABLE
   end
 
   # Determined to be a Mammoth 2.0 user
