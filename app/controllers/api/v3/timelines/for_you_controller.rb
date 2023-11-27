@@ -7,7 +7,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
   after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
 
   def show
-    @statuses = cached_personalized_statuses
+    @statuses = list_statuses
     render json: @statuses,
            each_serializer: REST::StatusSerializer
   end
@@ -19,7 +19,7 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     @account = account_from_acct
   end
 
-  def cached_list_statuses
+  def list_statuses
     cache_collection general_for_you_list_statuses, Status
   end
 
