@@ -2,8 +2,7 @@
 
 # Serving Mammoth 2.0
 class Api::V4::Timelines::ForYouController < Api::BaseController
-  # TODO: Re-enable with fix
-  # before_action :require_mammoth!
+  before_action :require_mammoth!
   before_action :set_for_you_default, only: [:show]
   after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
 

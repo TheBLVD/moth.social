@@ -32,6 +32,11 @@ class Api::V3::Timelines::ForYouController < Api::BaseController
     )
   end
 
+  # Mammoth Picks list
+  def default_list
+    List.where(account: @default_owner_account, title: LIST_TITLE).first!
+  end
+
   def list_feed
     ForYouFeed.new('foryou', default_list.id)
   end
