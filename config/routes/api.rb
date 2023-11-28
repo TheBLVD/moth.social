@@ -326,12 +326,11 @@ namespace :api, format: false do
       resources :channels, only: :show, controller: :channels
       resource :for_you, only: [:show], controller: 'for_you' do
         resources :statuses, only: :show, controller: :statuses
-        get '/me',      to: 'for_you#index'
-        put '/me',      to: 'for_you#update'
       end
     end
   end
 
+  # V4 Mammoth 2.0
   namespace :v4 do
     namespace :timelines do
       resource :for_you, only: [:show], controller: 'for_you' do

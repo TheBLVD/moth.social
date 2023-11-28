@@ -6,8 +6,13 @@
 class ForYouMammothServiceCheck < BaseService
   class Error < StandardError; end
 
+  # Overload backpressure release value
+  MAMMOTH_OVERLOAD_ENABLE = ENV['MAMMOTH_OVERLOAD_ENABLE'] == 'true'
+  Rails.logger.warn 'ForYouMammothScheduler MAMMOTH_OVERLOAD_ENABLED' if MAMMOTH_OVERLOAD_ENABLE
+
   def call
     begin
+      mammoth_overload?
       update_worker_in_process?
     rescue Error => e
       Rails.logger.warn("error: #{e}")
@@ -18,6 +23,10 @@ class ForYouMammothServiceCheck < BaseService
       end
       raise e
     end
+  end
+
+  def mammoth_overload?
+    raise Error, 'UpdateForYouScheduler Overload Enabled' if MAMMOTH_OVERLOAD_ENABLE
   end
 
   # Check specificly for any UpdateWorker

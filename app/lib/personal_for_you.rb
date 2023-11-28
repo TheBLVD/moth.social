@@ -7,6 +7,10 @@ class PersonalForYou
   ACCOUNT_RELAY_HOST = 'acctrelay.moth.social'
   FEATURE_HOST = 'feature.moth.social'
 
+  # Overload backpressure release value
+  MAMMOTH_OVERLOAD_ENABLE = ENV['MAMMOTH_OVERLOAD_ENABLE'] == 'true'
+  Rails.logger.warn 'PersonalForYou MAMMOTH_OVERLOAD_ENABLED' if MAMMOTH_OVERLOAD_ENABLE
+
   class Error < StandardError; end
 
   # Cache Key for User
@@ -48,6 +52,7 @@ class PersonalForYou
       "https://#{ACCOUNT_RELAY_HOST}/api/v1/foryou/users"
     )
     raise PersonalForYou::Error, "Request for users returned HTTP #{response.code}" unless response.code == 200
+
     JSON.parse(response.body).map(&:symbolize_keys).pluck(:acct)
   end
 
@@ -56,8 +61,11 @@ class PersonalForYou
   # If the for_you setting is public, get waitlist feature
   # and check for enrollment.
   # for_you_setting type can be 'public' | 'personal' | 'waitlist'
+  # If Overload is enabled set status to 'overloaded'
   def mammoth_user_profile(acct)
     user = user(acct)
+    # Mammoth Overload Check set if overload is enabled
+    user[:for_you_settings][:status] = 'overloaded' if MAMMOTH_OVERLOAD_ENABLE
     return user unless user[:for_you_settings][:type] == 'public'
 
     # if for_you is public get the waitlist
