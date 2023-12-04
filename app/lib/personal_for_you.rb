@@ -62,14 +62,14 @@ class PersonalForYou
   # and check for enrollment.
   # for_you_setting type can be 'public' | 'personal' | 'waitlist'
   # If Overload is enabled set status to 'overloaded'
-  def mammoth_user_profile(acct)
+  def mammoth_user_profile(acct, auth_header_key)
     user = user(acct)
     # Mammoth Overload Check set if overload is enabled
     user[:for_you_settings][:status] = 'overloaded' if MAMMOTH_OVERLOAD_ENABLE
     return user unless user[:for_you_settings][:type] == 'public'
 
     # if for_you is public get the waitlist
-    waitlist = waitlist_status(acct)
+    waitlist = waitlist_status(acct, auth_header_key)
     user[:for_you_settings][:type] = 'waitlist' if waitlist == 'enrolled'
     user
   end
@@ -97,8 +97,8 @@ class PersonalForYou
 
   # Get User Waitlist Status
   # :waitlist will be 'none' | 'enrolled'
-  def waitlist_status(acct)
-    response = HTTP.headers({ Authorization: ACCOUNT_RELAY_AUTH, 'Content-Type': 'application/json' }).get(
+  def waitlist_status(acct, auth_header_key)
+    response = HTTP.headers({ Authorization: "Bearer #{auth_header_key}", 'Content-Type': 'application/json' }).get(
       "https://#{FEATURE_HOST}/api/v1/personalize?acct=#{acct}"
     )
     JSON.parse(response.body, symbolize_names: true)[:waitlist]

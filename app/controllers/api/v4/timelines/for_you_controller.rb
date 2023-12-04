@@ -15,7 +15,7 @@ class Api::V4::Timelines::ForYouController < Api::BaseController
   # Return Mammoth User Profile w/ foryou settings
   # api/v4/foryou/users/me/:acct
   def index
-    result = PersonalForYou.new.mammoth_user_profile(acct_param)
+    result = PersonalForYou.new.mammoth_user_profile(acct_param, @auth_header_key)
     render json: result
   end
 
