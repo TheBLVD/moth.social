@@ -169,10 +169,10 @@ class Api::BaseController < ApplicationController
   # Mammoth client encoded JWT is required as Authorized Bearer header
   def require_mammoth!
     header = request.headers['Authorization']
-    header = header.split.last if header
-    raise  InvalidPayload unless header
+    @auth_header_key = header.split.last if header
+    raise InvalidPayload unless @auth_header_key
 
-    @decoded = JsonToken.decode(header)
+    @decoded = JsonToken.decode(@auth_header_key)
   end
 
   def render_empty
