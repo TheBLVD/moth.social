@@ -322,6 +322,10 @@ namespace :api, format: false do
       end
     end
 
+    namespace :admin do
+      resource :for_you, only: [:update], controller: 'for_you'
+    end
+
     namespace :timelines do
       resources :channels, only: :show, controller: :channels
       resource :for_you, only: [:show], controller: 'for_you' do
