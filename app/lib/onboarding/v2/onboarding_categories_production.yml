@@ -9,9 +9,6 @@
     - account: '@elonjet@mastodon.social'
       type: account
       summary: The official ElonJet account.
-    - account: '@MarkRuffalo@mastodon.social'
-      type: account
-      summary: Award-winning actor, Oscar nominee.
     - account: '@georgetakei@universeodon.com'
       type: account
       summary: "Actor, author, and activist. \U0001F596"
@@ -29,9 +26,6 @@
       type: hashtag
       bio: General movies and film discussion.
       summary: Movies discussion.
-    - account: '@morgfair@newsie.social'
-      type: account
-      summary: Actress, Primetime Emmy nominee.
     - account: '@BethanyBlack@mastodon.social'
       type: account
       summary: English stand-up comedian.
@@ -76,9 +70,12 @@
     - account: '@chrisgeidner@journa.host'
       type: account
       summary: Award-winning law journalist.
-    - account: '@Emilyalpertreyes@mas.to'
+    - account: '@404mediaco@mastodon.social'
       type: account
-      summary: LA Times covering Public Health.
+      summary:
+    - account: '@egies@masto.ai'
+      type: account
+      summary:
 - name: Content Creators
   items:
     - account: '@rebeccawatson@mstdn.social'
@@ -91,9 +88,6 @@
       type: hashtag
       bio: Discussion related to blogging, and interesting blog posts people have shared.
       summary: Blog content and discussion.
-    - account: '@oatmeal@mastodon.social'
-      type: account
-      summary: Popular web comic by Matthew Inman.
     - account: '@notjustbikes@notjustbikes.com'
       type: account
       summary: Urbanist commentator, YouTuber.
@@ -122,9 +116,9 @@
     - account: '@caseynewton@mastodon.social'
       type: account
       summary: Tech journalist. Editor, Platformer.
-    - account: '@DetroitBORG@techhub.social'
+    - account: '@carnage4life@mas.to'
       type: account
-      summary: Popular Apple and tech YouTuber.
+      summary:
     - hashtag: '#startup'
       type: hashtag
       bio: Discussion related to startups, entrepreneurship, and general industry happenings.
@@ -134,9 +128,6 @@
       summary: Founder of Craigslist.
 - name: Academics & Thinkers
   items:
-    - account: '@helenprejean@mindly.social'
-      type: account
-      summary: Death penalty activist.
     - account: '@thesiswhisperer@aus.social'
       type: account
       summary: Professor Inger Mewburn, ANU.
@@ -147,9 +138,6 @@
     - account: '@drcaberry@blacktwitter.io'
       type: account
       summary: Elec. Engineering, Robotics professor.
-    - account: '@brooklynmarie@mastodon.social'
-      type: account
-      summary: Your friendly neighborhood debunker.
     - hashtag: '#academia'
       type: hashtag
       bio: 'Academics on Mastodon: research, news, papers and general discussion.'
@@ -160,11 +148,14 @@
     - account: '@absolutspacegrl@mastodon.social'
       type: account
       summary: NASA engineer.
+    - account: '@mariapopova@indieweb.social'
+      type: account
+      summary:
+    - account: '@luckytran@med-mastodon.com'
+      type: account
+      summary:
 - name: Politics & Activism
   items:
-    - account: '@RitchieTorres@universeodon.com'
-      type: account
-      summary: NY15 Congressman.
     - account: '@rubenbolling@mastodon.social'
       type: account
       summary: Award winning political cartoonist.
@@ -172,9 +163,6 @@
       type: hashtag
       bio: Discussion covering activism and activist movements across the world.
       summary: General activism discussion.
-    - account: '@zhivi@blacktwitter.io'
-      type: account
-      summary: Health, fitness, accountability coach.
     - hashtag: '#BlackLivesMatter'
       type: hashtag
       bio:
@@ -206,20 +194,40 @@
     - account: '@BigAngBlack@fosstodon.org'
       type: account
       summary: Black culture student.
+    - account: '@indivisibleteam@mastodon.social'
+      type: account
+      summary:
+    - account: '@erictopol@mstdn.social'
+      type: account
+      summary:
+    - account: '@insideclimatenews@journa.host'
+      type: account
+      summary:
 - name: Humor
   items:
     - account: '@feral_hattie@mastodon.social'
       type: account
       summary: Humorous posts with progressive themes.
-    - account: '@professorkiosk@beige.party'
-      type: account
-      summary: Comedic posts from an academic.
     - account: '@Alice@beige.party'
       type: account
       summary: Witty one-liners.
-    - account: '@princesaballena@beige.party'
+- name: Flipboard
+  items:
+    - account: '@NewsDesk@flipboard.social'
       type: account
-      summary: Silly jokes and puns.
+      summary:
+    - account: '@TechDesk@flipboard.social'
+      type: account
+      summary:
+    - account: '@ArtPhotosDesk@flipboard.social'
+      type: account
+      summary:
+    - account: '@ScienceDesk@flipboard.social'
+      type: account
+      summary:
+    - account: '@CultureDesk@flipboard.social'
+      type: account
+      summary:
 - name: Art & Photographers
   items:
     - account: '@Curator@mastodon.art'
@@ -252,6 +260,15 @@
       type: hashtag
       bio: Photographers and interesting photos on Mastodon.
       summary: Photos and photography.
+    - account: '@bythehandofbob@mstdn.social'
+      type: account
+      summary:
+    - account: '@bythehandofbob@mstdn.social'
+      type: account
+      summary:
+    - account: '@inspirationgrid@graphics.social'
+      type: account
+      summary:
 - name: Mammoth Team
   items:
     - account: '@bart@moth.social'
