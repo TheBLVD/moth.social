@@ -8,6 +8,6 @@ class Api::V3::Admin::ForYouController < Api::BaseController
   def update
     # Set Queue specificly for a rebuild
     Rails.logger.debug { "DECODED #{@decoded}" }
-    UpdateForYouWorker.set(queue: 'mammoth_critial').perform_async({ acct: acct_param, rebuild: true })
+    UpdateForYouWorker.set(queue: 'mammoth_critial').perform_async({ acct: @decoded.sub, rebuild: true })
   end
 end
