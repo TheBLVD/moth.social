@@ -7,14 +7,25 @@ default:
   working_directory_path: '/tmp/appsignal'
 
   # Actions that should not be monitored by AppSignal
-  # ignore_actions:
-  #   - ApplicationController#isup
+ignore_actions:
+  - 'LinkCrawlWorker#perform'
+  - 'ActivityPub::DeliveryWorker#perform'
+  - 'VerifyAccountLinksWorker#perform'
+  - 'ActivityPub::SynchronizeFeaturedCollectionWorker#perform'
+  - 'ActivityPub::FetchRepliesWorker#perform'
+  - 'ActivityPub::ProcessingWorker#perform'
+  - 'UpdateStatusStatWorker#perform'
+  - 'FeedInsertWorker#perform'
+  - 'ChannelFeedWorker#perform'
+  - 'ThreadResolveWorker#perform'
 
   # Errors that should not be recorded by AppSignal
   # For more information see our docs:
   # https://docs.appsignal.com/ruby/configuration/ignore-errors.html
-  # ignore_errors:
-  #   - Exception
+ignore_errors:
+  - HTTP::TimeoutError
+  - ActiveRecord::NotNullViolation
+  - OpenSSL::SSL::SSLError
   #   - NoMemoryError
   #   - ScriptError
   #   - LoadError
