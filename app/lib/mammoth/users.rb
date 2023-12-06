@@ -18,16 +18,16 @@ module Mammoth
       data = []
       while current_page != total_pages
         response = fetch("https://#{ACCOUNT_RELAY_HOST}/api/v1/admin/users?page=#{current_page}")
-        current_page += 1
-        total_pages = response['Total-Pages']
-        Rails.logger.debug { "HTTP RESPONSE: #{response.inspect}" }
-        Rails.logger.debug { "HTTP CURRENT PAGE: #{response['Current-Page']}" }
-        Rails.logger.debug { "HTTP TOTAL PAGES: #{response['Total-Pages']}" }
+        current_page = response['Current-Page'].to_i + 1
+        total_pages = response['Total-Pages'].to_i
+        # Rails.logger.debug { "HTTP RESPONSE: #{response.inspect}" }
+        # Rails.logger.debug { "HTTP CURRENT PAGE: #{response['Current-Page']}" }
+        # Rails.logger.debug { "HTTP TOTAL PAGES: #{response['Total-Pages']}" }
         raise Users::Error, "Request for users returned HTTP #{response.code}" unless response.code == 200
 
         page = JSON.parse(response.body).map(&:symbolize_keys).pluck(:acct)
         # Rails.logger.debug { "PAGE_DATE: #{page}" }
-        data += page
+        data.concat(page)
       end
       data
     rescue => e
