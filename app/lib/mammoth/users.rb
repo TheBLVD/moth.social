@@ -13,10 +13,10 @@ module Mammoth
 
     def users
       current_page = 1
-      total_pages = 0
+      total_pages = 1
       next_page = "https://#{ACCOUNT_RELAY_HOST}/api/v1/admin/users"
       data = []
-      while current_page != total_pages
+      while current_page <= total_pages
         response = fetch("https://#{ACCOUNT_RELAY_HOST}/api/v1/admin/users?page=#{current_page}")
         current_page = response['Current-Page'].to_i + 1
         total_pages = response['Total-Pages'].to_i
@@ -28,17 +28,6 @@ module Mammoth
       data
     rescue => e
       raise Users::Error, 'Unable to parse mammoth users from AcctRelay', e
-    end
-
-    def get_next_page(link_header)
-      return nil unless link_header
-
-      # Example header:
-      # Link: <https://acctrelay.moth.social/api/v1/admin/users?page=1>; rel="first", <https://acctrelay.moth.social/api/v1/admin/users?page=2>; rel="next", <https://acctrelay.moth.social/api/v1/admin/users?page=6>; rel="last"
-      match = link_header.scan(/<([^>]+)/)
-      Rails.logger.debug { "LINK HEADER >> \n #{link_header}" }
-      Rails.logger.debug { "MATCH >> \n #{match}" }
-      match[1][0]
     end
 
     def fetch(url)
