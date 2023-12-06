@@ -67,7 +67,7 @@ class UpdateForYouWorker
   # Return early if user setting is Zero, meaning 'off' from the iOS perspective
   def following_status
     user_setting = @user[:for_you_settings]
-    return if user_setting[:your_follows].zero?
+    return if user_setting[:your_follows].zero? || user_setting[:type] == 'public'
 
     origin = Mammoth::StatusOrigin.instance
     @personal.statuses_for_direct_follows(@user[:acct])
@@ -81,7 +81,7 @@ class UpdateForYouWorker
   # Indirect Follows
   def indirect_following_status
     user_setting = @user[:for_you_settings]
-    return if user_setting[:friends_of_friends].zero?
+    return if user_setting[:friends_of_friends].zero? || user_setting[:type] == 'public'
 
     origin = Mammoth::StatusOrigin.instance
     @personal.statuses_for_indirect_follows(@user[:acct])
