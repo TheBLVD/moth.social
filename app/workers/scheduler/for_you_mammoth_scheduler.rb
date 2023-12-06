@@ -29,11 +29,11 @@ class Scheduler::ForYouMammothScheduler
   private
 
   # Fetch acct of mammoth users from AcctRelay
-  # These are users that are 'personalize'
+  # These are users that are 'local' & ordered by last Active
   def mammoth_users
-    personal_for_you = PersonalForYou.new
+    m_users = Mammoth::Users.new
     Async do
-      personal_for_you.acct_relay_users
+      m_users.all_mammoth_users
     end
   end
 end
