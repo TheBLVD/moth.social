@@ -42,8 +42,8 @@ module Mammoth
     end
 
     def statuses_from_channels(account_ids)
-      Status.where(account_id: account_ids,
-                   created_at: (GO_BACK.hours.ago)..Time.current)
+      Status.with_public_visibility.where(account_id: account_ids,
+                                          created_at: (GO_BACK.hours.ago)..Time.current)
     end
 
     # Check status for Channel's set level of engagment
