@@ -41,7 +41,7 @@ class PersonalForYou
     Rails.logger.debug { "INDIRECT FOLLOW RECOMMENDATIONS USERNAMES\n #{username_query}" }
     Rails.logger.debug { "INDIRECT FOLLOW RECOMMENDATIONS ACCOUNT_IDS\n #{account_ids}" }
     # Get Statuses for those accounts
-    Status.where(account_id: account_ids, updated_at: 12.hours.ago..Time.current).limit(200)
+    Status.with_public_visibility.where(account_id: account_ids, updated_at: 12.hours.ago..Time.current).limit(200)
   end
 
   # Get All registered users from AcctRely
@@ -156,7 +156,7 @@ class PersonalForYou
     # Array of account id's from fedi_account_handles
     account_ids = Account.where(username: username_query, domain: domain_query).pluck(:id)
     # Get Statuses for those accounts
-    Status.where(account_id: account_ids, updated_at: 12.hours.ago..Time.current).limit(200)
+    Status.with_public_visibility.where(account_id: account_ids, updated_at: 12.hours.ago..Time.current).limit(200)
   end
 
   # Get enabled channels with full accounts

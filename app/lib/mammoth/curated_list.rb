@@ -21,8 +21,8 @@ module Mammoth
     def statuses_from_list(account_ids)
       cache_key = 'mammoth_picks:statuses'
       Rails.cache.fetch(cache_key, expires_in: 120.seconds) do
-        statuses = Status.where(account_id: account_ids,
-                                created_at: (GO_BACK.hours.ago)..Time.current).to_a
+        statuses = Status.with_public_visibility.where(account_id: account_ids,
+                                                       created_at: (GO_BACK.hours.ago)..Time.current).to_a
 
         statuses.filter_map { |s| engagment_threshold(s) }.pluck(:id, :account_id).map { |id, account_id| { id: id, account_id: account_id } }
       end
