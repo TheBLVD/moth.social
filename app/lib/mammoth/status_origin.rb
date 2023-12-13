@@ -42,10 +42,12 @@ module Mammoth
     end 
 
     # Add reason by key id
-    # Expire Reason in 7 days
+    # Expire Reason in 2 days
     def add_reason(key, reason)
-        redis.sadd(key, reason)
-        redis.expire(key, 7.day.seconds) 
+        redis.pipelined do |pipeline|
+            pipeline.sadd(key, reason)
+            pipeline.expire(key, 2.day.seconds) 
+          end
     end 
 
     def find(status_id, acct = nil)
