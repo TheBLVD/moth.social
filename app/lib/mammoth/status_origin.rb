@@ -39,7 +39,7 @@ module Mammoth
         reasons = statuses.map do |s| 
             list_key = key(user[:acct], s[:id])
             reason = channel_reason(s, channel)
-            return {key: list_key, id: s[:id], reason: reason}
+             {key: list_key, id: s[:id], reason: reason}
         end 
         Rails.logger.warn "BULK CHANNEL REASONS: #{reasons}"
         bulk_reasons(reasons)
@@ -58,7 +58,7 @@ module Mammoth
         reasons = statuses.map do |s| 
             list_key = key(user[:acct], s[:id])
             reason = mammoth_pick_reason(s)
-            return {key: list_key, id: s[:id], reason: reason}
+             {key: list_key, id: s[:id], reason: reason}
         end 
         Rails.logger.warn "BULK MAMMOTH REASONS: #{reasons}"
         bulk_reasons(reasons)
