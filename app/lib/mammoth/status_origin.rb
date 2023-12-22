@@ -59,15 +59,6 @@ module Mammoth
         end 
     end 
 
-    # Add reason by key id
-    # Expire Reason in 2 days
-    def add_reason(key, status_id, reason)
-        redis.expire(key, 1.day.seconds)
-        redis.pipelined do |pipeline|
-            pipeline.zadd(key, status_id, reason)
-          end
-    end 
-
     def find(status_id, acct = nil)
         personal_list_key = key(acct, status_id)
         results = redis.zrange(personal_list_key, 0, -1).map { |o| 
@@ -83,13 +74,6 @@ module Mammoth
         return results
     end 
 
-     # Trim a feed to maximum size by removing older items
-  # @param [Integer] foryou_key
-  # @return [void]
-  def trim(key)
-    # Remove any items past the MAX_ITEMS'th entry in our feed
-    redis.zremrangebyrank(key, 0, -(MAX_ITEMS + 1))
-  end
 
     # Delete All Status Origins by username
     # ALERT: extra check to ensure a valid acct handle is passed.  
