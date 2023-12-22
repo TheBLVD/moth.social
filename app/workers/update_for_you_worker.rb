@@ -73,7 +73,7 @@ class UpdateForYouWorker
     @personal.statuses_for_direct_follows(@user[:acct])
              .filter_map { |s| engagment_threshold(s, user_setting[:your_follows], 'following') }
              .map do |s|
-      origin.add_trending_follows(s, @user)
+      origin.bulk_add_trending_follows(s, @user)
       s['id']
     end
   end
@@ -87,7 +87,7 @@ class UpdateForYouWorker
     @personal.statuses_for_indirect_follows(@user[:acct])
              .filter_map { |s| engagment_threshold(s, user_setting[:friends_of_friends], 'indirect') }
              .map do |s|
-      origin.add_friends_of_friends(s, @user)
+      origin.bulk_add_friends_of_friends(s, @user)
       s['id']
     end
   end
