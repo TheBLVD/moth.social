@@ -66,7 +66,7 @@ module Mammoth
     def add_reason(key, status_id, reason)
         redis.pipelined do |pipeline|
             pipeline.zadd(key, status_id, reason)
-            pipeline.expire(r[:key], 1.day.seconds)
+            pipeline.expire(key, 1.day.seconds)
           end
     end 
 
