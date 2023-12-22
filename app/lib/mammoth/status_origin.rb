@@ -34,7 +34,7 @@ module Mammoth
         
         add_reason(list_key, status[:id], reason)
     end
-    
+
     def bulk_add_channel(statuses, user, channel)
         reasons = statuses.map do |s| 
             list_key = key(user[:acct], s[:id])
@@ -63,7 +63,7 @@ module Mammoth
     end 
 
     def bulk_reasons(reasons)
-        redis.pipeline do |p|
+        redis.pipelined do |p|
             reasons.each do |r|
                 p.zadd(r[:key], r[:id], r[:reason])
                 p.expire(r[:key], 1.day.seconds)
