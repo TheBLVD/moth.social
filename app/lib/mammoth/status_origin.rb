@@ -9,51 +9,59 @@ module Mammoth
         include Redisable
     class NotFound < StandardError; end
 
-    # Add Trending Follows and Reason
-    def add_trending_follows(status, user)
-        list_key = key(user[:acct], status[:id])
-        reason = trending_follow_reason(status)
+    MAX_ITEMS = 1000
 
-        add_reason(list_key, reason)
+    # Add Trending Follows and Reason
+    def bulk_add_trending_follows(statuses, user)
+        reasons = statuses.map do |s| 
+            list_key = key(user[:acct], s[:id])
+            reason = trending_follow_reason(s)
+             {key: list_key, id: s[:id], reason: reason}
+        end 
+        bulk_reasons(reasons)
     end 
 
     # Add FOF and Reason to list
-    def add_friends_of_friends(status, user)
-        list_key = key(user[:acct], status[:id])
-        reason = trending_fof_reason(status)
-
-        add_reason(list_key, reason)
+    def bulk_add_friends_of_friends(statuses, user)
+        reasons = statuses.map do |s| 
+            list_key = key(user[:acct], s[:id])
+            reason = trending_fof_reason(s)
+             {key: list_key, id: s[:id], reason: reason}
+        end 
+        bulk_reasons(reasons)
     end
 
-    # Add Status and Reason to list
-    def add_channel(status, user, channel)
-        list_key = key(user[:acct], status[:id])
-        reason = channel_reason(status, channel)
-        
-        add_reason(list_key, reason)
-    end
-
-    # Add MammothPick and Reason to list
-    def add_mammoth_pick(status, user)
-        list_key = key(user[:acct], status[:id])
-        reason = mammoth_pick_reason(status)
-
-        add_reason(list_key, reason)
+    def bulk_add_channel(statuses, user, channel)
+        reasons = statuses.map do |s| 
+            list_key = key(user[:acct], s[:id])
+            reason = channel_reason(s, channel)
+             {key: list_key, id: s[:id], reason: reason}
+        end 
+        bulk_reasons(reasons)
     end 
-
-    # Add reason by key id
-    # Expire Reason in 2 days
-    def add_reason(key, reason)
-        redis.pipelined do |pipeline|
-            pipeline.sadd(key, reason)
-            pipeline.expire(key, 2.day.seconds) 
-          end
+     
+    # Array of statuses
+    def bulk_add_mammoth_pick(statuses, user)
+        reasons = statuses.map do |s| 
+            list_key = key(user[:acct], s[:id])
+            reason = mammoth_pick_reason(s)
+             {key: list_key, id: s[:id], reason: reason}
+        end 
+        bulk_reasons(reasons)
+    end 
+    
+    def bulk_reasons(reasons)
+        redis.pipelined do |p|
+            reasons.each do |r|
+                p.zadd(r[:key], r[:id], r[:reason])
+                p.expire(r[:key], 1.day.seconds)
+            end
+        end 
     end 
 
     def find(status_id, acct = nil)
-        public_list_key = key(status_id)
         personal_list_key = key(acct, status_id)
-        results = redis.sunion([public_list_key, personal_list_key]).map { |o| 
+        results = redis.zrange(personal_list_key, 0, -1).map { |o| 
             payload = Oj.load(o, symbol_keys: true)
 
             originating_account = Account.find(payload[:originating_account_id])
@@ -65,6 +73,7 @@ module Mammoth
         raise NotFound, 'status not found' unless results.length > 0 
         return results
     end 
+
 
     # Delete All Status Origins by username
     # ALERT: extra check to ensure a valid acct handle is passed.  

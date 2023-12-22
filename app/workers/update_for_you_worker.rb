@@ -70,12 +70,11 @@ class UpdateForYouWorker
     return if user_setting[:your_follows].zero? || user_setting[:type] == 'public'
 
     origin = Mammoth::StatusOrigin.instance
-    @personal.statuses_for_direct_follows(@user[:acct])
-             .filter_map { |s| engagment_threshold(s, user_setting[:your_follows], 'following') }
-             .map do |s|
-      origin.add_trending_follows(s, @user)
-      s['id']
-    end
+    statuses = @personal.statuses_for_direct_follows(@user[:acct])
+                        .filter_map { |s| engagment_threshold(s, user_setting[:your_follows], 'following') }
+
+    origin.bulk_add_trending_follows(statuses, @user)
+    statuses.pluck(:id)
   end
 
   # Indirect Follows
@@ -84,12 +83,11 @@ class UpdateForYouWorker
     return if user_setting[:friends_of_friends].zero? || user_setting[:type] == 'public'
 
     origin = Mammoth::StatusOrigin.instance
-    @personal.statuses_for_indirect_follows(@user[:acct])
-             .filter_map { |s| engagment_threshold(s, user_setting[:friends_of_friends], 'indirect') }
-             .map do |s|
-      origin.add_friends_of_friends(s, @user)
-      s['id']
-    end
+    statuses = @personal.statuses_for_indirect_follows(@user[:acct])
+                        .filter_map { |s| engagment_threshold(s, user_setting[:friends_of_friends], 'indirect') }
+
+    origin.bulk_add_friends_of_friends(statuses, @user)
+    statuses.pluck(:id)
   end
 
   # Channels Subscribed
@@ -107,13 +105,11 @@ class UpdateForYouWorker
     return if user_setting[:curated_by_mammoth].zero?
 
     curated_list = Mammoth::CuratedList.new
-    list_statuses = curated_list.curated_list_statuses
     origin = Mammoth::StatusOrigin.instance
 
-    list_statuses.map do |s|
-      origin.add_mammoth_pick(s, @user)
-      s[:id]
-    end
+    list_statuses = curated_list.curated_list_statuses
+    origin.bulk_add_mammoth_pick(list_statuses, @user)
+    list_statuses.pluck(:id)
   end
 
   # Check status for User's level of engagment
