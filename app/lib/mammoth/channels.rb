@@ -28,7 +28,7 @@ module Mammoth
       origin = Mammoth::StatusOrigin.instance
       channel_feed_manager = ChannelFeedManager.instance
       channels.flat_map do |channel|
-        channel_feed_manager.fetch_threshold_statuses(channel[:id]).each { |s| origin.add_channel(s, user, channel) }
+        origin.bulk_add_channel(channel_feed_manager.fetch_threshold_statuses(channel[:id]), user, channel)
       end
     end
 

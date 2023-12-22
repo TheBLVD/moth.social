@@ -34,6 +34,15 @@ module Mammoth
         
         add_reason(list_key, status[:id], reason)
     end
+    
+    def bulk_add_channel(statuses, user, channel)
+        reasons = statuses.map do |s| 
+            list_key = key(user[:acct], s[:id])
+            reason = channel_reason(s, channel)
+            return {key: list_key, id: s[:id], reason: reason}
+        end 
+        bulk_reasons(reasons)
+    end 
 
     # Add MammothPick and Reason to list
     def add_mammoth_pick(status, user)
@@ -50,6 +59,7 @@ module Mammoth
             reason = mammoth_pick_reason(s)
             return {key: list_key, id: s[:id], reason: reason}
         end 
+        bulk_reasons(reasons)
     end 
 
     def bulk_reasons(reasons)
