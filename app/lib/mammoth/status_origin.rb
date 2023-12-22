@@ -41,17 +41,18 @@ module Mammoth
             reason = channel_reason(s, channel)
             return {key: list_key, id: s[:id], reason: reason}
         end 
+        Rails.logger.warn "BULK CHANNEL REASONS: #{reasons}"
         bulk_reasons(reasons)
     end 
-
+    
     # Add MammothPick and Reason to list
     def add_mammoth_pick(status, user)
         list_key = key(user[:acct], status[:id])
         reason = mammoth_pick_reason(status)
-
+        
         add_reason(list_key, status[:id], reason)
     end 
-
+    
     # Array of statuses
     def bulk_add_mammoth_pick(statuses, user)
         reasons = statuses.map do |s| 
@@ -59,10 +60,13 @@ module Mammoth
             reason = mammoth_pick_reason(s)
             return {key: list_key, id: s[:id], reason: reason}
         end 
+        Rails.logger.warn "BULK MAMMOTH REASONS: #{reasons}"
         bulk_reasons(reasons)
     end 
-
+    
     def bulk_reasons(reasons)
+        Rails.logger.warn "ALL REASONS: #{reasons}"
+
         redis.pipelined do |p|
             reasons.each do |r|
                 p.zadd(r[:key], r[:id], r[:reason])
