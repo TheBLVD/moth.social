@@ -12,27 +12,23 @@ module Mammoth
     MAX_ITEMS = 1000
 
     # Add Trending Follows and Reason
-    def add_trending_follows(status, user)
-        list_key = key(user[:acct], status[:id])
-        reason = trending_follow_reason(status)
-
-        add_reason(list_key, status[:id], reason)
+    def bulk_add_trending_follows(statuses, user)
+        reasons = statuses.map do |s| 
+            list_key = key(user[:acct], s[:id])
+            reason = trending_follow_reason(s)
+             {key: list_key, id: s[:id], reason: reason}
+        end 
+        bulk_reasons(reasons)
     end 
 
     # Add FOF and Reason to list
-    def add_friends_of_friends(status, user)
-        list_key = key(user[:acct], status[:id])
-        reason = trending_fof_reason(status)
-
-        add_reason(list_key, status[:id], reason)
-    end
-
-    # Add Status and Reason to list
-    def add_channel(status, user, channel)
-        list_key = key(user[:acct], status[:id])
-        reason = channel_reason(status, channel)
-        
-        add_reason(list_key, status[:id], reason)
+    def bulk_add_friends_of_friends(statuses, user)
+        reasons = statuses.map do |s| 
+            list_key = key(user[:acct], s[:id])
+            reason = trending_fof_reason(s)
+             {key: list_key, id: s[:id], reason: reason}
+        end 
+        bulk_reasons(reasons)
     end
 
     def bulk_add_channel(statuses, user, channel)
@@ -43,15 +39,7 @@ module Mammoth
         end 
         bulk_reasons(reasons)
     end 
-    
-    # Add MammothPick and Reason to list
-    def add_mammoth_pick(status, user)
-        list_key = key(user[:acct], status[:id])
-        reason = mammoth_pick_reason(status)
-        
-        add_reason(list_key, status[:id], reason)
-    end 
-    
+     
     # Array of statuses
     def bulk_add_mammoth_pick(statuses, user)
         reasons = statuses.map do |s| 
