@@ -107,13 +107,11 @@ class UpdateForYouWorker
     return if user_setting[:curated_by_mammoth].zero?
 
     curated_list = Mammoth::CuratedList.new
-    list_statuses = curated_list.curated_list_statuses
     origin = Mammoth::StatusOrigin.instance
 
-    list_statuses.map do |s|
-      origin.add_mammoth_pick(s, @user)
-      s[:id]
-    end
+    list_statuses = curated_list.curated_list_statuses
+    origin.bulk_add_mammoth_pick(list_statuses, @user)
+    list_statuses.pluck(:id)
   end
 
   # Check status for User's level of engagment

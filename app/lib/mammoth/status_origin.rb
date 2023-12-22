@@ -9,12 +9,14 @@ module Mammoth
         include Redisable
     class NotFound < StandardError; end
 
+    MAX_ITEMS = 1000
+
     # Add Trending Follows and Reason
     def add_trending_follows(status, user)
         list_key = key(user[:acct], status[:id])
         reason = trending_follow_reason(status)
 
-        add_reason(list_key, reason)
+        add_reason(list_key, status[:id], reason)
     end 
 
     # Add FOF and Reason to list
@@ -22,7 +24,7 @@ module Mammoth
         list_key = key(user[:acct], status[:id])
         reason = trending_fof_reason(status)
 
-        add_reason(list_key, reason)
+        add_reason(list_key, status[:id], reason)
     end
 
     # Add Status and Reason to list
@@ -30,7 +32,7 @@ module Mammoth
         list_key = key(user[:acct], status[:id])
         reason = channel_reason(status, channel)
         
-        add_reason(list_key, reason)
+        add_reason(list_key, status[:id], reason)
     end
 
     # Add MammothPick and Reason to list
@@ -38,15 +40,33 @@ module Mammoth
         list_key = key(user[:acct], status[:id])
         reason = mammoth_pick_reason(status)
 
-        add_reason(list_key, reason)
+        add_reason(list_key, status[:id], reason)
+    end 
+
+    # Array of statuses
+    def bulk_add_mammoth_pick(statuses, user)
+        reasons = statuses.map do |s| 
+            list_key = key(user[:acct], s[:id])
+            reason = mammoth_pick_reason(s)
+            return {key: list_key, id: s[:id], reason: reason}
+        end 
+    end 
+
+    def bulk_reasons(reasons)
+        redis.pipeline do |p|
+            reasons.each do |r|
+                p.zadd(r[:key], r[:id], r[:reason])
+                p.expire(r[:key], 1.day.seconds)
+            end
+        end 
     end 
 
     # Add reason by key id
     # Expire Reason in 2 days
-    def add_reason(key, reason)
+    def add_reason(key, status_id, reason)
         redis.pipelined do |pipeline|
-            pipeline.sadd(key, reason)
-            pipeline.expire(key, 2.day.seconds) 
+            pipeline.zadd(key, status_id, reason)
+            pipeline.expire(r[:key], 1.day.seconds)
           end
     end 
 
@@ -64,6 +84,14 @@ module Mammoth
         raise NotFound, 'status not found' unless results.length > 0 
         return results
     end 
+
+     # Trim a feed to maximum size by removing older items
+  # @param [Integer] foryou_key
+  # @return [void]
+  def trim(key)
+    # Remove any items past the MAX_ITEMS'th entry in our feed
+    redis.zremrangebyrank(key, 0, -(MAX_ITEMS + 1))
+  end
 
     # Delete All Status Origins by username
     # ALERT: extra check to ensure a valid acct handle is passed.  
