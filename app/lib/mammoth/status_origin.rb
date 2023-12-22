@@ -72,7 +72,7 @@ module Mammoth
 
     def find(status_id, acct = nil)
         personal_list_key = key(acct, status_id)
-        results = redis.smembers(personal_list_key).map { |o| 
+        results = redis.zrange(personal_list_key, 0, -1).map { |o| 
             payload = Oj.load(o, symbol_keys: true)
 
             originating_account = Account.find(payload[:originating_account_id])
