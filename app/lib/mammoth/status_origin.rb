@@ -18,7 +18,7 @@ module Mammoth
             reason = trending_follow_reason(s)
              {key: list_key, id: s[:id], reason: reason}
         end 
-        bulk_reasons(reasons)
+        bulk_reasons(user, reasons)
     end 
 
     # Add FOF and Reason to list
@@ -28,7 +28,7 @@ module Mammoth
             reason = trending_fof_reason(s)
              {key: list_key, id: s[:id], reason: reason}
         end 
-        bulk_reasons(reasons)
+        bulk_reasons(user, reasons)
     end
 
     def bulk_add_channel(statuses, user, channel)
@@ -37,7 +37,7 @@ module Mammoth
             reason = channel_reason(s, channel)
              {key: list_key, id: s[:id], reason: reason}
         end 
-        bulk_reasons(reasons)
+        bulk_reasons(user, reasons)
     end 
      
     # Array of statuses
@@ -50,9 +50,13 @@ module Mammoth
         bulk_reasons(reasons)
     end 
     
-    def bulk_reasons(reasons)
+    def bulk_reasons(user, reasons)
+        Rails.logger.info "BULK REASONS #{reasons}"
+        user_list_key = key(user[:acct])
+        Rails.logger.info "USER LIST KEY #{user_list_key}"
         redis.pipelined do |p|
             reasons.each do |r|
+                p.zadd(user_list_key, 0, r[:key])
                 p.zadd(r[:key], r[:id], r[:reason])
                 p.expire(r[:key], 1.day.seconds)
             end
