@@ -47,7 +47,7 @@ module Mammoth
             reason = mammoth_pick_reason(s)
              {key: list_key, id: s[:id], reason: reason}
         end 
-        bulk_reasons(reasons)
+        bulk_reasons(user, reasons)
     end 
     
     def bulk_reasons(user, reasons)
