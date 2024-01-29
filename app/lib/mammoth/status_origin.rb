@@ -123,7 +123,7 @@ module Mammoth
         Oj.dump({source: "FriendsOfFriends", originating_account_id: status.account[:id] })
     end
 
-    # Find items from 1000 - end of the  list
+    # Find items from MAX_ITEMS - end of the  list
     # Then del them
     def trim(user)
         user_list_key = key(user[:acct])
