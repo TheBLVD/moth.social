@@ -38,5 +38,7 @@ namespace :db do
     sh "PGPASSWORD=#{password} pg_dump -U #{username} -h #{host} -d #{db} -f #{file_name}"
 
     sh "aws s3 cp #{file_name} s3://moth-social/db_backups/"
+    # Once copied to S3 remove local version.
+    sh "rm -f #{file_name}"
   end
 end
