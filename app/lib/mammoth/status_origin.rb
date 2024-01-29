@@ -122,7 +122,6 @@ module Mammoth
     def trending_fof_reason(status)
         Oj.dump({source: "FriendsOfFriends", originating_account_id: status.account[:id] })
     end
-  end
 
     # Find items from 1000 - end of the  list
     # Then del them
@@ -133,4 +132,7 @@ module Mammoth
             p.del(keys_to_purge)
         end
     end 
+
+    end
+
 end
