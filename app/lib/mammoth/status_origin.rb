@@ -9,7 +9,7 @@ module Mammoth
         include Redisable
     class NotFound < StandardError; end
 
-    MAX_ITEMS = 1000
+    MAX_ITEMS = 5000
 
     # Add Trending Follows and Reason
     def bulk_add_trending_follows(statuses, user)
