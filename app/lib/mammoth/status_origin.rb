@@ -80,16 +80,6 @@ module Mammoth
         return results
     end 
 
-    # Find items from 1000 - end of the  list
-    # Then del them
-    def trim(user)
-        user_list_key = key(user[:acct])
-        keys_to_purge = redis.zrange(user_list_key, MAX_ITEMS, -1)
-        redis.pipelined do |p|
-            p.del(keys_to_purge)
-        end
-    end 
-
 
     # Delete All Status Origins by username
     # ALERT: extra check to ensure a valid acct handle is passed.  
@@ -133,4 +123,14 @@ module Mammoth
         Oj.dump({source: "FriendsOfFriends", originating_account_id: status.account[:id] })
     end
   end
+
+    # Find items from 1000 - end of the  list
+    # Then del them
+    def trim(user)
+        user_list_key = key(user[:acct])
+        keys_to_purge = redis.zrange(user_list_key, MAX_ITEMS, -1)
+        redis.pipelined do |p|
+            p.del(keys_to_purge)
+        end
+    end 
 end
