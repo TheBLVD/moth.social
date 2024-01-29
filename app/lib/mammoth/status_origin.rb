@@ -85,8 +85,13 @@ module Mammoth
         username, domain = acct.strip.gsub(/\A@/, '').split('@')
         return nil unless username && domain
 
-        list_key = key("#{username}@#{domain}")
-        redis.keys("#{list_key}*").each { |key| redis.del(key) }
+        user_list_key = key("#{username}@#{domain}")
+        keys_to_purge = redis.zrange(user_list_key, 0, -1)
+        redis.pipelined do |p|
+            p.del(keys_to_purge)
+            p.del(user_list_key)
+        end 
+
     end 
 
     private 
