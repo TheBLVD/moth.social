@@ -51,7 +51,6 @@ module Mammoth
     end 
     
     def bulk_reasons(user, reasons)
-        Rails.logger.info "BULK REASONS #{reasons}"
         user_list_key = key(user[:acct])
         Rails.logger.info "USER LIST KEY #{user_list_key}"
         redis.pipelined do |p|
@@ -61,6 +60,9 @@ module Mammoth
                 p.expire(r[:key], 1.day.seconds)
             end
         end 
+
+        # Regular Trimming of items keeps it from growing out of control
+        trim(user)
     end 
 
     def find(status_id, acct = nil)
@@ -76,6 +78,16 @@ module Mammoth
         # Throw Error if array find is empty
         raise NotFound, 'status not found' unless results.length > 0 
         return results
+    end 
+
+    # Find items from 1000 - end of the  list
+    # Then del them
+    def trim(user)
+        user_list_key = key(user[:acct])
+        keys_to_purge = redis.zrange(user_list_key, MAX_ITEMS, -1)
+        redis.pipelined do |p|
+            p.del(keys_to_purge)
+        end
     end 
 
 
