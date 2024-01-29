@@ -52,7 +52,7 @@ module Mammoth
     
     def bulk_reasons(user, reasons)
         user_list_key = key(user[:acct])
-        Rails.logger.info "USER LIST KEY #{user_list_key}"
+        Rails.logger.debug "USER LIST KEY #{user_list_key}"
         redis.pipelined do |p|
             reasons.each do |r|
                 p.zadd(user_list_key, 0, r[:key])
