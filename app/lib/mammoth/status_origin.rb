@@ -9,7 +9,7 @@ module Mammoth
         include Redisable
     class NotFound < StandardError; end
 
-    MAX_ITEMS = 1000
+    MAX_ITEMS = 5000
 
     # Add Trending Follows and Reason
     def bulk_add_trending_follows(statuses, user)
@@ -18,7 +18,7 @@ module Mammoth
             reason = trending_follow_reason(s)
              {key: list_key, id: s[:id], reason: reason}
         end 
-        bulk_reasons(reasons)
+        bulk_reasons(user, reasons)
     end 
 
     # Add FOF and Reason to list
@@ -28,7 +28,7 @@ module Mammoth
             reason = trending_fof_reason(s)
              {key: list_key, id: s[:id], reason: reason}
         end 
-        bulk_reasons(reasons)
+        bulk_reasons(user, reasons)
     end
 
     def bulk_add_channel(statuses, user, channel)
@@ -37,7 +37,7 @@ module Mammoth
             reason = channel_reason(s, channel)
              {key: list_key, id: s[:id], reason: reason}
         end 
-        bulk_reasons(reasons)
+        bulk_reasons(user, reasons)
     end 
      
     # Array of statuses
@@ -50,13 +50,19 @@ module Mammoth
         bulk_reasons(reasons)
     end 
     
-    def bulk_reasons(reasons)
+    def bulk_reasons(user, reasons)
+        user_list_key = key(user[:acct])
+        Rails.logger.debug "USER LIST KEY #{user_list_key}"
         redis.pipelined do |p|
             reasons.each do |r|
+                p.zadd(user_list_key, 0, r[:key])
                 p.zadd(r[:key], r[:id], r[:reason])
                 p.expire(r[:key], 1.day.seconds)
             end
         end 
+
+        # Regular Trimming of items keeps it from growing out of control
+        trim(user)
     end 
 
     def find(status_id, acct = nil)
@@ -81,8 +87,13 @@ module Mammoth
         username, domain = acct.strip.gsub(/\A@/, '').split('@')
         return nil unless username && domain
 
-        list_key = key("#{username}@#{domain}")
-        redis.keys("#{list_key}*").each { |key| redis.del(key) }
+        user_list_key = key("#{username}@#{domain}")
+        keys_to_purge = redis.zrange(user_list_key, 0, -1)
+        redis.pipelined do |p|
+            p.del(keys_to_purge)
+            p.del(user_list_key)
+        end 
+
     end 
 
     private 
@@ -111,5 +122,17 @@ module Mammoth
     def trending_fof_reason(status)
         Oj.dump({source: "FriendsOfFriends", originating_account_id: status.account[:id] })
     end
-  end
+
+    # Find items from MAX_ITEMS - end of the  list
+    # Then del them
+    def trim(user)
+        user_list_key = key(user[:acct])
+        keys_to_purge = redis.zrange(user_list_key, MAX_ITEMS, -1)
+        redis.pipelined do |p|
+            p.del(keys_to_purge)
+        end
+    end 
+
+    end
+
 end
