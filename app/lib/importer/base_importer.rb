@@ -35,9 +35,9 @@ class Importer::BaseImporter
   # Estimate the amount of documents that would be indexed. Not exact!
   # @returns [Integer]
   def estimate!
-    ActiveRecord::Base.connection_pool.with_connection do |connection|
-      connection.select_one("SELECT reltuples AS estimate FROM pg_class WHERE relname = '#{index.adapter.target.table_name}'")['estimate'].to_i
-    end
+    reltuples = ActiveRecord::Base.connection_pool.with_connection { |connection| connection.select_one("SELECT reltuples FROM pg_class WHERE relname = '#{index.adapter.target.table_name}'")['reltuples'].to_i }
+    # If the table has never yet been vacuumed or analyzed, reltuples contains -1
+    [reltuples, 0].max
   end
 
   # Import data from the database into the index

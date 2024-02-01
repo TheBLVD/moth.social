@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-lock '3.17.3'
+lock '3.17.2'
 
 set :repo_url, ENV.fetch('REPO', 'git@github.com:TheBLVD/moth.social.git')
 set :branch, ENV.fetch('BRANCH', 'main')
@@ -12,6 +12,9 @@ set :migration_role, :app
 set :appsignal_config, name: 'moth.social'
 
 append :linked_dirs, 'vendor/bundle', 'public/system'
+
+SYSTEMD_SERVICES = %i[sidekiq streaming web].freeze
+SERVICE_ACTIONS = %i[reload restart status].freeze
 
 SYSTEMD_SERVICES = %i[sidekiq streaming web].freeze
 SERVICE_ACTIONS = %i[reload restart status].freeze

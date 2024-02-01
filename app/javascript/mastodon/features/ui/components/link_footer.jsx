@@ -43,7 +43,7 @@ class LinkFooter extends PureComponent {
     intl: PropTypes.object.isRequired,
   };
 
-  handleLogoutClick = (e) => {
+  handleLogoutClick = e => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -52,13 +52,11 @@ class LinkFooter extends PureComponent {
     return false;
   };
 
-  render() {
+  render () {
     const { signedIn, permissions } = this.context.identity;
     const { multiColumn } = this.props;
 
-    const canInvite =
-      signedIn &&
-      (permissions & PERMISSION_INVITE_USERS) === PERMISSION_INVITE_USERS;
+    const canInvite = signedIn && ((permissions & PERMISSION_INVITE_USERS) === PERMISSION_INVITE_USERS);
     const canProfileDirectory = profileDirectory;
 
     const DividingCircle = <span aria-hidden>{' · '}</span>;
@@ -92,23 +90,17 @@ class LinkFooter extends PureComponent {
         </p>
 
         <p>
-          <strong>Mastodon</strong>:{' '}
-          <a href='https://joinmastodon.org' target='_blank'>
-            <FormattedMessage id='footer.about' defaultMessage='About' />
-          </a>
+          <strong>Mastodon</strong>:
+          {' '}
+          <a href='https://joinmastodon.org' target='_blank'><FormattedMessage id='footer.about' defaultMessage='About' /></a>
           {DividingCircle}
-          <a href='https://joinmastodon.org/apps' target='_blank'>
-            <FormattedMessage
-              id='footer.get_app'
-              defaultMessage='Get the app'
-            />
-          </a>
-          {' · '}
+          <a href='https://joinmastodon.org/apps' target='_blank'><FormattedMessage id='footer.get_app' defaultMessage='Get the app' /></a>
+          {DividingCircle}
           <Link to='/keyboard-shortcuts'><FormattedMessage id='footer.keyboard_shortcuts' defaultMessage='Keyboard shortcuts' /></Link>
           {DividingCircle}
           <a href={source_url} rel='noopener noreferrer' target='_blank'><FormattedMessage id='footer.source_code' defaultMessage='View source code' /></a>
           {DividingCircle}
-          v{version}
+          <span className='version'>v{version}</span>
         </p>
       </div>
     );

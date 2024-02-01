@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-# rubocop:disable all
 
 RSpec.describe Api::V1::AccountsController do
   render_views
