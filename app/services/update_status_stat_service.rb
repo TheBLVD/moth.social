@@ -18,8 +18,12 @@ class UpdateStatusStatService < BaseService
     get_status("https://#{host}#{ENDPOINT}#{status_id}", status['id'])
   end
 
+  # Explictly set User-Agent when making
+  # client requests for stats
   def get_status(url, id)
-    Request.new(:get, url).perform do |response|
+    req = Request.new(:get, url)
+    req.add_headers('User-Agent' => 'getmammoth.app FY Agent')
+    req.perform do |response|
       break if response.code != 200
 
       body = response.body_with_limit
