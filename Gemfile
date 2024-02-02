@@ -214,4 +214,4 @@ gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
 gem 'jwt'
 
 # Appsignal
-gem 'appsignal'
+gem 'appsignal', '~> 3.5'

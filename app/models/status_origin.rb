@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ActiveModel Only for Serialization
 class StatusOrigin
   include ActiveModel::Model

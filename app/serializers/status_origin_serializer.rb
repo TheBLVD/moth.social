@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Required Source & Originating Account
 # Channel_id & Title maybe be null
 class StatusOriginSerializer < ActiveModel::Serializer

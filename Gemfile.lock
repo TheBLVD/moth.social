@@ -118,7 +118,7 @@ GEM
     annotate (3.2.0)
       activerecord (>= 3.2, < 8.0)
       rake (>= 10.4, < 14.0)
-    appsignal (3.4.14)
+    appsignal (3.5.5)
       rack
     ast (2.4.2)
     async (1.31.0)
@@ -857,7 +857,7 @@ DEPENDENCIES
   active_model_serializers (~> 0.10)
   addressable (~> 2.8)
   annotate (~> 3.2)
-  appsignal
+  appsignal (~> 3.5)
   async (~> 1.31)
   async-http
   aws-sdk-s3 (~> 1.123)
