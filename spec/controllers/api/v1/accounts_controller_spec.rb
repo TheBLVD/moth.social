@@ -153,7 +153,7 @@ RSpec.describe Api::V1::AccountsController do
   describe 'POST #unfollow' do
     let(:scopes) { 'write:follows' }
     let(:other_account) { Fabricate(:account, username: 'bob') }
-    let!(:params) {{ id: other_account.id }}
+    let!(:params) { { id: other_account.id } }
 
     before do
       allow(RegenerationWorker).to receive(:perform_async)
@@ -175,7 +175,7 @@ RSpec.describe Api::V1::AccountsController do
       let!(:params) { super().merge(rebuild: true) }
 
       it 'rebuilds if necessary' do
-          expect(RegenerationWorker).to have_received(:perform_async)
+        expect(RegenerationWorker).to have_received(:perform_async)
       end
     end
   end
@@ -349,4 +349,4 @@ RSpec.describe Api::V1::AccountsController do
   end
 end
 
-#rubocop:enable all
+# rubocop:enable all

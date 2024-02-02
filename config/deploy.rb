@@ -16,7 +16,6 @@ append :linked_dirs, 'vendor/bundle', 'public/system'
 SYSTEMD_SERVICES = %i[sidekiq streaming web].freeze
 SERVICE_ACTIONS = %i[reload restart status].freeze
 
-
 namespace :systemd do
   SYSTEMD_SERVICES.each do |service|
     SERVICE_ACTIONS.each do |action|

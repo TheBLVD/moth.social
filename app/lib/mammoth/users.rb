@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Mammoth
   class Users
     class Error < StandardError; end
 
     ACCOUNT_RELAY_AUTH = "Bearer #{ENV.fetch('ACCOUNT_RELAY_KEY')}".freeze
-    ACCOUNT_RELAY_HOST = 'acctrelay.moth.social'.freeze
+    ACCOUNT_RELAY_HOST = 'acctrelay.moth.social'
 
     def all_mammoth_users
       users
@@ -14,7 +16,6 @@ module Mammoth
     def users
       current_page = 1
       total_pages = 1
-      next_page = "https://#{ACCOUNT_RELAY_HOST}/api/v1/admin/users"
       data = []
       while current_page <= total_pages
         response = fetch("https://#{ACCOUNT_RELAY_HOST}/api/v1/admin/users?page=#{current_page}")
