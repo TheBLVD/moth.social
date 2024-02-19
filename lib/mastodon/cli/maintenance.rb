@@ -285,41 +285,6 @@ module Mastodon::CLI
       end
     end
 
-    def deduplicate_users_process_confirmation_token
-      ActiveRecord::Base.connection.select_all("SELECT string_agg(id::text, ',') AS ids FROM users WHERE confirmation_token IS NOT NULL GROUP BY confirmation_token HAVING count(*) > 1").each do |row|
-        users = User.where(id: row['ids'].split(',')).sort_by(&:created_at).reverse.drop(1)
-        say "Unsetting confirmation token for those accounts: #{users.map(&:account).map(&:acct).join(', ')}", :yellow
-
-        users.each do |user|
-          user.update!(confirmation_token: nil)
-        end
-      end
-    end
-
-    def deduplicate_users_process_remember_token
-      if ActiveRecord::Migrator.current_version < 2022_01_18_183010
-        ActiveRecord::Base.connection.select_all("SELECT string_agg(id::text, ',') AS ids FROM users WHERE remember_token IS NOT NULL GROUP BY remember_token HAVING count(*) > 1").each do |row|
-          users = User.where(id: row['ids'].split(',')).sort_by(&:updated_at).reverse.drop(1)
-          say "Unsetting remember token for those accounts: #{users.map(&:account).map(&:acct).join(', ')}", :yellow
-
-          users.each do |user|
-            user.update!(remember_token: nil)
-          end
-        end
-      end
-    end
-
-    def deduplicate_users_process_password_token
-      ActiveRecord::Base.connection.select_all("SELECT string_agg(id::text, ',') AS ids FROM users WHERE reset_password_token IS NOT NULL GROUP BY reset_password_token HAVING count(*) > 1").each do |row|
-        users = User.where(id: row['ids'].split(',')).sort_by(&:updated_at).reverse.drop(1)
-        say "Unsetting password reset token for those accounts: #{users.map(&:account).map(&:acct).join(', ')}", :yellow
-
-        users.each do |user|
-          user.update!(reset_password_token: nil)
-        end
-      end
-    end
-
     def deduplicate_account_domain_blocks!
       remove_index_if_exists!(:account_domain_blocks, 'index_account_domain_blocks_on_account_id_and_domain')
 
