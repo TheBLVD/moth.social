@@ -45,14 +45,14 @@ ignore_errors:
 
 development:
   <<: *defaults
-  active: true
+  active: false
 
 production:
   <<: *defaults
-  active: true
-  enable_nginx_metrics: true
+  active: false
+  enable_nginx_metrics: false
 
 staging:
   <<: *defaults
-  active: true
-  enable_nginx_metrics: true
+  active: false
+  enable_nginx_metrics: false
