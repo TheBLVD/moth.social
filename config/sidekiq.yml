@@ -68,6 +68,7 @@
       interval: 30 minutes
       class: Scheduler::SoftwareUpdateCheckScheduler
       queue: scheduler
+    # Mammoth Jobs
     status_stat_update_scheduler:
       queue: scheduler
       interval: '30m'
@@ -80,10 +81,12 @@
       queue: scheduler
       interval: '2m'
       class: Scheduler::ChannelMammothStatusesScheduler
+    # V1 ForYou General Feed
     for_you_statuses_scheduler:
       queue: scheduler
       interval: '5m'
       class: Scheduler::ForYouStatusesScheduler
+    # V2 Personalized ForYou Feed
     mammoth_for_you_statuses_scheduler:
       queue: scheduler
       interval: '5m'
