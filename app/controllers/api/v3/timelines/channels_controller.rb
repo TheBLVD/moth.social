@@ -12,11 +12,16 @@ class Api::V3::Timelines::ChannelsController < Api::BaseController
   def show
     if channel_id_param == '1efe873b-0bc2-454f-9f24-a9b8b8ef3410'
         response = HTTP.get(
-          'https://feature.moth.social/listrelay/ThreadsDevs'
+          'https://feature.moth.social/listrelay/ThreadsDevs', :form => {
+              :max_id => params[:max_id],
+              :min_id => params[:min_id],
+              :since_id => params[:since_id],
+              :limit => params[:limit]
+          }
         )
         raise NotFound, 'channel not found' unless response.code == 200
 
-        render json: response.body
+        render plain: response.body.to_s, content_type: "application/json"
         return
     end
     @statuses = cached_channel_statuses
