@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Api::V3::Timelines::ChannelsController < Api::BaseController
-  before_action :set_channel
 
   after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
 
@@ -12,7 +11,7 @@ class Api::V3::Timelines::ChannelsController < Api::BaseController
   def show
     if channel_id_param == '1efe873b-0bc2-454f-9f24-a9b8b8ef3410'
         response = HTTP.get(
-          'https://feature.moth.social/listrelay/ThreadsDevs', :form => {
+          'https://feature.moth.social/listrelay/ThreadsDevs', :params => {
               :max_id => params[:max_id],
               :min_id => params[:min_id],
               :since_id => params[:since_id],
