@@ -21,6 +21,7 @@ class Api::V3::Timelines::ChannelsController < Api::BaseController
         )
         raise NotFound, 'channel not found' unless response.code == 200
 
+        @statuses = []
         render plain: response.body.to_s, content_type: "application/json"
         return
     end
