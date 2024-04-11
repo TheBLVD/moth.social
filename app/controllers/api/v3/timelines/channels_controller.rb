@@ -10,6 +10,36 @@ class Api::V3::Timelines::ChannelsController < Api::BaseController
   end
 
   def show
+    if channel_id_param == '1efe873b-0bc2-454f-9f24-a9b8b8ef3410'
+        response = HTTP.get(
+          'https://feature.moth.social/listrelay/ThreadsDevs', :params => {
+              :max_id => params[:max_id],
+              :min_id => params[:min_id],
+              :since_id => params[:since_id],
+              :limit => params[:limit]
+          }
+        )
+        raise NotFound, 'channel not found' unless response.code == 200
+
+        @statuses = []
+        render plain: response.body.to_s, content_type: "application/json"
+        return
+    end
+    if channel_id_param == '32d4a591-57ce-414d-ada3-38ca466977a0'
+        response = HTTP.get(
+          'https://feature.moth.social/listrelay/BigThreads', :params => {
+              :max_id => params[:max_id],
+              :min_id => params[:min_id],
+              :since_id => params[:since_id],
+              :limit => params[:limit]
+          }
+        )
+        raise NotFound, 'channel not found' unless response.code == 200
+
+        @statuses = []
+        render plain: response.body.to_s, content_type: "application/json"
+        return
+    end
     @statuses = cached_channel_statuses
     render json: @statuses,
            each_serializer: REST::StatusSerializer,
