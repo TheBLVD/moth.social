@@ -25,7 +25,7 @@ class Api::V3::Timelines::ChannelsController < Api::BaseController
         render plain: response.body.to_s, content_type: "application/json"
         return
     end
-    if channel_id_param == '<ID NEEDED>'
+    if channel_id_param == '32d4a591-57ce-414d-ada3-38ca466977a0'
         response = HTTP.get(
           'https://feature.moth.social/listrelay/BigThreads', :params => {
               :max_id => params[:max_id],
