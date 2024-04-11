@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V3::Timelines::ChannelsController < Api::BaseController
-before_action :set_channel
+  before_action :set_channel
 
   after_action :insert_pagination_headers, only: [:show], unless: -> { @statuses.empty? }
 
