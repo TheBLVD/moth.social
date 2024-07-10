@@ -56,10 +56,6 @@ class Scheduler::VacuumScheduler
     Vacuum::ImportsVacuum.new
   end
 
-  def applications_vacuum
-    Vacuum::ApplicationsVacuum.new
-  end
-
   def content_retention_policy
     ContentRetentionPolicy.current
   end

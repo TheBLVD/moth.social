@@ -65,7 +65,6 @@ gem 'nsa'
 gem 'oj', '~> 3.14'
 gem 'ox', '~> 2.14'
 gem 'parslet'
-gem 'posix-spawn'
 gem 'public_suffix', '~> 5.0'
 gem 'pundit', '~> 2.3'
 gem 'premailer-rails'
@@ -215,3 +214,5 @@ gem 'jwt'
 
 # Appsignal
 gem 'appsignal', '~> 3.5'
+
+gem 'mail', '~> 2.8'

@@ -24,10 +24,6 @@
       every: '6h'
       class: Scheduler::Trends::ReviewNotificationsScheduler
       queue: scheduler
-    trends_update_scheduler:
-      every: '1h'
-      class: Scheduler::Trends::TrendsUpdateScheduler
-      queue: scheduler
     indexing_scheduler:
       interval: 1 minute
       class: Scheduler::IndexingScheduler
