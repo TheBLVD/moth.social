@@ -176,7 +176,7 @@ group :development do
   gem 'capistrano-yarn', '~> 2.0'
 
   # Validate missing i18n keys
-  gem 'i18n-tasks', '~> 1.0', require: false
+  gem 'i18n-tasks', '1.0.14', require: false
 end
 
 group :development, :test do
