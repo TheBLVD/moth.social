@@ -126,6 +126,44 @@ class SearchQueryTransformer < Parslet::Transform
         { multi_match: { type: 'most_fields', query: @term, fields: ['text', 'text.stemmed'], operator: 'and' } }
       end
     end
+
+    def to_query
+      if @negated
+        { bool: { must_not: { @type => { @filter => @term } } } }
+      else
+        { @type => { @filter => @term } }
+      end
+    end
+
+    private
+
+    def account_id_from_term(term)
+      return @options[:current_account]&.id || -1 if term == 'me'
+
+      username, domain = term.gsub(/\A@/, '').split('@')
+      domain = nil if TagManager.instance.local_domain?(domain)
+      account = Account.find_remote(username, domain)
+
+      # If the account is not found, we want to return empty results, so return
+      # an ID that does not exist
+      account&.id || -1
+    end
+
+    def language_code_from_term(term)
+      language_code = term
+
+      return language_code if LanguagesHelper::SUPPORTED_LOCALES.key?(language_code.to_sym)
+
+      language_code = term.downcase
+
+      return language_code if LanguagesHelper::SUPPORTED_LOCALES.key?(language_code.to_sym)
+
+      language_code = term.split(/[_-]/).first.downcase
+
+      return language_code if LanguagesHelper::SUPPORTED_LOCALES.key?(language_code.to_sym)
+
+      term
+    end
   end
 
   class PhraseClause
@@ -223,7 +261,7 @@ class SearchQueryTransformer < Parslet::Transform
   end
 
   rule(clause: subtree(:clause)) do
-    prefix   = clause[:prefix][:term].to_s if clause[:prefix]
+    prefix   = clause[:prefix][:term].to_s.downcase if clause[:prefix]
     operator = clause[:operator]&.to_s
     term     = clause[:phrase] ? clause[:phrase].map { |term| term[:term].to_s }.join(' ') : clause[:term].to_s
 

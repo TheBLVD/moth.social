@@ -25,7 +25,7 @@ gem 'active_model_serializers', '~> 0.10'
 gem 'addressable', '~> 2.8'
 gem 'bootsnap', '~> 1.16.0', require: false
 gem 'browser'
-gem 'charlock_holmes', '~> 0.7.7'
+gem 'charlock_holmes', '~> 0.7.9'
 gem 'chewy', '~> 7.3'
 gem 'devise', '~> 4.9'
 gem 'devise-two-factor', '~> 4.1'
@@ -65,7 +65,6 @@ gem 'nsa'
 gem 'oj', '~> 3.14'
 gem 'ox', '~> 2.14'
 gem 'parslet'
-gem 'posix-spawn'
 gem 'public_suffix', '~> 5.0'
 gem 'pundit', '~> 2.3'
 gem 'premailer-rails'
@@ -94,7 +93,7 @@ gem 'twitter-text', '~> 3.1.0'
 gem 'tzinfo-data', '~> 1.2023'
 gem 'webpacker', '~> 5.4'
 gem 'webpush', github: 'ClearlyClaire/webpush', ref: 'f14a4d52e201128b1b00245d11b6de80d6cfdcd9'
-gem 'webauthn', '~> 3.0'
+gem 'webauthn', '~> 3.1'
 
 gem 'json-ld', '~> 3.3', '>= 3.3.1'
 gem 'json-ld-preloaded', '~> 3.2'
@@ -177,7 +176,7 @@ group :development do
   gem 'capistrano-yarn', '~> 2.0'
 
   # Validate missing i18n keys
-  gem 'i18n-tasks', '~> 1.0', require: false
+  gem 'i18n-tasks', '~> 1.0', '>= 1.0.14', require: false
 end
 
 group :development, :test do
@@ -215,3 +214,5 @@ gem 'jwt'
 
 # Appsignal
 gem 'appsignal', '~> 3.5'
+
+gem 'mail', '~> 2.8'
